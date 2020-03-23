@@ -70,7 +70,7 @@ public class Main : Node2D
         }
         else
         {
-            return Difficulty.Medium;
+            return Difficulty.Hard;
         }
     }
 
