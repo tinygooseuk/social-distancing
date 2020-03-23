@@ -1,0 +1,35 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://Prefabs/Enemy.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Textures/EnemyRed.png" type="Texture" id=2]
+[ext_resource path="res://Prefabs/Enemy_Red.cs" type="Script" id=3]
+
+[sub_resource type="AtlasTexture" id=1]
+atlas = ExtResource( 2 )
+region = Rect2( 0, 0, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=2]
+atlas = ExtResource( 2 )
+region = Rect2( 0, 16, 16, 16 )
+
+[sub_resource type="SpriteFrames" id=3]
+animations = [ {
+"frames": [ SubResource( 1 ), SubResource( 2 ) ],
+"loop": true,
+"name": "Idle",
+"speed": 5.0
+} ]
+
+[sub_resource type="RectangleShape2D" id=4]
+extents = Vector2( 16.7163, 4.58572 )
+
+[node name="Enemy_Red" instance=ExtResource( 1 )]
+script = ExtResource( 3 )
+
+[node name="Sprite" parent="." index="0"]
+frames = SubResource( 3 )
+frame = 1
+
+[node name="Collider" parent="." index="1"]
+position = Vector2( -0.460247, -1.34906 )
+shape = SubResource( 4 )

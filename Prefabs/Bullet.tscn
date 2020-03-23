@@ -1,0 +1,53 @@
+[gd_scene load_steps=11 format=2]
+
+[ext_resource path="res://Textures/Blob.png" type="Texture" id=1]
+[ext_resource path="res://Prefabs/Bullet.cs" type="Script" id=2]
+[ext_resource path="res://Sounds/EnemyDeath.wav" type="AudioStream" id=3]
+[ext_resource path="res://Sounds/Shoot.wav" type="AudioStream" id=4]
+
+[sub_resource type="AtlasTexture" id=1]
+atlas = ExtResource( 1 )
+region = Rect2( 0, 0, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=2]
+atlas = ExtResource( 1 )
+region = Rect2( 16, 0, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=3]
+atlas = ExtResource( 1 )
+region = Rect2( 0, 16, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=4]
+atlas = ExtResource( 1 )
+region = Rect2( 16, 16, 16, 16 )
+
+[sub_resource type="SpriteFrames" id=5]
+animations = [ {
+"frames": [ SubResource( 1 ), SubResource( 2 ), SubResource( 3 ), SubResource( 4 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
+
+[sub_resource type="CircleShape2D" id=6]
+radius = 8.44114
+
+[node name="Bullet" type="KinematicBody2D"]
+script = ExtResource( 2 )
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+frames = SubResource( 5 )
+speed_scale = 2.0
+playing = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource( 6 )
+
+[node name="Sounds" type="Node" parent="."]
+
+[node name="EnemyDeath" type="AudioStreamPlayer" parent="Sounds"]
+stream = ExtResource( 3 )
+
+[node name="Shot" type="AudioStreamPlayer" parent="Sounds"]
+stream = ExtResource( 4 )
+autoplay = true

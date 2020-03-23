@@ -1,0 +1,19 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Social Distancing", "Social Distancing.csproj", "{9E437057-E961-424D-B7EB-3AD4066B0D40}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+	Debug|Any CPU = Debug|Any CPU
+	Release|Any CPU = Release|Any CPU
+	Tools|Any CPU = Tools|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9E437057-E961-424D-B7EB-3AD4066B0D40}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E437057-E961-424D-B7EB-3AD4066B0D40}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E437057-E961-424D-B7EB-3AD4066B0D40}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E437057-E961-424D-B7EB-3AD4066B0D40}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E437057-E961-424D-B7EB-3AD4066B0D40}.Tools|Any CPU.ActiveCfg = Tools|Any CPU
+		{9E437057-E961-424D-B7EB-3AD4066B0D40}.Tools|Any CPU.Build.0 = Tools|Any CPU
+	EndGlobalSection
+EndGlobal

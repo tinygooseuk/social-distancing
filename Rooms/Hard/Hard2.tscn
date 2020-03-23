@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Scripts/EnemySpawner.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Rooms/_Template.tscn" type="PackedScene" id=2]
+
+[node name="Room" instance=ExtResource( 2 )]
+tile_data = PoolIntArray( 0, 0, 0, 25, 0, 0, 65536, 0, 0, 65561, 0, 0, 131072, 0, 0, 131084, 0, 0, 131085, 0, 0, 131097, 0, 0, 196608, 0, 0, 196633, 0, 0, 262144, 0, 0, 262169, 0, 0, 327680, 0, 0, 327705, 0, 0, 393216, 0, 0, 393224, 0, 0, 393225, 0, 0, 393241, 0, 0, 458752, 0, 0, 458777, 0, 0, 524288, 0, 0, 524313, 0, 0, 589824, 0, 0, 589849, 0, 0, 655360, 0, 0, 655364, 0, 0, 655365, 0, 0, 655385, 0, 0, 720896, 0, 0, 720921, 0, 0, 786432, 0, 0, 786457, 0, 0, 851968, 0, 0, 851993, 0, 0, 917504, 0, 0, 917505, 0, 0, 917506, 0, 0, 917507, 0, 0, 917529, 0, 0 )
+
+[node name="Position2D" parent="." index="0" instance=ExtResource( 1 )]
+position = Vector2( 359.433, 105.565 )
+
+[node name="Position2D2" parent="." index="1" instance=ExtResource( 1 )]
+position = Vector2( 264.922, 105.101 )
+
+[node name="Position2D3" parent="." index="2" instance=ExtResource( 1 )]
+position = Vector2( 313.567, 154.673 )
