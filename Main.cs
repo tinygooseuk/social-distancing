@@ -29,7 +29,7 @@ public class Main : Node2D
         this.FindSubnodes();
 
         // Generate world
-        for (int level = 0; level < 50; level++)
+        for (int level = 0; level < 30; level++)
         {
             Difficulty desiredDifficulty = GetDifficulty(level);
 
@@ -64,7 +64,7 @@ public class Main : Node2D
         {
             return Difficulty.Easy;
         } 
-        else if (level < 30)
+        else if (level < 20)
         {
             return Difficulty.Medium;
         }
