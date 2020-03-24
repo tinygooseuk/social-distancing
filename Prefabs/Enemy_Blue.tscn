@@ -21,15 +21,14 @@ animations = [ {
 } ]
 
 [sub_resource type="CircleShape2D" id=4]
-radius = 18.4368
+radius = 11.2079
 
 [node name="Enemy" instance=ExtResource( 2 )]
 script = ExtResource( 3 )
 
 [node name="Sprite" parent="." index="0"]
 frames = SubResource( 3 )
-frame = 1
 
 [node name="Collider" parent="." index="1"]
-position = Vector2( 0, 0 )
+position = Vector2( 0, 0.725677 )
 shape = SubResource( 4 )
