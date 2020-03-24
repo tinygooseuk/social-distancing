@@ -22,7 +22,9 @@ tangential_accel_random = 1.0
 color_ramp = SubResource( 2 )
 
 [node name="Particles" type="Particles2D"]
+emitting = false
 amount = 64
+one_shot = true
 explosiveness = 1.0
 process_material = SubResource( 3 )
 texture = ExtResource( 1 )
