@@ -30,7 +30,6 @@ script = ExtResource( 2 )
 scale = Vector2( 2, 2 )
 frames = SubResource( 3 )
 animation = "Idle"
-frame = 1
 playing = true
 
 [node name="Collider" type="CollisionShape2D" parent="."]
@@ -38,6 +37,7 @@ position = Vector2( -1.10416, 0.36805 )
 shape = SubResource( 4 )
 
 [node name="VisibilityEnabler2D" type="VisibilityEnabler2D" parent="."]
+scale = Vector2( 3.64077, 3.64077 )
 rect = Rect2( -20, -20, 40, 40 )
 process_parent = true
 physics_process_parent = true
