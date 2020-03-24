@@ -30,8 +30,8 @@ public class Enemy_Yellow : Enemy
             return Vector2.Zero;
         }
 
-        Vector2 move = (playerPosition - Position + new Vector2(0.1f, 0.1f)).Normalized() * 800.0f;
-        move.y = -500.0f;
+        Vector2 move = (playerPosition - GlobalPosition + new Vector2(0.1f, 0.1f)).Normalized() * 1000.0f;
+        move.y = -400.0f;
 
         GroundedTime = 0.0f;
 
