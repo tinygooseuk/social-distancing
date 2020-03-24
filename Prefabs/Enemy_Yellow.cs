@@ -3,6 +3,8 @@ using System;
 
 public class Enemy_Yellow : Enemy
 {
+    protected override Color GetColour() => Colors.Yellow;
+
     // State
     private float GroundedTime = 0.0f;
     

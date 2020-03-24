@@ -3,6 +3,8 @@ using System;
 
 public class Enemy_Blue : Enemy
 {
+    protected override Color GetColour() => Colors.Blue;
+
     public override void _Process(float delta)
     {
         base._Process(delta);

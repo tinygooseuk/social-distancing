@@ -62,7 +62,7 @@ public class Bullet : KinematicBody2D
 
     private async Task KillEnemy(Enemy e)
     {
-        e.QueueFree();
+        e.Die();
         Main.Instance.Player1.OnEnemyDied();
 
         Sound_EnemyDeath.Play();

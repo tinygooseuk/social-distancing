@@ -1,11 +1,13 @@
 using Godot;
 using System;
+using System.Threading.Tasks;
 
 public class Enemy : KinematicBody2D
 {
     // Override point
     protected virtual bool IsAffectedByGravity() => true;
     protected virtual Vector2 Move(Vector2 playerPosition) => Vector2.Zero;
+    protected virtual Color GetColour() => Colors.White;
 
     // Consts
     private static float GRAVITY = 9.8f;
@@ -35,5 +37,23 @@ public class Enemy : KinematicBody2D
                 character.Die();
             }
         }
+    }
+
+    public void Die()
+    {        
+        QueueFree();
+
+        // Spawn particles
+        PackedScene deathParticlesScene = GD.Load<PackedScene>("res://Prefabs/DeathParticles.tscn");
+        
+        Particles2D deathParticles = (Particles2D)deathParticlesScene.Instance();
+        deathParticles.Position = Position;
+        
+        ParticlesMaterial processMaterial = (ParticlesMaterial)deathParticles.ProcessMaterial;
+        GradientTexture gradientTexture = (GradientTexture)processMaterial.ColorRamp;  
+        Gradient gradient = gradientTexture.Gradient;
+        gradient.SetColor(0, GetColour());
+
+        GetParent().AddChild(deathParticles);      
     }
 }
