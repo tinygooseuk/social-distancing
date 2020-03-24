@@ -14,7 +14,7 @@ public class Enemy : KinematicBody2D
     // State
     protected Vector2 Velocity = Vector2.Zero;
 
-    public override void _Process(float delta)
+    public override void _PhysicsProcess(float delta)
     {
         Vector2 move = Move(Main.Instance.Player1.GlobalPosition);
         Velocity += move;
@@ -26,5 +26,14 @@ public class Enemy : KinematicBody2D
         }      
 
         Velocity = MoveAndSlide(Velocity, upDirection: Vector2.Up);
+
+        for (int slideIndex = 0; slideIndex < GetSlideCount(); slideIndex++)
+        {
+            KinematicCollision2D collision = GetSlideCollision(slideIndex);
+            if (collision != null && IsInstanceValid(collision.Collider) && collision.Collider is Character character)
+            {
+                character.Die();
+            }
+        }
     }
 }

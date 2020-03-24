@@ -27,7 +27,7 @@ public class Bullet : KinematicBody2D
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
-    public override async void _Process(float delta)
+    public override async void _PhysicsProcess(float delta)
     {
         KinematicCollision2D collision = MoveAndCollide(new Vector2(Direction, 0.0f) * delta * 400.0f);
         if (collision != null && IsInstanceValid(collision.Collider))

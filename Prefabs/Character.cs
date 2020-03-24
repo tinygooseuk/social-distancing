@@ -35,15 +35,17 @@ public class Character : KinematicBody2D
         this.FindSubnodes();
     }
 
+    public override void _PhysicsProcess(float delta)
+    {
+        // "Physics"
+        ApplyPhysics();
+        UpdateGrounded(delta);
+    }
+
     public override void _Process(float delta)
     {
         // Input
         ProcessInput(delta);
-
-        // "Physics"
-        ApplyPhysics();
-        CheckEnemies();
-        UpdateGrounded(delta);
 
         // Graphics
         UpdateSprite();
@@ -104,7 +106,7 @@ public class Character : KinematicBody2D
         Bullet bullet = (Bullet)bulletScene.Instance();
         bullet.Colour = colour;
         bullet.Direction = IsRight ? 1.0f : -1.0f;
-        bullet.Position = Position + new Vector2(bullet.Direction * 30.0f, -8.0f);
+        bullet.Position = Position + new Vector2(bullet.Direction * 30.0f, -6.0f);
         GetParent().AddChild(bullet);        
     }
 
@@ -125,18 +127,16 @@ public class Character : KinematicBody2D
         Velocity = MoveAndSlide(Velocity, upDirection: Vector2.Up);
     }
 
-    private void CheckEnemies()
+    public void Die()
     {
-        for (int i = 0; i < GetSlideCount(); i++)
+        if (IsDead)
         {
-            KinematicCollision2D collision = GetSlideCollision(i);
-            if (collision.Collider is Enemy e)
-            {
-                IsDead = true;
-                Sound_Death.Play();
-                Main.Instance.PlayerDied();
-            }
+            return;
         }
+
+        IsDead = true;
+        Sound_Death.Play();
+        Main.Instance.PlayerDied();
     }
 
     private void UpdateGrounded(float delta)
