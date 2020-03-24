@@ -1,9 +1,13 @@
 using Godot;
 using System;
 using System.Threading.Tasks;
+using System.Text;
 
 public class Enemy : KinematicBody2D
 {
+    // Subnodes
+    [Subnode("Sprite")] private AnimatedSprite EnemySprite;
+
     // Override point
     protected virtual bool IsAffectedByGravity() => true;
     protected virtual Vector2 Move(Vector2 playerPosition) => Vector2.Zero;
@@ -15,6 +19,11 @@ public class Enemy : KinematicBody2D
 
     // State
     protected Vector2 Velocity = Vector2.Zero;
+
+    public override void _Ready()
+    {
+        EnemySprite = GetNode<AnimatedSprite>("Sprite"); // Why subnode not work here?!
+    }
 
     public override void _PhysicsProcess(float delta)
     {
@@ -40,7 +49,36 @@ public class Enemy : KinematicBody2D
     }
 
     public void Die()
-    {        
+    {       
+        AtlasTexture enemyTexture = (AtlasTexture)EnemySprite.Frames.GetFrame("Idle", 0);
+        Image enemyImage = enemyTexture.Atlas.GetData();
+
+        PackedScene pixelScene = GD.Load<PackedScene>("res://Prefabs/Pixel.tscn");
+
+        enemyImage.Lock();
+        {
+            for (int y = 0; y < enemyTexture.GetHeight(); y++)
+            {
+                for (int x = 0; x < enemyTexture.GetWidth(); x++)
+                {
+                    Vector2 offset = enemyTexture.Region.Position;
+
+                    bool isPixel = enemyImage.GetPixel((int)offset.x + x, (int)offset.y + y).a > 0.5f;
+                    
+                    if (isPixel)
+                    {
+                        Pixel pixel = (Pixel)pixelScene.Instance();
+                        pixel.Position = Position + new Vector2((float)x * 2.0f, (float)y * 2.0f) - new Vector2(enemyTexture.GetWidth(), enemyTexture.GetHeight());
+                        pixel.Modulate = GetColour();
+                        pixel.ApplyCentralImpulse(Velocity);
+                        GetParent().AddChild(pixel);
+                    }
+                    
+                }   
+            }
+        }
+        enemyImage.Unlock();
+
         QueueFree();
 
         // Spawn particles
