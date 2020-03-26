@@ -63,9 +63,6 @@ public class Game : Node2D
             {
                 CurrentLevel = newLevel;
             }
-
-            AgainButton.Visible = true;
-            AgainButton.Text = $"AI: {GetAIDifficultyScale(CurrentLevel)}";
         }
     }
 
