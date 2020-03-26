@@ -25,6 +25,8 @@ public class Character : KinematicBody2D
     private Vector2 Velocity = Vector2.Zero;
     private bool IsDead = false;
 
+    private float LerpedCameraOffsetY = 0.0f;
+
     private int BaseScore = 0;
     private int KillScore = 0;
     public int Score => BaseScore + KillScore;
@@ -112,9 +114,11 @@ public class Character : KinematicBody2D
             return;
         }
 
-        float cameraOffset = Input.GetActionStrength("look_down") - Input.GetActionStrength("look_up");
+        float rootCameraOffset = Mathf.Clamp(Position.y * 0.2f, -40.0f, 0.0f);
+        float desiredCameraOffset = Input.GetActionStrength("look_down") - Input.GetActionStrength("look_up");
+        LerpedCameraOffsetY = Mathf.Lerp(LerpedCameraOffsetY, desiredCameraOffset * 70.0f, 0.1f);
         
-        Camera.Offset = new Vector2(0.0f, Mathf.Lerp(Camera.Offset.y, cameraOffset * 70.0f, 0.1f));
+        Camera.Offset = new Vector2(0.0f, rootCameraOffset + LerpedCameraOffsetY);
     }
 
     private void FireBullet(Bullet.ColourEnum colour)
