@@ -22,7 +22,7 @@
 
 [sub_resource type="Curve" id=3]
 bake_resolution = 300
-_data = [ Vector2( 0, 0.293103 ), 0.0, 0.245244, 0, 0, Vector2( 1, 1 ), 1.67343, 0.0, 0, 0 ]
+_data = [ Vector2( 0, 0.336207 ), 0.0, 0.33867, 0, 0, Vector2( 1, 1 ), 0.922647, 0.0, 0, 0 ]
 
 [sub_resource type="DynamicFont" id=1]
 font_data = ExtResource( 7 )
