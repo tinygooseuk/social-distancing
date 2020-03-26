@@ -21,8 +21,8 @@ animations = [ {
 } ]
 
 [sub_resource type="CapsuleShape2D" id=4]
-radius = 10.7064
-height = 7.07603
+radius = 10.4051
+height = 7.64859
 
 [node name="Enemy" instance=ExtResource( 2 )]
 script = ExtResource( 3 )
@@ -32,5 +32,8 @@ frames = SubResource( 3 )
 frame = 1
 
 [node name="Collider" parent="." index="1"]
-position = Vector2( -0.245601, 3.80227 )
+position = Vector2( -0.245601, 3.15835 )
 shape = SubResource( 4 )
+
+[node name="VisibilityEnabler2D" parent="." index="2"]
+position = Vector2( -0.197914, -1.12151 )

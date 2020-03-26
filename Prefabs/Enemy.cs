@@ -6,7 +6,7 @@ using System.Text;
 public class Enemy : KinematicBody2D
 {
     // Subnodes
-    private AnimatedSprite EnemySprite;
+    protected AnimatedSprite EnemySprite;
 
     // Override point
     protected virtual bool IsAffectedByGravity() => true;

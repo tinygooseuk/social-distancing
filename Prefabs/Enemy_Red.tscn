@@ -21,14 +21,13 @@ animations = [ {
 } ]
 
 [sub_resource type="RectangleShape2D" id=4]
-extents = Vector2( 14.0563, 4.58572 )
+extents = Vector2( 14.0563, 8.54027 )
 
 [node name="Enemy_Red" instance=ExtResource( 1 )]
 script = ExtResource( 3 )
 
 [node name="Sprite" parent="." index="0"]
 frames = SubResource( 3 )
-frame = 1
 
 [node name="Collider" parent="." index="1"]
 position = Vector2( -0.0435886, -0.654633 )
