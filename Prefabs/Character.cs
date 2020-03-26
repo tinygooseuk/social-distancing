@@ -6,6 +6,7 @@ public class Character : KinematicBody2D
     // Subnodes    
     [Subnode] private AnimatedSprite Sprite;
     [Subnode] private CollisionShape2D Collider;
+    [Subnode] private Camera2D Camera;
     [Subnode] private AnimationPlayer AnimationPlayer;
 
     [Subnode("Sounds/Jump")] private AudioStreamPlayer Sound_Jump;
@@ -46,6 +47,7 @@ public class Character : KinematicBody2D
     {
         // Input
         ProcessInput(delta);
+        ProcessCameraInput(delta);
 
         // Graphics
         UpdateSprite();
@@ -98,6 +100,19 @@ public class Character : KinematicBody2D
         {
             FireBullet(Bullet.ColourEnum.Blue);
         }
+    }
+    }
+
+    private void ProcessCameraInput(float delta)
+    {
+        if (IsDead)
+        {
+            return;
+        }
+
+        float cameraOffset = Input.GetActionStrength("look_down") - Input.GetActionStrength("look_up");
+        
+        Camera.Offset = new Vector2(0.0f, Mathf.Lerp(Camera.Offset.y, cameraOffset * 70.0f, 0.1f));
     }
 
     private void FireBullet(Bullet.ColourEnum colour)
