@@ -6,7 +6,7 @@ using System.Text;
 public class Enemy : KinematicBody2D
 {
     // Subnodes
-    [Subnode("Sprite")] private AnimatedSprite EnemySprite;
+    private AnimatedSprite EnemySprite;
 
     // Override point
     protected virtual bool IsAffectedByGravity() => true;
@@ -55,21 +55,39 @@ public class Enemy : KinematicBody2D
 
         PackedScene pixelScene = GD.Load<PackedScene>("res://Prefabs/Pixel.tscn");
 
+        Transform2D transform = new Transform2D
+        {
+            origin = Vector2.Zero,
+            x = GlobalTransform.x,
+            y = GlobalTransform.y,
+        };
+
+        int numPixels = GetTree().GetNodesInGroup("pixels").Count;
+        int skip = 1 + Mathf.RoundToInt(numPixels / 100);
+        int counter = 0;
+
         enemyImage.Lock();
         {
             for (int y = 0; y < enemyTexture.GetHeight(); y++)
             {
                 for (int x = 0; x < enemyTexture.GetWidth(); x++)
                 {
-                    Vector2 offset = enemyTexture.Region.Position;
+                    if (counter++ % skip > 0)
+                    {
+                        continue;
+                    }
 
-                    bool isPixel = enemyImage.GetPixel((int)offset.x + x, (int)offset.y + y).a > 0.5f;
+                    Vector2 pixelOffset = enemyTexture.Region.Position;
+                    Color pixelColour = enemyImage.GetPixel((int)pixelOffset.x + x, (int)pixelOffset.y + y);
+                    bool isPixel = pixelColour.a > 0.5f;
                     
+                    Vector2 offset = new Vector2((float)x * 2.0f, (float)y * 2.0f) - new Vector2(enemyTexture.GetWidth(), enemyTexture.GetHeight());
+
                     if (isPixel)
                     {
                         Pixel pixel = (Pixel)pixelScene.Instance();
-                        pixel.Position = Position + new Vector2((float)x * 2.0f, (float)y * 2.0f) - new Vector2(enemyTexture.GetWidth(), enemyTexture.GetHeight());
-                        pixel.Modulate = GetColour();
+                        pixel.Position = Position + transform.Xform(offset);
+                        pixel.Modulate = pixelColour;
                         pixel.ApplyCentralImpulse(Velocity);
                         GetParent().AddChild(pixel);
                     }
