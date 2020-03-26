@@ -97,8 +97,4 @@ script = ExtResource( 9 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-
-[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
-
-[node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
 [connection signal="pressed" from="UI/BG/AgainButton" to="UI/BG/AgainButton" method="OnPressed"]
