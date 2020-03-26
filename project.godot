@@ -17,8 +17,6 @@ _global_script_class_icons={
 
 config/name="SocialDistancing"
 run/main_scene="res://Main.tscn"
-run/disable_stdout=true
-run/disable_stderr=true
 
 [display]
 
@@ -67,6 +65,11 @@ hit_red={
 , Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":68,"unicode":0,"echo":false,"script":null)
  ]
 }
+
+[physics]
+
+2d/physics_engine="GodotPhysics"
+2d/thread_model=2
 
 [rendering]
 
