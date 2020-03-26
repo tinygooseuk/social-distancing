@@ -23,14 +23,14 @@ region = Rect2( 16, 16, 16, 16 )
 
 [sub_resource type="SpriteFrames" id=5]
 animations = [ {
-"frames": [ SubResource( 1 ), SubResource( 2 ), SubResource( 3 ), SubResource( 4 ) ],
-"loop": true,
-"name": "WalkRight",
-"speed": 5.0
-}, {
 "frames": [ SubResource( 1 ) ],
 "loop": true,
 "name": "Idle",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 1 ), SubResource( 2 ), SubResource( 3 ), SubResource( 4 ) ],
+"loop": true,
+"name": "WalkRight",
 "speed": 5.0
 } ]
 
@@ -113,7 +113,7 @@ shape = SubResource( 6 )
 anims/Jump = SubResource( 7 )
 anims/Land = SubResource( 8 )
 
-[node name="Camera2D" type="Camera2D" parent="."]
+[node name="Camera" type="Camera2D" parent="."]
 current = true
 limit_left = 0
 limit_right = 416

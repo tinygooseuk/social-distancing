@@ -5,6 +5,6 @@ public class AgainButton : Button
 {
     private void OnPressed()
     {
-        Main.Instance.RestartGame();
+        Game.Instance.RestartGame();
     }
 }

@@ -2,7 +2,7 @@
 
 [ext_resource path="res://Rooms/Easy/Easy1.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Prefabs/Character.tscn" type="PackedScene" id=2]
-[ext_resource path="res://Main.cs" type="Script" id=3]
+[ext_resource path="res://Game.cs" type="Script" id=3]
 [ext_resource path="res://Rooms/Bedrock.tscn" type="PackedScene" id=4]
 [ext_resource path="res://Rooms/DeadRoom.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Rooms/Hard/Hard4.tscn" type="PackedScene" id=6]
@@ -92,4 +92,8 @@ script = ExtResource( 9 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
 [connection signal="pressed" from="UI/BG/AgainButton" to="UI/BG/AgainButton" method="OnPressed"]

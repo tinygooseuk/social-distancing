@@ -2,10 +2,10 @@ using Godot;
 using Godot.Collections;
 using System;
 
-public class Main : Node2D
+public class Game : Node2D
 {
     // Ref
-    public static Main Instance = null;
+    public static Game Instance = null;
 
     // Exports
     [Export] private Array<PackedScene> EasyScenes = new Array<PackedScene>();
@@ -25,6 +25,7 @@ public class Main : Node2D
     public override void _Ready()
     {
         Instance = this;
+        GD.Seed(OS.GetSystemTimeMsecs());
 
         this.FindSubnodes();
 

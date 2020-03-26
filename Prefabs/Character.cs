@@ -55,7 +55,7 @@ public class Character : KinematicBody2D
         // Update score
         float score = -(Position.y - 207.0f);
         BaseScore = (int)Mathf.Max(score, BaseScore);
-        Main.Instance.Score.Text = $"Score: {Score}";
+        Game.Instance.Score.Text = $"Score: {Score}";
     }
 
     public void OnEnemyDied()
@@ -154,7 +154,7 @@ public class Character : KinematicBody2D
 
         IsDead = true;
         Sound_Death.Play();
-        Main.Instance.PlayerDied();
+        Game.Instance.PlayerDied();
     }
 
     private void UpdateGrounded(float delta)

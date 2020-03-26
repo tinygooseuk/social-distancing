@@ -27,7 +27,7 @@ public class Enemy : KinematicBody2D
 
     public override void _PhysicsProcess(float delta)
     {
-        Vector2 move = Move(Main.Instance.Player1.GlobalPosition);
+        Vector2 move = Move(Game.Instance.Player1.GlobalPosition);
         Velocity += move;
 
         if (IsAffectedByGravity())
