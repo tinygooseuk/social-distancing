@@ -45,12 +45,12 @@ public class Enemy_Yellow : Enemy
         EnemySprite.Position = new Vector2(0.0f, Mathf.Lerp(0.0f, +5.0f, jumpProximity));
     }
 
-    protected override Vector2 Move(Vector2 playerPosition)
+    protected override Vector2 Move(Vector2 playerPosition, float difficultyScale)
     {
         // Move towards player a little
         Vector2 move = new Vector2
         {
-            x = Mathf.Sign(playerPosition.x - GlobalPosition.x) * 10.0f,
+            x = Mathf.Sign(playerPosition.x - GlobalPosition.x) * 10.0f * difficultyScale,
             y = 0.0f
         };
 

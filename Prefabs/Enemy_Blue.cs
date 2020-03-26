@@ -36,7 +36,7 @@ public class Enemy_Blue : Enemy
         }
     }
 
-    protected override Vector2 Move(Vector2 playerPosition)
+    protected override Vector2 Move(Vector2 playerPosition, float difficultyScale)
     {
         Vector2 move = new Vector2(); 
         
@@ -44,14 +44,14 @@ public class Enemy_Blue : Enemy
         {
             case StateEnum.FollowPlayer:
             case StateEnum.FollowPlayerAgain:
-                move.x = Mathf.Sign(playerPosition.x - Position.x) * 10.0f;
+                move.x = Mathf.Sign(playerPosition.x - Position.x) * 10.0f * difficultyScale;
                 break;
 
             case StateEnum.GoLeft:
-                move.x = -10.0f;
+                move.x = -10.0f * difficultyScale;
                 break;
             case StateEnum.GoRight:
-                move.x = +10.0f;
+                move.x = +10.0f * difficultyScale;
                 break;
         }    
 

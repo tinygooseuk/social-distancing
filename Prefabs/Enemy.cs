@@ -10,7 +10,7 @@ public class Enemy : KinematicBody2D
 
     // Override point
     protected virtual bool IsAffectedByGravity() => true;
-    protected virtual Vector2 Move(Vector2 playerPosition) => Vector2.Zero;
+    protected virtual Vector2 Move(Vector2 playerPosition, float difficultyScale) => Vector2.Zero;
     protected virtual Color GetColour() => Colors.White;
 
     // Consts
@@ -27,7 +27,7 @@ public class Enemy : KinematicBody2D
 
     public override void _PhysicsProcess(float delta)
     {
-        Vector2 move = Move(Game.Instance.Player1.GlobalPosition);
+        Vector2 move = Move(Game.Instance.Player1.GlobalPosition, Game.Instance.GetAIDifficultyScale(Game.Instance.CurrentLevel));
         Velocity += move;
 
         if (IsAffectedByGravity())
