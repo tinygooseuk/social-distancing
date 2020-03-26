@@ -53,7 +53,8 @@ public class Enemy : KinematicBody2D
         AtlasTexture enemyTexture = (AtlasTexture)EnemySprite.Frames.GetFrame("Idle", 0);
         Image enemyImage = enemyTexture.Atlas.GetData();
 
-        PackedScene pixelScene = GD.Load<PackedScene>("res://Prefabs/Pixel.tscn");
+        Scene<Pixel> pixelScene = R.Prefabs.Pixel;
+        pixelScene.Load();
 
         Transform2D transform = new Transform2D
         {
@@ -85,7 +86,7 @@ public class Enemy : KinematicBody2D
 
                     if (isPixel)
                     {
-                        Pixel pixel = (Pixel)pixelScene.Instance();
+                        Pixel pixel = pixelScene.Instance();
                         pixel.Position = Position + transform.Xform(offset);
                         pixel.Modulate = pixelColour;
                         pixel.ApplyCentralImpulse(Velocity);
@@ -100,9 +101,9 @@ public class Enemy : KinematicBody2D
         QueueFree();
 
         // Spawn particles
-        PackedScene deathParticlesScene = GD.Load<PackedScene>("res://Prefabs/DeathParticles.tscn");
+        Scene<Particles2D> deathParticlesScene = R.Prefabs.DeathParticles;
         
-        Particles2D deathParticles = (Particles2D)deathParticlesScene.Instance();
+        Particles2D deathParticles = deathParticlesScene.Instance();
         deathParticles.Position = Position;
         
         ParticlesMaterial processMaterial = (ParticlesMaterial)deathParticles.ProcessMaterial;

@@ -88,19 +88,21 @@ public class Character : KinematicBody2D
         }
 
         LastBullet += delta;
-        if (Input.IsActionJustPressed("hit_red") && LastBullet > 0.5f)
+        if (LastBullet > 0.5f)
         {
-            FireBullet(Bullet.ColourEnum.Red);
+            if (Input.IsActionJustPressed("hit_red"))
+            {
+                FireBullet(Bullet.ColourEnum.Red);
+            }
+            if (Input.IsActionJustPressed("hit_yellow"))
+            {
+                FireBullet(Bullet.ColourEnum.Yellow);
+            }
+            if (Input.IsActionJustPressed("hit_blue"))
+            {
+                FireBullet(Bullet.ColourEnum.Blue);
+            }
         }
-        if (Input.IsActionJustPressed("hit_yellow") && LastBullet > 0.5f)
-        {
-            FireBullet(Bullet.ColourEnum.Yellow);
-        }
-        if (Input.IsActionJustPressed("hit_blue") && LastBullet > 0.5f)
-        {
-            FireBullet(Bullet.ColourEnum.Blue);
-        }
-    }
     }
 
     private void ProcessCameraInput(float delta)
@@ -117,8 +119,9 @@ public class Character : KinematicBody2D
 
     private void FireBullet(Bullet.ColourEnum colour)
     {
-        PackedScene bulletScene = (PackedScene)GD.Load("res://Prefabs/Bullet.tscn");
-        Bullet bullet = (Bullet)bulletScene.Instance();
+        Scene<Bullet> bulletScene = R.Prefabs.Bullet;
+
+        Bullet bullet = bulletScene.Instance();
         bullet.Colour = colour;
         bullet.Direction = IsRight ? 1.0f : -1.0f;
         bullet.Position = Position + new Vector2(bullet.Direction * 30.0f, -6.0f);
