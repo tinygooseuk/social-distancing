@@ -11,20 +11,9 @@ public class Character : KinematicBody2D
         set
         {
              _PlayerIndex = value; 
-
-            // Set collision layer based on player index
-            CollisionLayer = (uint)PlayerIndex+1;
-
-            // Set colour too
-            Modulate = new []
-            {
-                new Color(0.91f, 0.48f, 0.03f),
-                new Color(0.57f, 0.03f, 0.91f),
-                new Color(0.8f, 0.91f, 0.03f),
-                new Color(0.91f, 0.03f, 0.11f),
-            }[PlayerIndex];
+            UpdatePlayerIndex();
         }
-    }
+    }   
 
     // Subnodes    
     [Subnode] private AnimatedSprite Sprite;
@@ -204,6 +193,21 @@ public class Character : KinematicBody2D
         }
 
         Sprite.Scale = new Vector2(2.0f * (IsRight ? 1 : -1), 2.0f);
+    }
+
+    private void UpdatePlayerIndex()
+    {
+        // Set collision layer based on player index
+        CollisionLayer = (uint)PlayerIndex+1;
+
+        // Set colour too
+        Modulate = new []
+        {
+            new Color(0.91f, 0.48f, 0.03f),
+            new Color(0.57f, 0.03f, 0.91f),
+            new Color(0.8f, 0.91f, 0.03f),
+            new Color(0.91f, 0.03f, 0.11f),
+        }[PlayerIndex];
     }
 }
 
