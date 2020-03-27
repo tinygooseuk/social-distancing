@@ -128,9 +128,23 @@ public class Game : Node2D
         AgainButton.Visible = true;
     }
 
-    public void RestartGame()
+    public async void RestartGame()
     {
-        GetTree().ChangeScene("res://Main.tscn");
+        Scene<Node> sceneToLoad = null;
+
+        switch (Global.NumberOfPlayers)
+        {
+            case 1: sceneToLoad = R.Scenes.SinglePlayer; break;
+            case 2: sceneToLoad = R.Scenes.TwoPlayer; break;
+            default:
+                GD.PrintErr($"Unsupported # of players - {Global.NumberOfPlayers}");
+                break;
+        }
+
+        if (sceneToLoad != null)
+        {
+            GetTree().ChangeSceneTo(await sceneToLoad.LoadAsync());
+        }
     }
 
     private Difficulty GetDifficultyEnumValue(int level)
