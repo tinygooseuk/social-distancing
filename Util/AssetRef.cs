@@ -24,7 +24,7 @@ public class Asset<T> where T : Resource
     {
         if (Object == null)
         {
-            Object = GD.Load<T>(ResourcePath);;
+            Object = GD.Load<T>(ResourcePath);
         }
         
         return Object;
@@ -34,7 +34,19 @@ public class Asset<T> where T : Resource
     {
         if (Object == null)
         {
-            Object = await AsyncUtil.LoadAsync<T>(ResourcePath);
+            if (ResourceLoader.HasCached(ResourcePath))
+            {
+                return Load();
+            }
+            
+            await Task.Run(() => 
+            {
+                lock(typeof(Asset<T>))
+                {
+                    // Don't use the cache for threading reasons!
+                    Object = GD.Load<T>(ResourcePath);
+                }
+            });
         }        
         
         return Object;
