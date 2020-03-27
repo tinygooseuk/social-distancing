@@ -8,7 +8,6 @@ public class Bullet : KinematicBody2D
 
     // Subnodes
     [Subnode] private AnimatedSprite AnimatedSprite;
-    [Subnode("Sounds/EnemyDeath")] private AudioStreamPlayer Sound_EnemyDeath;
     
     // State
     public float Direction = 0.0f;
@@ -24,32 +23,33 @@ public class Bullet : KinematicBody2D
             case ColourEnum.Yellow: AnimatedSprite.Modulate = new Color(1.0f, 1.0f, 0.0f); break;
             case ColourEnum.Blue: AnimatedSprite.Modulate = new Color(0.0f, 0.0f, 1.0f); break;
         }
+
+        // Play shot sound
+        Asset<AudioStream> Sound_Shoot = R.Sounds.Shoot;
+        GetTree().PlaySound2D(Sound_Shoot, relativeTo: this);
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
-    public override async void _PhysicsProcess(float delta)
+    public override void _PhysicsProcess(float delta)
     {
         KinematicCollision2D collision = MoveAndCollide(new Vector2(Direction, 0.0f) * delta * 400.0f);
         if (collision != null && IsInstanceValid(collision.Collider))
         {
             if (Colour == ColourEnum.Red && collision.Collider is Enemy_Red er)
             {
-                await KillEnemy(er);
-                QueueFree();
+                KillEnemy(er);
 
                 return;
             }
             if (Colour == ColourEnum.Yellow && collision.Collider is Enemy_Yellow ey)
             {
-                await KillEnemy(ey);
-                QueueFree();
+                KillEnemy(ey);
 
                 return;
             }
             if (Colour == ColourEnum.Blue && collision.Collider is Enemy_Blue eb)
             {
-                await KillEnemy(eb);
-                QueueFree();
+                KillEnemy(eb);
 
                 return;
             }
@@ -60,14 +60,13 @@ public class Bullet : KinematicBody2D
         }
     }
 
-    private async Task KillEnemy(Enemy e)
+    private void KillEnemy(Enemy e)
     {
         e.Die();
         Game.Instance.Player1.OnEnemyDied();
 
-        Sound_EnemyDeath.Play();
-
-        await ToSignal(Sound_EnemyDeath, "finished");
-        Visible = false;
+        // Play enemy death sound
+        Asset<AudioStream> Sound_EnemyDeath = R.Sounds.EnemyDeath;
+        GetTree().PlaySound2D(Sound_EnemyDeath, relativeTo: this);
     }
 }

@@ -11,4 +11,11 @@ public static class R
 
 
     }
+    public static class Sounds
+    {
+        public static string Shoot = "res://Sounds/Shoot.wav";
+        public static string EnemyDeath = "res://Sounds/EnemyDeath.wav";
+        public static string PlayerDeath = "res://Sounds/PlayerDeath.wav";
+    
+    }
 }

@@ -12,8 +12,8 @@ public class Character : KinematicBody2D
     [Subnode] private Camera2D Camera;
     [Subnode] private AnimationPlayer AnimationPlayer;
 
-    [Subnode("Sounds/Jump")] private AudioStreamPlayer Sound_Jump;
-    [Subnode("Sounds/PlayerDeath")] private AudioStreamPlayer Sound_Death;
+    [Subnode("Sounds/Jump")] private AudioStreamPlayer2D Sound_Jump;
+    [Subnode("Sounds/PlayerDeath")] private AudioStreamPlayer2D Sound_Death;
     
     // Consts
     private static float GRAVITY = 9.8f;
