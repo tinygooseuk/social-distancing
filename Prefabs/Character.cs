@@ -3,6 +3,9 @@ using System;
 
 public class Character : KinematicBody2D
 {
+    // Exports
+    [Export] private int PlayerIndex = 0;
+
     // Subnodes    
     [Subnode] private AnimatedSprite Sprite;
     [Subnode] private CollisionShape2D Collider;
@@ -73,7 +76,7 @@ public class Character : KinematicBody2D
             return;
         }
 
-        float move = Input.GetActionStrength("move_right") - Input.GetActionStrength("move_left");
+        float move = Input.GetActionStrength($"move_right_{PlayerIndex}") - Input.GetActionStrength($"move_left_{PlayerIndex}");
         Velocity.x += move * MOVE_SPEED;
 
         if (!Mathf.IsEqualApprox(Velocity.x, 0.0f))
@@ -81,7 +84,7 @@ public class Character : KinematicBody2D
             IsRight = Mathf.Sign(Velocity.x) == 1;
         }
 
-        bool jump = Input.IsActionJustPressed("jump") && IsGrounded;
+        bool jump = Input.IsActionJustPressed($"jump_{PlayerIndex}") && IsGrounded;
         if (jump) 
         {
             AnimationPlayer.Play("Jump");
@@ -92,15 +95,15 @@ public class Character : KinematicBody2D
         LastBullet += delta;
         if (LastBullet > 0.5f)
         {
-            if (Input.IsActionJustPressed("hit_red"))
+            if (Input.IsActionJustPressed($"hit_red_{PlayerIndex}"))
             {
                 FireBullet(Bullet.ColourEnum.Red);
             }
-            if (Input.IsActionJustPressed("hit_yellow"))
+            if (Input.IsActionJustPressed($"hit_yellow_{PlayerIndex}"))
             {
                 FireBullet(Bullet.ColourEnum.Yellow);
             }
-            if (Input.IsActionJustPressed("hit_blue"))
+            if (Input.IsActionJustPressed($"hit_blue_{PlayerIndex}"))
             {
                 FireBullet(Bullet.ColourEnum.Blue);
             }
@@ -115,7 +118,7 @@ public class Character : KinematicBody2D
         }
 
         float rootCameraOffset = Mathf.Clamp(Position.y * 0.2f, -40.0f, 0.0f);
-        float desiredCameraOffset = Input.GetActionStrength("look_down") - Input.GetActionStrength("look_up");
+        float desiredCameraOffset = Input.GetActionStrength($"look_down_{PlayerIndex}") - Input.GetActionStrength($"look_up_{PlayerIndex}");
         LerpedCameraOffsetY = Mathf.Lerp(LerpedCameraOffsetY, desiredCameraOffset * 70.0f, 0.1f);
         
         Camera.Offset = new Vector2(0.0f, rootCameraOffset + LerpedCameraOffsetY);
