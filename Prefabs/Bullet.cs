@@ -71,5 +71,12 @@ public class Bullet : KinematicBody2D
         // Play enemy death sound
         Asset<AudioStream> Sound_EnemyDeath = R.Sounds.EnemyDeath;
         GetTree().PlaySound2D(Sound_EnemyDeath, relativeTo: this);
+
+        // Shake correct camera
+        Character c = Game.Instance.Players[FiredByPlayerIndex];
+        if (IsInstanceValid(c))
+        {
+            c.ShakeCamera(new Vector2(Direction * 10.0f, (float)GD.RandRange(-8.0f, +8.0f)));
+        }
     }
 }

@@ -40,6 +40,9 @@ public class Character : KinematicBody2D
 
     private Vector2 LerpedCameraOffset = Vector2.Zero;
 
+    private Vector2 CameraShakeMagnitude = Vector2.Zero;
+    private Vector2 CameraShakeOffset = Vector2.Zero;
+
     private bool IsGrounded => LastGrounded < 0.2f;
 
     public override void _Ready()
@@ -59,6 +62,21 @@ public class Character : KinematicBody2D
         // Input
         ProcessInput(delta);
         ProcessCameraInput(delta);
+
+        // Camera shake
+        if (CameraShakeMagnitude.Length() > 0.001f)
+        {
+            CameraShakeOffset = new Vector2 
+            {
+                x = (float)GD.RandRange(-CameraShakeMagnitude.x, +CameraShakeMagnitude.x), 
+                y = (float)GD.RandRange(-CameraShakeMagnitude.y, +CameraShakeMagnitude.y), 
+            };
+            CameraShakeMagnitude *= 0.9f;
+        }
+        else
+        {
+            CameraShakeOffset = Vector2.Zero;
+        }
 
         // Graphics
         UpdateSprite();
@@ -116,13 +134,12 @@ public class Character : KinematicBody2D
             float desiredCameraOffsetX = Input.GetActionStrength($"look_right_{PlayerIndex}") - Input.GetActionStrength($"look_left_{PlayerIndex}");
             LerpedCameraOffset.x = (Global.NumberOfPlayers == 1) ? 0.0f : Mathf.Lerp(LerpedCameraOffset.x, desiredCameraOffsetX * 70.0f, 0.1f);
 
-            float rootCameraOffsetY = Mathf.Clamp(Position.y * 0.2f, -40.0f, 0.0f);
             float desiredCameraOffsetY = Input.GetActionStrength($"look_down_{PlayerIndex}") - Input.GetActionStrength($"look_up_{PlayerIndex}");
             LerpedCameraOffset.y = Mathf.Lerp(LerpedCameraOffset.y, desiredCameraOffsetY * 70.0f, 0.1f);
-
-            Camera.Offset = new Vector2(LerpedCameraOffset.x, rootCameraOffsetY + LerpedCameraOffset.y);
         }
-                
+
+        float rootCameraOffsetY = Mathf.Clamp(Position.y * 0.2f, -40.0f, 0.0f);
+        Camera.Offset = new Vector2(LerpedCameraOffset.x, rootCameraOffsetY + LerpedCameraOffset.y) + CameraShakeOffset;                
         Camera.GlobalPosition = GlobalPosition;
     }
 
@@ -165,7 +182,11 @@ public class Character : KinematicBody2D
         IsDead = true;
         Sound_Death.Play();
         Game.Instance.PlayerDied(PlayerIndex);
+
+        ShakeCamera(new Vector2(250.0f, 250.0f));
     }
+
+    public void ShakeCamera(Vector2 magnitude) => CameraShakeMagnitude += magnitude;
 
     private void UpdateGrounded(float delta)
     {
