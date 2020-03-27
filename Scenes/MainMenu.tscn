@@ -63,13 +63,13 @@ flat = true
 [node name="Spacer" type="Control" parent="VBoxContainer"]
 margin_top = 52.0
 margin_right = 84.0
-margin_bottom = 72.0
-rect_min_size = Vector2( 0, 20 )
+margin_bottom = 67.0
+rect_min_size = Vector2( 0, 15 )
 
 [node name="Quit" type="Button" parent="VBoxContainer"]
-margin_top = 76.0
+margin_top = 71.0
 margin_right = 84.0
-margin_bottom = 98.0
+margin_bottom = 93.0
 text = "Quit Game"
 flat = true
 [connection signal="pressed" from="VBoxContainer/SinglePlayer" to="." method="StartSinglePlayer"]
