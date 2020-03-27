@@ -198,6 +198,16 @@ look_down_3={
  ]
 }
 
+[layer_names]
+
+2d_physics/layer_1="Player 1"
+2d_physics/layer_2="Player 2"
+2d_physics/layer_3="Player 3"
+2d_physics/layer_4="Player 4"
+2d_physics/layer_5="Enemy"
+2d_physics/layer_6="Ground"
+2d_physics/layer_7="Passthrough"
+
 [physics]
 
 2d/physics_engine="GodotPhysics"
