@@ -10,6 +10,8 @@ public class Bullet : KinematicBody2D
     [Subnode] private AnimatedSprite AnimatedSprite;
     
     // State
+    public int FiredByPlayerIndex = 0;
+
     public float Direction = 0.0f;
     public ColourEnum Colour = ColourEnum.Red;
     
@@ -63,8 +65,9 @@ public class Bullet : KinematicBody2D
     private void KillEnemy(Enemy e)
     {
         e.Die();
-        Game.Instance.Player1.OnEnemyDied();
 
+        Game.Instance.KillScore += (int)(500.0f + (float)Game.Instance.CurrentLevel / 10.0f);
+        
         // Play enemy death sound
         Asset<AudioStream> Sound_EnemyDeath = R.Sounds.EnemyDeath;
         GetTree().PlaySound2D(Sound_EnemyDeath, relativeTo: this);

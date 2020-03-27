@@ -27,8 +27,31 @@ public class Enemy : KinematicBody2D
 
     public override void _PhysicsProcess(float delta)
     {
-        Vector2 move = Move(Game.Instance.Player1.GlobalPosition, Game.Instance.GetAIDifficultyScale(Game.Instance.CurrentLevel));
-        Velocity += move;
+        // Find nearest player
+        float nearestSqrDistance = 1000000000.0f;
+        Character nearestPlayer = null;
+
+        for (int playerIndex = 0; playerIndex < Global.NumberOfPlayers; playerIndex++)
+        {
+            Character thisPlayer = Game.Instance.Players[playerIndex];
+            if (!IsInstanceValid(thisPlayer))
+            {
+                continue;
+            }
+
+            float thisSqrDistance = thisPlayer.GlobalPosition.DistanceSquaredTo(GlobalPosition);
+            if (thisSqrDistance < nearestSqrDistance)
+            {
+                nearestSqrDistance = thisSqrDistance;
+                nearestPlayer = thisPlayer;
+            }
+        }
+
+        if (IsInstanceValid(nearestPlayer))
+        {
+            Vector2 move = Move(nearestPlayer.GlobalPosition, Game.Instance.GetAIDifficultyScale(Game.Instance.CurrentLevel));
+            Velocity += move;
+        }
 
         if (IsAffectedByGravity())
         {

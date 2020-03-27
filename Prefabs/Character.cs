@@ -4,12 +4,31 @@ using System;
 public class Character : KinematicBody2D
 {
     // Exports
-    [Export] private int PlayerIndex = 0;
+    [Export] private int _PlayerIndex = 0;
+    public int PlayerIndex 
+    {
+        get => _PlayerIndex;
+        set
+        {
+             _PlayerIndex = value; 
+
+            // Set collision layer based on player index
+            CollisionLayer = (uint)PlayerIndex+1;
+
+            // Set colour too
+            Modulate = new []
+            {
+                new Color(0.91f, 0.48f, 0.03f),
+                new Color(0.57f, 0.03f, 0.91f),
+                new Color(0.8f, 0.91f, 0.03f),
+                new Color(0.91f, 0.03f, 0.11f),
+            }[PlayerIndex];
+        }
+    }
 
     // Subnodes    
     [Subnode] private AnimatedSprite Sprite;
     [Subnode] private CollisionShape2D Collider;
-    [Subnode] private Camera2D Camera;
     [Subnode] private AnimationPlayer AnimationPlayer;
 
     [Subnode("Sounds/Jump")] private AudioStreamPlayer2D Sound_Jump;
@@ -22,26 +41,21 @@ public class Character : KinematicBody2D
     private static float FRICTION = 0.15f;
 
     // State
+    public Camera2D Camera;
+
     private float LastGrounded = 100.0f;
     private float LastBullet = 100.0f;
     private bool IsRight = true;
     private Vector2 Velocity = Vector2.Zero;
     private bool IsDead = false;
 
-    private float LerpedCameraOffsetY = 0.0f;
-
-    private int BaseScore = 0;
-    private int KillScore = 0;
-    public int Score => BaseScore + KillScore;
+    private Vector2 LerpedCameraOffset = Vector2.Zero;
 
     private bool IsGrounded => LastGrounded < 0.2f;
 
     public override void _Ready()
     {
         this.FindSubnodes();
-
-        // Set collision layer based on player index
-        CollisionLayer = (uint)PlayerIndex+1;
     }
 
     public override void _PhysicsProcess(float delta)
@@ -62,14 +76,7 @@ public class Character : KinematicBody2D
         
         // Update score
         float score = -(Position.y - 207.0f);
-        BaseScore = (int)Mathf.Max(score, BaseScore);
-        Game.Instance.Score.Text = $"Score: {Score}";
-    }
-
-    public void OnEnemyDied()
-    {
-        int roughLevel = BaseScore / 100; // FIXME: bad.
-        KillScore += (int)(500.0f + (float)roughLevel / 10.0f);
+        Game.Instance.BaseScore = (int)Mathf.Max(score, Game.Instance.BaseScore);
     }
 
     private void ProcessInput(float delta)
@@ -115,16 +122,19 @@ public class Character : KinematicBody2D
 
     private void ProcessCameraInput(float delta)
     {
-        if (IsDead)
+        if (!IsDead)
         {
-            return;
-        }
+            float desiredCameraOffsetX = Input.GetActionStrength($"look_right_{PlayerIndex}") - Input.GetActionStrength($"look_left_{PlayerIndex}");
+            LerpedCameraOffset.x = (Global.NumberOfPlayers == 1) ? 0.0f : Mathf.Lerp(LerpedCameraOffset.x, desiredCameraOffsetX * 70.0f, 0.1f);
 
-        float rootCameraOffset = Mathf.Clamp(Position.y * 0.2f, -40.0f, 0.0f);
-        float desiredCameraOffset = Input.GetActionStrength($"look_down_{PlayerIndex}") - Input.GetActionStrength($"look_up_{PlayerIndex}");
-        LerpedCameraOffsetY = Mathf.Lerp(LerpedCameraOffsetY, desiredCameraOffset * 70.0f, 0.1f);
-        
-        Camera.Offset = new Vector2(0.0f, rootCameraOffset + LerpedCameraOffsetY);
+            float rootCameraOffsetY = Mathf.Clamp(Position.y * 0.2f, -40.0f, 0.0f);
+            float desiredCameraOffsetY = Input.GetActionStrength($"look_down_{PlayerIndex}") - Input.GetActionStrength($"look_up_{PlayerIndex}");
+            LerpedCameraOffset.y = Mathf.Lerp(LerpedCameraOffset.y, desiredCameraOffsetY * 70.0f, 0.1f);
+
+            Camera.Offset = new Vector2(LerpedCameraOffset.x, rootCameraOffsetY + LerpedCameraOffset.y);
+        }
+                
+        Camera.GlobalPosition = GlobalPosition;
     }
 
     private void FireBullet(Bullet.ColourEnum colour)
@@ -132,6 +142,7 @@ public class Character : KinematicBody2D
         Scene<Bullet> bulletScene = R.Prefabs.Bullet;
 
         Bullet bullet = bulletScene.Instance();
+        bullet.FiredByPlayerIndex = PlayerIndex;
         bullet.Colour = colour;
         bullet.Direction = IsRight ? 1.0f : -1.0f;
         bullet.Position = Position + new Vector2(bullet.Direction * 30.0f, -6.0f);
@@ -164,7 +175,7 @@ public class Character : KinematicBody2D
 
         IsDead = true;
         Sound_Death.Play();
-        Game.Instance.PlayerDied();
+        Game.Instance.PlayerDied(PlayerIndex);
     }
 
     private void UpdateGrounded(float delta)

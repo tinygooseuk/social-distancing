@@ -1,0 +1,77 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://Scenes/MainMenu.cs" type="Script" id=1]
+[ext_resource path="res://Fonts/ScoreFont.tres" type="DynamicFont" id=2]
+[ext_resource path="res://Textures/Title.png" type="Texture" id=3]
+
+[sub_resource type="Theme" id=1]
+default_font = ExtResource( 2 )
+
+[node name="MainMenu" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+rect_min_size = Vector2( 416, 240 )
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Title" type="TextureRect" parent="."]
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -20.0
+margin_top = 20.0
+margin_right = 20.0
+margin_bottom = 40.0
+grow_horizontal = 2
+rect_min_size = Vector2( 200, 100 )
+texture = ExtResource( 3 )
+expand = true
+stretch_mode = 6
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -32.0
+margin_top = 20.0
+margin_right = 32.0
+margin_bottom = 132.0
+size_flags_vertical = 3
+theme = SubResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SinglePlayer" type="Button" parent="VBoxContainer"]
+margin_right = 84.0
+margin_bottom = 22.0
+text = "1 player"
+flat = true
+
+[node name="TwoPlayer" type="Button" parent="VBoxContainer"]
+margin_top = 26.0
+margin_right = 84.0
+margin_bottom = 48.0
+text = "2 players"
+flat = true
+
+[node name="Spacer" type="Control" parent="VBoxContainer"]
+margin_top = 52.0
+margin_right = 84.0
+margin_bottom = 72.0
+rect_min_size = Vector2( 0, 20 )
+
+[node name="Quit" type="Button" parent="VBoxContainer"]
+margin_top = 76.0
+margin_right = 84.0
+margin_bottom = 98.0
+text = "Quit Game"
+flat = true
+[connection signal="pressed" from="VBoxContainer/SinglePlayer" to="." method="StartSinglePlayer"]
+[connection signal="pressed" from="VBoxContainer/TwoPlayer" to="." method="StartTwoPlayer"]
+[connection signal="pressed" from="VBoxContainer/Quit" to="." method="QuitGame"]

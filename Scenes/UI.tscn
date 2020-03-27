@@ -1,0 +1,47 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://Scripts/AgainButton.cs" type="Script" id=1]
+[ext_resource path="res://Shaders/ScreenShader.shader" type="Shader" id=2]
+[ext_resource path="res://Fonts/ScoreFont.tres" type="DynamicFont" id=3]
+
+[sub_resource type="ShaderMaterial" id=7]
+shader = ExtResource( 2 )
+
+[node name="UI" type="CanvasLayer"]
+
+[node name="BG" type="ColorRect" parent="."]
+material = SubResource( 7 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+rect_min_size = Vector2( 416, 240 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Score" type="Label" parent="BG"]
+margin_left = 10.0
+margin_top = 10.0
+margin_right = 130.0
+margin_bottom = 30.0
+custom_fonts/font = ExtResource( 3 )
+text = "Score: 00000"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="AgainButton" type="Button" parent="BG"]
+visible = false
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -150.0
+margin_top = -70.0
+margin_right = -50.0
+margin_bottom = -50.0
+text = "Try again?"
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+[connection signal="pressed" from="BG/AgainButton" to="BG/AgainButton" method="OnPressed"]
