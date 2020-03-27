@@ -39,6 +39,9 @@ public class Character : KinematicBody2D
     public override void _Ready()
     {
         this.FindSubnodes();
+
+        // Set collision layer based on player index
+        CollisionLayer = (uint)PlayerIndex+1;
     }
 
     public override void _PhysicsProcess(float delta)
@@ -79,9 +82,9 @@ public class Character : KinematicBody2D
         float move = Input.GetActionStrength($"move_right_{PlayerIndex}") - Input.GetActionStrength($"move_left_{PlayerIndex}");
         Velocity.x += move * MOVE_SPEED;
 
-        if (!Mathf.IsEqualApprox(Velocity.x, 0.0f))
+        if (Mathf.Abs(move) > 0.1f)
         {
-            IsRight = Mathf.Sign(Velocity.x) == 1;
+            IsRight = Mathf.Sign(move) == 1;
         }
 
         bool jump = Input.IsActionJustPressed($"jump_{PlayerIndex}") && IsGrounded;
