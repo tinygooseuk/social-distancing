@@ -26,6 +26,10 @@ window/size/fullscreen=true
 window/stretch/mode="2d"
 window/stretch/aspect="keep"
 
+[editor_plugins]
+
+enabled=PoolStringArray( "mono_debugger" )
+
 [input]
 
 move_left_0={
@@ -207,6 +211,11 @@ look_down_3={
 2d_physics/layer_5="Enemy"
 2d_physics/layer_6="Ground"
 2d_physics/layer_7="Passthrough"
+
+[mono]
+
+debugger_agent/port=55555
+debugger_agent/wait_timeout=30000
 
 [physics]
 
