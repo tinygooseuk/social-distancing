@@ -23,7 +23,18 @@ public static class R
     public static class Scenes
     {
         public static string MainMenu = "res://Scenes/MainMenu.tscn";
+
+        public static string GetGameSceneForNumPlayers(int numPlayers) => new []
+        {
+            null,
+            R.Scenes.SinglePlayer,
+            R.Scenes.TwoPlayer,
+            R.Scenes.ThreePlayer,
+            R.Scenes.FourPlayer,
+        }[numPlayers];
         public static string SinglePlayer = "res://Scenes/SinglePlayer.tscn";
         public static string TwoPlayer = "res://Scenes/TwoPlayer.tscn";
+        public static string ThreePlayer = "res://Scenes/ThreePlayer.tscn";
+        public static string FourPlayer = "res://Scenes/FourPlayer.tscn";
     }
 }

@@ -60,6 +60,7 @@ EasyScenes = [ ExtResource( 8 ), ExtResource( 20 ), ExtResource( 9 ), ExtResourc
 MediumScenes = [ ExtResource( 17 ), ExtResource( 16 ), ExtResource( 18 ), ExtResource( 21 ) ]
 HardScenes = [ ExtResource( 19 ), ExtResource( 10 ), ExtResource( 11 ), ExtResource( 13 ) ]
 DifficultyCurve = SubResource( 1 )
+MaxLevels = 15
 
 [node name="TemplateLabel" type="Label" parent="Game"]
 visible = false

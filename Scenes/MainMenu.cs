@@ -13,20 +13,12 @@ public class MainMenu : Control
         SinglePlayer.GrabFocus();
     }
 
-    private async void StartSinglePlayer()
+    private async void Play(int numPlayers)
     {
-        Global.NumberOfPlayers = 1;
+        Global.NumberOfPlayers = numPlayers;
 
-        Scene<Node> singlePlayerScene = R.Scenes.SinglePlayer;
-        GetTree().ChangeSceneTo(await singlePlayerScene.LoadAsync());
-    }
-
-    private async void StartTwoPlayer()
-    {
-        Global.NumberOfPlayers = 2;
-
-        Scene<Node> twoPlayerScene = R.Scenes.TwoPlayer;
-        GetTree().ChangeSceneTo(await twoPlayerScene.LoadAsync());
+        Scene<Node> gameScene = R.Scenes.GetGameSceneForNumPlayers(numPlayers);
+        GetTree().ChangeSceneTo(await gameScene.LoadAsync());
     }
 
     private void QuitGame()

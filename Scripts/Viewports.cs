@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public class Viewports : HBoxContainer
+public class Viewports : Container
 {
     public override void _Ready()
     {

@@ -227,6 +227,9 @@ public class Character : KinematicBody2D
         // Set collision layer based on player index
         CollisionLayer = (uint)PlayerIndex+1;
 
+        // Grab reference to our camera
+        Camera = Game.Instance.GetPlayerCamera(PlayerIndex);
+
         // Set colour too
         Modulate = new []
         {

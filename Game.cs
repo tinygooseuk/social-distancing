@@ -56,6 +56,8 @@ public class Game : Node2D
         }
 
         // Generate world
+        bool areViewportsScaledDown = GetPlayerCamera(0).Zoom.x > 1.0f;
+
         for (int level = 0; level < MaxLevels; level++)
         {
             Difficulty desiredDifficulty = GetDifficultyEnumValue(level);
@@ -64,10 +66,13 @@ public class Game : Node2D
             room.Position = new Vector2(-208.0f, level * -240.0f);
             GameArea.AddChild(room);
 
+            float labelScale = areViewportsScaledDown ? 1.75f : 1.0f;
+
             Label roomLabel = (Label)TemplateLabel.Duplicate();
             roomLabel.RectPosition = new Vector2(-208.0f + 20.0f, level * -240.0f);
             roomLabel.Text = $"Level {level+1}";
             roomLabel.Visible = true;
+            roomLabel.RectScale =  new Vector2(labelScale, labelScale);
             GameArea.AddChild(roomLabel);
         }
 
@@ -80,7 +85,6 @@ public class Game : Node2D
         {   
             Character player = characterScene.Instance();
             player.PlayerIndex = playerIndex;
-            player.Camera = GetPlayerViewport(playerIndex).GetNode<Camera2D>("Camera");
             player.Position = new Vector2
             {
                 x = (-totalPlayerWidth / 2.0f) + playerIndex * PLAYER_WIDTH,
@@ -116,6 +120,7 @@ public class Game : Node2D
 
     public Viewport RootViewport => GetPlayerViewport(0);
     public Viewport GetPlayerViewport(int playerIndex) => GetNode<Viewport>($"/root/RootControl/Viewports/Player{playerIndex+1}_ViewportContainer/Player{playerIndex+1}_Viewport");
+    public Camera2D GetPlayerCamera(int playerIndex) => (Camera2D)GetPlayerViewport(playerIndex).GetChild(0);
 
     public CanvasLayer GetUICanvasLayer() => GetNode<CanvasLayer>("/root/RootControl/UI");
 
@@ -149,11 +154,11 @@ public class Game : Node2D
 
     private Difficulty GetDifficultyEnumValue(int level)
     {
-        if (level < 10)
+        if (level < 5)
         {
             return Difficulty.Easy;
         } 
-        else if (level < 20)
+        else if (level < 10)
         {
             return Difficulty.Medium;
         }
