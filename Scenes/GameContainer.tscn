@@ -18,17 +18,17 @@
 [ext_resource path="res://Rooms/Easy/Easy2.tscn" type="PackedScene" id=20]
 [ext_resource path="res://Rooms/Medium/Medium4.tscn" type="PackedScene" id=21]
 
-[sub_resource type="Curve" id=3]
+[sub_resource type="Curve" id=1]
 bake_resolution = 300
 _data = [ Vector2( 0, 0.336207 ), 0.0, 0.33867, 0, 0, Vector2( 1, 1 ), 0.922647, 0.0, 0, 0 ]
 
-[sub_resource type="OccluderPolygon2D" id=4]
+[sub_resource type="OccluderPolygon2D" id=2]
 polygon = PoolVector2Array( 16, 16, 0.0133438, 16, 0, 0, 16, 0 )
 
-[sub_resource type="ConvexPolygonShape2D" id=5]
+[sub_resource type="ConvexPolygonShape2D" id=3]
 points = PoolVector2Array( 16, 16, 0, 16, 0, 0, 16, 0 )
 
-[sub_resource type="TileSet" id=6]
+[sub_resource type="TileSet" id=4]
 0/name = "Ground"
 0/texture = ExtResource( 4 )
 0/tex_offset = Vector2( 0, 0 )
@@ -36,18 +36,18 @@ points = PoolVector2Array( 16, 16, 0, 16, 0, 0, 16, 0 )
 0/region = Rect2( 0, 0, 16, 16 )
 0/tile_mode = 0
 0/occluder_offset = Vector2( 0, 0 )
-0/occluder = SubResource( 4 )
+0/occluder = SubResource( 2 )
 0/navigation_offset = Vector2( 0, 0 )
 0/shape_offset = Vector2( 0, 0 )
 0/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
-0/shape = SubResource( 5 )
+0/shape = SubResource( 3 )
 0/shape_one_way = false
 0/shape_one_way_margin = 1.0
 0/shapes = [ {
 "autotile_coord": Vector2( 0, 0 ),
 "one_way": false,
 "one_way_margin": 1.0,
-"shape": SubResource( 5 ),
+"shape": SubResource( 3 ),
 "shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
 } ]
 0/z_index = 0
@@ -59,7 +59,7 @@ script = ExtResource( 2 )
 EasyScenes = [ ExtResource( 8 ), ExtResource( 20 ), ExtResource( 9 ), ExtResource( 15 ) ]
 MediumScenes = [ ExtResource( 17 ), ExtResource( 16 ), ExtResource( 18 ), ExtResource( 21 ) ]
 HardScenes = [ ExtResource( 19 ), ExtResource( 10 ), ExtResource( 11 ), ExtResource( 13 ) ]
-DifficultyCurve = SubResource( 3 )
+DifficultyCurve = SubResource( 1 )
 
 [node name="TemplateLabel" type="Label" parent="Game"]
 visible = false
@@ -75,10 +75,10 @@ __meta__ = {
 
 [node name="Bedrock" parent="Game" instance=ExtResource( 6 )]
 position = Vector2( -208, 240 )
-tile_set = SubResource( 6 )
+tile_set = SubResource( 4 )
 collision_layer = 0
 
 [node name="DeadRoom" parent="Game" instance=ExtResource( 5 )]
 position = Vector2( -208, 480 )
-tile_set = SubResource( 6 )
+tile_set = SubResource( 4 )
 collision_layer = 0
