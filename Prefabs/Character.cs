@@ -72,10 +72,16 @@ public class Character : KinematicBody2D
                 y = (float)GD.RandRange(-CameraShakeMagnitude.y, +CameraShakeMagnitude.y), 
             };
             CameraShakeMagnitude *= 0.9f;
+
+            float weakShake = Mathf.Clamp(Mathf.Abs(CameraShakeMagnitude.y / 2.0f), 0.01f, 1.0f);
+            float strongShake = Mathf.Clamp(Mathf.Abs(CameraShakeMagnitude.x / 2.0f), 0.01f, 1.0f);
+
+            Input.StartJoyVibration(PlayerIndex, weakShake, strongShake, 0.5f);
         }
         else
         {
             CameraShakeOffset = Vector2.Zero;
+            Input.StopJoyVibration(PlayerIndex);
         }
 
         // Graphics
