@@ -95,12 +95,12 @@ public class Character : KinematicBody2D
             float weakShake = Mathf.Clamp(Mathf.Abs(CameraShakeMagnitude.y / 2.0f), 0.01f, 1.0f);
             float strongShake = Mathf.Clamp(Mathf.Abs(CameraShakeMagnitude.x / 2.0f), 0.01f, 1.0f);
 
-            //Input.StartJoyVibration(PlayerIndex, weakShake, strongShake, 0.5f);
+            Input.StartJoyVibration(PlayerIndex, weakShake, strongShake, 0.5f);
         }
         else
         {
             CameraShakeOffset = Vector2.Zero;
-           // Input.StopJoyVibration(PlayerIndex);
+            Input.StopJoyVibration(PlayerIndex);
         }
 
         bool isCancellableSpeed = Velocity.y >= 0;// || Mathf.Abs(Velocity.x) > Mathf.Abs(Velocity.y);
@@ -293,8 +293,5 @@ public class Character : KinematicBody2D
             new Color(0.91f, 0.03f, 0.11f),
         }[PlayerIndex];
     }
-
-   // private void OnEnterWall(Node wall) => IsInsideWall = true; 
-    //private void OnExitWall(Node wall) => IsInsideWall = false; 
 }
 

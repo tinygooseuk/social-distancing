@@ -129,5 +129,3 @@ stream = ExtResource( 3 )
 
 [node name="PlayerDeath" type="AudioStreamPlayer2D" parent="Sounds"]
 stream = ExtResource( 4 )
-[connection signal="body_entered" from="InsideWallDetector" to="." method="OnEnterWall"]
-[connection signal="body_exited" from="InsideWallDetector" to="." method="OnExitWall"]
