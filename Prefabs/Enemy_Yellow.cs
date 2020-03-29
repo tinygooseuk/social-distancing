@@ -5,12 +5,23 @@ public class Enemy_Yellow : Enemy
 {
     protected override Color GetColour() => Colors.Yellow;
 
+    // Subnodes
+    [Subnode] private AudioStreamPlayer2D JumpSound;
+
     // Consts
     private const float TIME_TO_JUMP = 1.5f;
 
     // State
     private float GroundedTime = 0.0f;
     
+    public override void _Ready()
+    {
+        base._Ready();
+        this.FindSubnodes();
+
+        // Don't all jump at once!
+        GroundedTime = (float)GD.RandRange(0.0f, 0.5f);
+    }
 
     public override void _Process(float delta)
     {
@@ -62,6 +73,9 @@ public class Enemy_Yellow : Enemy
                 move.x *= 100.0f;
                 move.y = -400.0f;
                 GroundedTime = 0.0f;
+
+                JumpSound.PitchScale = (float)GD.RandRange(0.8f, 1.2f);
+                JumpSound.Play();
             }
             else
             {

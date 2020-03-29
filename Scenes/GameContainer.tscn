@@ -1,6 +1,5 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=6 format=2]
 
-[ext_resource path="res://Rooms/Easy/Easy_1.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Game.cs" type="Script" id=2]
 [ext_resource path="res://Fonts/ScoreFont.tres" type="DynamicFont" id=3]
 [ext_resource path="res://Rooms/DeadRoom.tscn" type="PackedScene" id=5]
@@ -14,11 +13,8 @@ _data = [ Vector2( 0, 0.336207 ), 0.0, 0.33867, 0, 0, Vector2( 1, 1 ), 0.922647,
 
 [node name="Game" type="Node2D" parent="."]
 script = ExtResource( 2 )
-EasyScenes = [ ExtResource( 1 ) ]
-MediumScenes = [ ExtResource( 1 ) ]
-HardScenes = [ ExtResource( 1 ) ]
 DifficultyCurve = SubResource( 1 )
-MaxLevels = 15
+MaxLevels = 3
 
 [node name="TemplateLabel" type="Label" parent="Game"]
 visible = false

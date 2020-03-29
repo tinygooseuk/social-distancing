@@ -73,7 +73,7 @@ public class Bullet : KinematicBody2D
         GetTree().PlaySound2D(Sound_EnemyDeath, relativeTo: this);
 
         // Shake correct camera
-        Character c = Game.Instance.Players[FiredByPlayerIndex];
+        Character c = Game.Instance.GetPlayer(FiredByPlayerIndex);
         if (IsInstanceValid(c))
         {
             c.ShakeCamera(new Vector2(Direction * 10.0f, (float)GD.RandRange(-8.0f, +8.0f)));

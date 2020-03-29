@@ -1,6 +1,7 @@
 using Godot;
 using Godot.Collections;
 using System;
+using System.Threading.Tasks;
 
 public class Game : Node2D
 {
@@ -8,13 +9,9 @@ public class Game : Node2D
     public static Game Instance = null;
 
     // Exports
-    [Export] private Array<PackedScene> EasyScenes = new Array<PackedScene>();
-    [Export] private Array<PackedScene> MediumScenes = new Array<PackedScene>();
-    [Export] private Array<PackedScene> HardScenes = new Array<PackedScene>();
-
     [Export] private Curve DifficultyCurve;
 
-    [Export] private int MaxLevels = 30;
+    [Export] private int MaxLevels = 15;
     
 
     // Subnodes
@@ -23,7 +20,7 @@ public class Game : Node2D
     public Label ScoreLabel;
     public Button AgainButton;
 
-    public Array<Character> Players = new Array<Character>();
+    private Array<Character> Players = new Array<Character>();
 
     // Enums
     enum Difficulty { Easy, Medium, Hard };
@@ -35,7 +32,7 @@ public class Game : Node2D
     public int KillScore = 0;
     public int TotalScore => BaseScore + KillScore;
 
-    public override void _Ready()
+    public override async void _Ready()
     {
         Instance = this;
         GD.Seed(OS.GetSystemTimeMsecs());
@@ -62,20 +59,29 @@ public class Game : Node2D
         {
             Difficulty desiredDifficulty = GetDifficultyEnumValue(level);
 
-            Node2D room = InstanceRandomRoom(desiredDifficulty); 
-            room.Position = new Vector2(-208.0f, level * -240.0f);
+            Node2D room = await InstanceRandomRoomAsync(desiredDifficulty); 
+            room.Position = new Vector2(-Const.SCREEN_HALF_WIDTH, level * -Const.SCREEN_HEIGHT);
             GameArea.AddChild(room);
 
             float labelScale = areViewportsScaledDown ? 1.75f : 1.0f;
 
             Label roomLabel = (Label)TemplateLabel.Duplicate();
-            roomLabel.RectPosition = new Vector2(-208.0f + 20.0f, level * -240.0f);
+            roomLabel.RectPosition = new Vector2(-Const.SCREEN_HALF_WIDTH + 20.0f, level * -Const.SCREEN_HEIGHT);
             roomLabel.Text = $"Level {level+1}";
             roomLabel.Visible = true;
             roomLabel.RectScale =  new Vector2(labelScale, labelScale);
             GameArea.AddChild(roomLabel);
         }
 
+        // Create goal room
+        {
+            Scene<Node2D> goalRoomScene = R.Rooms.GoalRoom;
+
+            Node2D room = await goalRoomScene.InstanceAsync();
+            room.Position = new Vector2(-Const.SCREEN_HALF_WIDTH, MaxLevels * -Const.SCREEN_HEIGHT);
+            GameArea.AddChild(room);
+        }
+         
         // Create players
         Scene<Character> characterScene = R.Prefabs.Character;
         const float PLAYER_WIDTH = 20.0f;
@@ -83,13 +89,20 @@ public class Game : Node2D
 
         for (int playerIndex = 0; playerIndex < Global.NumberOfPlayers; playerIndex++)
         {   
+            // Create player and set up
             Character player = characterScene.Instance();
             player.PlayerIndex = playerIndex;
             player.Position = new Vector2
             {
                 x = (-totalPlayerWidth / 2.0f) + playerIndex * PLAYER_WIDTH,
-                y = 208.0f
+                y = Const.SCREEN_HALF_WIDTH
             };
+
+            // Limit player camera to top of world
+            int offset = (Global.NumberOfPlayers == 2) ? -28 : 88;
+
+            Camera2D camera = GetPlayerCamera(playerIndex);
+            camera.LimitTop = (int)((MaxLevels) * -Const.SCREEN_HEIGHT) + offset; // 88 will arbitrarily make it limit properly. cool.
 
             GameArea.AddChild(player);
             Players.Add(player);
@@ -103,9 +116,9 @@ public class Game : Node2D
 
         for (int playerIndex = 0; playerIndex < Global.NumberOfPlayers; playerIndex++)
         {
-            if (IsInstanceValid(Players[playerIndex]))
+            if (Players.Count > playerIndex && IsInstanceValid(Players[playerIndex]))
             {
-                newLevel = Mathf.FloorToInt(1.0f + Players[playerIndex].Position.y / -240.0f);
+                newLevel = Mathf.FloorToInt(1.0f + Players[playerIndex].Position.y / -Const.SCREEN_HEIGHT);
             }        
         }
 
@@ -124,10 +137,33 @@ public class Game : Node2D
 
     public CanvasLayer GetUICanvasLayer() => GetNode<CanvasLayer>("/root/RootControl/UI");
 
+    public Character GetPlayer(int playerIndex) => (Players.Count > playerIndex) ? Players[playerIndex] : null;
+    public Character GetNearestPlayer(Vector2 globalPosition) 
+    {
+        float nearestSqrDistance = 1000000000.0f;
+        Character nearestPlayer = null;
+
+        for (int playerIndex = 0; playerIndex < Global.NumberOfPlayers; playerIndex++)
+        {
+            Character thisPlayer = GetPlayer(playerIndex);
+            if (!IsInstanceValid(thisPlayer)) continue;
+
+            float thisSqrDistance = thisPlayer.GlobalPosition.DistanceSquaredTo(GlobalPosition);
+            if (thisSqrDistance < nearestSqrDistance)
+            {
+                nearestSqrDistance = thisSqrDistance;
+                nearestPlayer = thisPlayer;
+            }
+        }
+
+        return nearestPlayer;
+
+    }
+
     public void PlayerDied(int playerIndex)
     {
         //TODO: not in multiplayer?
-        Players[playerIndex].Position = new Vector2(-208.0f + 40.0f, 480.0f);
+        Players[playerIndex].Position = new Vector2(-Const.SCREEN_HALF_WIDTH + 40.0f, 480.0f);
         Players[playerIndex].RotationDegrees = 90.0f;
         
         AgainButton.Visible = true;
@@ -174,19 +210,19 @@ public class Game : Node2D
         return DifficultyCurve.Interpolate(progression);
     }
 
-    private Node2D InstanceRandomRoom(Difficulty d)
+    private async Task<Node2D> InstanceRandomRoomAsync(Difficulty d)
     {
-        Array<PackedScene> sceneArray = null;
+        string[] sceneArray = null;
 
         switch (d)
         {
-            case Difficulty.Easy: sceneArray = EasyScenes; break;
-            case Difficulty.Medium: sceneArray = MediumScenes; break;
-            case Difficulty.Hard: sceneArray = HardScenes; break;            
+            case Difficulty.Easy: sceneArray = R.Rooms.EasyRooms; break;
+            case Difficulty.Medium: sceneArray = R.Rooms.MediumRooms; break;
+            case Difficulty.Hard: sceneArray = R.Rooms.HardRooms; break;            
         }
 
-        PackedScene scene = sceneArray[(int)(GD.Randi() % sceneArray.Count)];
-        return (Node2D)scene.Instance();
+        Scene<Node2D> roomScene = sceneArray[(int)(GD.Randi() % sceneArray.Length)];
+        return await roomScene.InstanceAsync();
     }
 }
 

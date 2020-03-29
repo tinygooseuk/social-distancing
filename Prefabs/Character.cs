@@ -41,6 +41,7 @@ public class Character : KinematicBody2D
     private bool IsRight = true;
     private Vector2 Velocity = Vector2.Zero;
     private bool IsDead = false;
+    private bool IsLevelComplete = false;
     
     private bool IsPassingThrough = false;
     private bool IsInsideWall = false;
@@ -142,7 +143,7 @@ public class Character : KinematicBody2D
             AnimationPlayer.Play("Jump");
             Sound_Jump.Play();
          
-            if (Input.IsActionPressed($"move_down_{PlayerIndex}"))
+            if (!IsLevelComplete && Input.IsActionPressed($"move_down_{PlayerIndex}"))
             {
                 IsInsideWall = true;
                 ForceFallTime = 0.2f;
@@ -191,11 +192,19 @@ public class Character : KinematicBody2D
     {
         if (!IsDead)
         {
-            float desiredCameraOffsetX = Input.GetActionStrength($"look_right_{PlayerIndex}") - Input.GetActionStrength($"look_left_{PlayerIndex}");
-            LerpedCameraOffset.x = (Global.NumberOfPlayers == 1) ? 0.0f : Mathf.Lerp(LerpedCameraOffset.x, desiredCameraOffsetX * 70.0f, 0.1f);
+            Vector2 desiredCameraOffset = new Vector2
+            {
+                x = Input.GetActionStrength($"look_right_{PlayerIndex}") - Input.GetActionStrength($"look_left_{PlayerIndex}"),
+                y = Input.GetActionStrength($"look_down_{PlayerIndex}") - Input.GetActionStrength($"look_up_{PlayerIndex}"),
+            };
 
-            float desiredCameraOffsetY = Input.GetActionStrength($"look_down_{PlayerIndex}") - Input.GetActionStrength($"look_up_{PlayerIndex}");
-            LerpedCameraOffset.y = Mathf.Lerp(LerpedCameraOffset.y, desiredCameraOffsetY * 70.0f, 0.1f);
+            if (IsLevelComplete)
+            {
+                desiredCameraOffset.y = (Global.NumberOfPlayers == 2) ? +1.0f : -0.69f; // arbitrary-ish
+            }
+
+            LerpedCameraOffset.x = 0.0f;// (Global.NumberOfPlayers == 1) ? 0.0f : Mathf.Lerp(LerpedCameraOffset.x, desiredCameraOffset.x * 70.0f, 0.1f);
+            LerpedCameraOffset.y = Mathf.Lerp(LerpedCameraOffset.y, desiredCameraOffset.y * 70.0f, 0.1f);
         }
 
         float rootCameraOffsetY = Mathf.Clamp(Position.y * 0.2f, -40.0f, 0.0f);
@@ -244,6 +253,11 @@ public class Character : KinematicBody2D
         Game.Instance.PlayerDied(PlayerIndex);
 
         ShakeCamera(new Vector2(250.0f, 250.0f));
+    }
+
+    public void MarkLevelComplete()
+    {
+        IsLevelComplete = true;
     }
 
     public void ShakeCamera(Vector2 magnitude) => CameraShakeMagnitude += magnitude;
