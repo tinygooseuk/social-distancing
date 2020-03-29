@@ -23,6 +23,7 @@ public class Character : KinematicBody2D
     [Subnode] private Area2D InsideWallDetector;
 
     [Subnode("Sounds/Jump")] private AudioStreamPlayer2D Sound_Jump;
+    [Subnode("Sounds/Drop")] private AudioStreamPlayer2D Sound_Drop;
     [Subnode("Sounds/PlayerDeath")] private AudioStreamPlayer2D Sound_Death;
     
     // Consts
@@ -141,17 +142,18 @@ public class Character : KinematicBody2D
         if (jump) 
         {
             AnimationPlayer.Play("Jump");
-            Sound_Jump.Play();
          
             if (!IsLevelComplete && Input.IsActionPressed($"move_down_{PlayerIndex}"))
             {
                 IsInsideWall = true;
                 ForceFallTime = 0.2f;
                 Velocity.y = +5.0f;
+                Sound_Drop.Play();
             } 
             else 
             {
                 Velocity.y = -JUMP_IMPULSE;
+                Sound_Jump.Play();
             }
             LastJump = 0.0f;
 
@@ -306,6 +308,12 @@ public class Character : KinematicBody2D
             new Color(0.8f, 0.91f, 0.03f),
             new Color(0.91f, 0.03f, 0.11f),
         }[PlayerIndex];
+
+        // Update all pitches
+        foreach (AudioStreamPlayer2D sound in GetNode("Sounds").GetChildren())
+        {
+            sound.PitchScale = 1.0f + ((float)PlayerIndex) / 16.0f;
+        }
     }
 }
 
