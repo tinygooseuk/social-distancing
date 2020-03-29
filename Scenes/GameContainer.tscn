@@ -10,12 +10,11 @@
 bake_resolution = 300
 _data = [ Vector2( 0, 0.336207 ), 0.0, 0.33867, 0, 0, Vector2( 1, 1 ), 0.922647, 0.0, 0, 0 ]
 
-[node name="GameContainer" type="Node"]
+[node name="GameContainer" type="Node2D"]
 
 [node name="Game" type="Node2D" parent="."]
 script = ExtResource( 2 )
 DifficultyCurve = SubResource( 1 )
-MaxLevels = 3
 
 [node name="TemplateLabel" type="Label" parent="Game"]
 visible = false
