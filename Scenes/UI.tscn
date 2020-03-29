@@ -19,12 +19,15 @@ __meta__ = {
 }
 
 [node name="Score" type="Label" parent="BG"]
-margin_left = 10.0
-margin_top = 10.0
-margin_right = 130.0
-margin_bottom = 30.0
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -160.0
+margin_top = 20.0
+margin_right = -20.0
+margin_bottom = 20.0
 custom_fonts/font = ExtResource( 3 )
 text = "Score: 00000"
+align = 2
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -35,10 +38,10 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -150.0
-margin_top = -70.0
-margin_right = -50.0
-margin_bottom = -50.0
+margin_left = -154.0
+margin_top = -75.0
+margin_right = -54.0
+margin_bottom = -55.0
 text = "Try again?"
 script = ExtResource( 1 )
 __meta__ = {

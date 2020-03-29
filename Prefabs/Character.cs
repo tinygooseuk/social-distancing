@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Linq;
 
 public class Character : KinematicBody2D
 {
@@ -19,6 +20,7 @@ public class Character : KinematicBody2D
     [Subnode] private AnimatedSprite Sprite;
     [Subnode] private CollisionShape2D Collider;
     [Subnode] private AnimationPlayer AnimationPlayer;
+    [Subnode] private Area2D InsideWallDetector;
 
     [Subnode("Sounds/Jump")] private AudioStreamPlayer2D Sound_Jump;
     [Subnode("Sounds/PlayerDeath")] private AudioStreamPlayer2D Sound_Death;
@@ -27,16 +29,22 @@ public class Character : KinematicBody2D
     private static float GRAVITY = 9.8f;
     private static float MOVE_SPEED = 40.0f;
     private static float JUMP_IMPULSE = 300.0f;
+    private static float JUMP_DEBOUNCE = 0.4f;
     private static float FRICTION = 0.15f;
 
     // State
     public Camera2D Camera;
 
     private float LastGrounded = 100.0f;
+    private float LastJump = 100.0f;
     private float LastBullet = 100.0f;
     private bool IsRight = true;
     private Vector2 Velocity = Vector2.Zero;
     private bool IsDead = false;
+    
+    private bool IsPassingThrough = false;
+    private bool IsInsideWall = false;
+    private float ForceFallTime = 0.0f;
 
     private Vector2 LerpedCameraOffset = Vector2.Zero;
 
@@ -55,6 +63,17 @@ public class Character : KinematicBody2D
         // "Physics"
         ApplyPhysics();
         UpdateGrounded(delta);
+
+        // Update inside-ness
+        int insides = 0;
+        foreach (var overlapObject in InsideWallDetector.GetOverlappingBodies())
+        {
+            if (overlapObject is TileMap)
+            {
+                insides++;
+            }
+        }
+        IsInsideWall = insides > 0 || ForceFallTime > 0.0f;
     }
 
     public override void _Process(float delta)
@@ -76,12 +95,19 @@ public class Character : KinematicBody2D
             float weakShake = Mathf.Clamp(Mathf.Abs(CameraShakeMagnitude.y / 2.0f), 0.01f, 1.0f);
             float strongShake = Mathf.Clamp(Mathf.Abs(CameraShakeMagnitude.x / 2.0f), 0.01f, 1.0f);
 
-            Input.StartJoyVibration(PlayerIndex, weakShake, strongShake, 0.5f);
+            //Input.StartJoyVibration(PlayerIndex, weakShake, strongShake, 0.5f);
         }
         else
         {
             CameraShakeOffset = Vector2.Zero;
-            Input.StopJoyVibration(PlayerIndex);
+           // Input.StopJoyVibration(PlayerIndex);
+        }
+
+        bool isCancellableSpeed = Velocity.y >= 0;// || Mathf.Abs(Velocity.x) > Mathf.Abs(Velocity.y);
+        if (IsPassingThrough && isCancellableSpeed && !IsInsideWall)
+        {
+            IsPassingThrough = false;
+            SetCollisionMaskBit(6, true);
         }
 
         // Graphics
@@ -99,23 +125,47 @@ public class Character : KinematicBody2D
             return;
         }
 
+        // Add movement
         float move = Input.GetActionStrength($"move_right_{PlayerIndex}") - Input.GetActionStrength($"move_left_{PlayerIndex}");
         Velocity.x += move * MOVE_SPEED;
 
+        // Change facing direction if needed
         if (Mathf.Abs(move) > 0.1f)
         {
             IsRight = Mathf.Sign(move) == 1;
         }
 
-        bool jump = Input.IsActionJustPressed($"jump_{PlayerIndex}") && IsGrounded;
+        // Check for jump
+        bool jump = Input.IsActionJustPressed($"jump_{PlayerIndex}") && IsGrounded && LastJump > JUMP_DEBOUNCE;
         if (jump) 
         {
             AnimationPlayer.Play("Jump");
             Sound_Jump.Play();
-            Velocity.y = -JUMP_IMPULSE;
+         
+            if (Input.IsActionPressed($"move_down_{PlayerIndex}"))
+            {
+                IsInsideWall = true;
+                ForceFallTime = 0.2f;
+                Velocity.y = +5.0f;
+            } 
+            else 
+            {
+                Velocity.y = -JUMP_IMPULSE;
+            }
+            LastJump = 0.0f;
+
+            IsPassingThrough = true;
+            SetCollisionMaskBit(6, false);
+        }        
+        LastJump += delta;        
+
+        // Force falling
+        if (ForceFallTime > 0.0f)
+        {
+            ForceFallTime -= delta;
         }
 
-        LastBullet += delta;
+        // Check for shooting
         if (LastBullet > 0.5f)
         {
             if (Input.IsActionJustPressed($"hit_red_{PlayerIndex}"))
@@ -130,6 +180,10 @@ public class Character : KinematicBody2D
             {
                 FireBullet(Bullet.ColourEnum.Blue);
             }
+        } 
+        else
+        {
+            LastBullet += delta;
         }
     }
 
@@ -157,7 +211,7 @@ public class Character : KinematicBody2D
         bullet.FiredByPlayerIndex = PlayerIndex;
         bullet.Colour = colour;
         bullet.Direction = IsRight ? 1.0f : -1.0f;
-        bullet.Position = Position + new Vector2(bullet.Direction * 30.0f, -6.0f);
+        bullet.Position = Position + new Vector2(bullet.Direction * 20.0f, -4.0f);
         GetParent().AddChild(bullet);        
     }
 
@@ -239,5 +293,8 @@ public class Character : KinematicBody2D
             new Color(0.91f, 0.03f, 0.11f),
         }[PlayerIndex];
     }
+
+   // private void OnEnterWall(Node wall) => IsInsideWall = true; 
+    //private void OnExitWall(Node wall) => IsInsideWall = false; 
 }
 

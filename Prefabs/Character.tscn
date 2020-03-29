@@ -97,6 +97,7 @@ tracks/1/keys = {
 }
 
 [node name="Character" type="KinematicBody2D"]
+position = Vector2( 1, -5 )
 collision_mask = 127
 script = ExtResource( 2 )
 
@@ -107,8 +108,14 @@ animation = "Idle"
 playing = true
 
 [node name="Collider" type="CollisionShape2D" parent="."]
-visible = false
 position = Vector2( -1.10416, 0.36805 )
+shape = SubResource( 6 )
+
+[node name="InsideWallDetector" type="Area2D" parent="."]
+collision_mask = 64
+
+[node name="CollisionShape" type="CollisionShape2D" parent="InsideWallDetector"]
+position = Vector2( -1.104, 0.368 )
 shape = SubResource( 6 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
@@ -122,3 +129,5 @@ stream = ExtResource( 3 )
 
 [node name="PlayerDeath" type="AudioStreamPlayer2D" parent="Sounds"]
 stream = ExtResource( 4 )
+[connection signal="body_entered" from="InsideWallDetector" to="." method="OnEnterWall"]
+[connection signal="body_exited" from="InsideWallDetector" to="." method="OnExitWall"]
