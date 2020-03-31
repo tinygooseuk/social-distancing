@@ -32,7 +32,7 @@ script = ExtResource( 3 )
 frames = SubResource( 3 )
 
 [node name="Collider" parent="." index="1"]
-position = Vector2( -0.245601, 3.15835 )
+position = Vector2( -0.246, 2.158 )
 shape = SubResource( 4 )
 
 [node name="VisibilityEnabler2D" parent="." index="2"]
@@ -40,3 +40,5 @@ position = Vector2( -0.197914, -1.12151 )
 
 [node name="JumpSound" type="AudioStreamPlayer2D" parent="." index="3"]
 stream = ExtResource( 4 )
+volume_db = -3.0
+max_distance = 500.0
