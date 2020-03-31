@@ -4,16 +4,30 @@ using System;
 public class Pixel : RigidBody2D
 {
     private float Age = 0.0f;
+    private float Lifetime = 0.0f;
+
     private const float LIFETIME = 1.5f;
+    private const float LIFETIME_RANDOM = 0.25f;
 
     private const float SUCK_COLLECT_DISTANCE = 20.0f;
     private const float SUCK_CLOSE_DISTANCE = 50.0f;
 
     private bool IsSucking = false;
+    public bool CanSuck = true;
+
+    public override void _Ready()
+    {
+        Lifetime = LIFETIME + (float)GD.RandRange(-LIFETIME_RANDOM, +LIFETIME_RANDOM);
+
+        if (!CanSuck)
+        {
+            Lifetime *= 2.0f;
+        }
+    }
 
     public override void _IntegrateForces(Physics2DDirectBodyState state)
     {
-        if (IsSucking)
+        if (IsSucking && CanSuck)
         {
             Character nearestPlayer = Game.Instance.GetNearestPlayer(GlobalPosition);
             if (IsInstanceValid(nearestPlayer))
@@ -45,16 +59,29 @@ public class Pixel : RigidBody2D
     public override void _Process(float delta)
     {
         Age += delta;
-
-        if (Age > LIFETIME)
+        
+        // no suck? fade out!
+        if (!CanSuck)
         {
-            if (!IsSucking)
+            Modulate = new Color(Modulate.r, Modulate.g, Modulate.b, 1.0f - (Age / Lifetime));
+        }
+
+        if (Age > Lifetime)
+        {
+            if (CanSuck)
             {
-                CollisionMask = 0x00000000;
-                GravityScale = 0.0f;
-             
-                IsSucking = true;             
-            }            
+                if (!IsSucking)
+                {
+                    CollisionMask = 0x00000000;
+                    GravityScale = 0.0f;
+                    
+                    IsSucking = true;             
+                }            
+            }
+            else 
+            {
+                QueueFree();
+            }
         }
     }
 }

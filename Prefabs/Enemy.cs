@@ -2,6 +2,7 @@ using Godot;
 using System;
 using System.Threading.Tasks;
 using System.Text;
+using System.Collections.Generic;
 
 public class Enemy : KinematicBody2D
 {
@@ -50,64 +51,21 @@ public class Enemy : KinematicBody2D
             if (collision != null && IsInstanceValid(collision.Collider) && collision.Collider is Character character)
             {
                 character.Die();
+                break;
             }
         }
     }
 
     public void Die()
     {       
-        AtlasTexture enemyTexture = (AtlasTexture)EnemySprite.Frames.GetFrame("Idle", 0);
-        Image enemyImage = enemyTexture.Atlas.GetData();
-
-        Scene<Pixel> pixelScene = R.Prefabs.Pixel;
-        pixelScene.Load();
-
-        Transform2D transform = new Transform2D
+        IEnumerable<Pixel> pixels = EnemySprite.BurstIntoPixels(body: this);
+        foreach (Pixel pixel in pixels)
         {
-            origin = Vector2.Zero,
-            x = GlobalTransform.x,
-            y = GlobalTransform.y,
-        };
-
-        int numPixels = GetTree().GetNodesInGroup("pixels").Count;
-        int skip = 1 + Mathf.RoundToInt(numPixels / 100);
-        int counter = 0;
-
-        enemyImage.Lock();
-        {
-            for (int y = 0; y < enemyTexture.GetHeight(); y++)
-            {
-                for (int x = 0; x < enemyTexture.GetWidth(); x++)
-                {
-                    if (counter++ % skip > 0)
-                    {
-                        continue;
-                    }
-
-                    Vector2 pixelOffset = enemyTexture.Region.Position;
-                    Color pixelColour = enemyImage.GetPixel((int)pixelOffset.x + x, (int)pixelOffset.y + y);
-                    bool isPixel = pixelColour.a > 0.5f;
-                    
-                    Vector2 offset = new Vector2((float)x * 2.0f, (float)y * 2.0f) - new Vector2(enemyTexture.GetWidth(), enemyTexture.GetHeight());
-
-                    if (isPixel)
-                    {
-                        Pixel pixel = pixelScene.Instance();
-                        pixel.Position = Position + transform.Xform(offset);
-                        pixel.Modulate = pixelColour;
-                        pixel.ApplyCentralImpulse(Velocity);
-                        GetParent().AddChild(pixel);
-                    }
-                    
-                }   
-            }
+            pixel.ApplyCentralImpulse(Velocity);
         }
-        enemyImage.Unlock();
-
-        QueueFree();
 
         // Spawn particles
-        Scene<Particles2D> deathParticlesScene = R.Prefabs.DeathParticles;
+        Scene<Particles2D> deathParticlesScene = R.Particles.DeathParticles;
         
         Particles2D deathParticles = deathParticlesScene.Instance();
         deathParticles.Position = Position;
@@ -118,5 +76,8 @@ public class Enemy : KinematicBody2D
         gradient.SetColor(0, GetColour());
 
         GetParent().AddChild(deathParticles);      
+
+        // Free
+        QueueFree();
     }
 }

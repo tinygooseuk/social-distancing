@@ -42,7 +42,9 @@ margin_left = -154.0
 margin_top = -75.0
 margin_right = -54.0
 margin_bottom = -55.0
+custom_fonts/font = ExtResource( 3 )
 text = "Try again?"
+flat = true
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false

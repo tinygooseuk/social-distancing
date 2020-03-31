@@ -8,6 +8,7 @@ public class Bullet : KinematicBody2D
 
     // Subnodes
     [Subnode] private AnimatedSprite AnimatedSprite;
+    [Subnode] private Tween IntroTween;
     
     // State
     public int FiredByPlayerIndex = 0;
@@ -29,6 +30,10 @@ public class Bullet : KinematicBody2D
         // Play shot sound
         Asset<AudioStream> Sound_Shoot = R.Sounds.Shoot;
         GetTree().PlaySound2D(Sound_Shoot, relativeTo: this);
+
+        // Tween up the size
+        IntroTween.InterpolateProperty(AnimatedSprite, "scale", null, new Vector2(2.0f, 2.0f), 0.1f, Tween.TransitionType.Cubic, Tween.EaseType.Out);
+        IntroTween.Start();
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.

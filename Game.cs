@@ -20,7 +20,7 @@ public class Game : Node2D
     public Label ScoreLabel;
     public Button AgainButton;
 
-    private Array<Character> Players = new Array<Character>();
+    private Godot.Collections.Array Players = new Godot.Collections.Array();
 
     // Enums
     enum Difficulty { Easy, Medium, Hard };
@@ -116,9 +116,10 @@ public class Game : Node2D
 
         for (int playerIndex = 0; playerIndex < Global.NumberOfPlayers; playerIndex++)
         {
-            if (Players.Count > playerIndex && IsInstanceValid(Players[playerIndex]))
+            Character c = GetPlayer(playerIndex);
+            if (Players.Count > playerIndex && IsInstanceValid(c))
             {
-                newLevel = Mathf.FloorToInt(1.0f + Players[playerIndex].Position.y / -Const.SCREEN_HEIGHT);
+                newLevel = Mathf.FloorToInt(1.0f + c.Position.y / -Const.SCREEN_HEIGHT);
             }        
         }
 
@@ -137,7 +138,7 @@ public class Game : Node2D
 
     public CanvasLayer GetUICanvasLayer() => GetNode<CanvasLayer>("/root/RootControl/UI");
 
-    public Character GetPlayer(int playerIndex) => (Players.Count > playerIndex) ? Players[playerIndex] : null;
+    public Character GetPlayer(int playerIndex) => (Players.Count > playerIndex) ? Players[playerIndex] as Character : null;
     public Character GetNearestPlayer(Vector2 globalPosition) 
     {
         float nearestSqrDistance = 1000000000.0f;
@@ -163,10 +164,15 @@ public class Game : Node2D
     public void PlayerDied(int playerIndex)
     {
         //TODO: not in multiplayer?
-        Players[playerIndex].Position = new Vector2(-Const.SCREEN_HALF_WIDTH + 40.0f, 480.0f);
-        Players[playerIndex].RotationDegrees = 90.0f;
+        Character c = GetPlayer(playerIndex);
+        if (IsInstanceValid(c))
+        {
+            c.Position = new Vector2(-Const.SCREEN_HALF_WIDTH + 40.0f, 480.0f);
+            c.RotationDegrees = 90.0f;
+        }
         
         AgainButton.Visible = true;
+        AgainButton.GrabFocus();
     }
 
     public async void RestartGame()

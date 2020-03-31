@@ -7,11 +7,17 @@ public static class R
     {
         public static string Bullet = "res://Prefabs/Bullet.tscn";
         public static string Pixel = "res://Prefabs/Pixel.tscn";
-        public static string DeathParticles = "res://Prefabs/DeathParticles.tscn";
 
         public static string Character = "res://Prefabs/Character.tscn";
 
     }
+
+    public static class Particles 
+    {
+        public static string DeathParticles = "res://Particles/DeathParticles.tscn";
+        public static string JumpParticles = "res://Particles/JumpParticles.tscn";
+    }
+
     public static class Sounds
     {
         public static string Shoot = "res://Sounds/Shoot.wav";

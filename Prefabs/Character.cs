@@ -39,6 +39,8 @@ public class Character : KinematicBody2D
     private float LastGrounded = 100.0f;
     private float LastJump = 100.0f;
     private float LastBullet = 100.0f;
+    private float LastDied = 0.0f;
+
     private bool IsRight = true;
     private Vector2 Velocity = Vector2.Zero;
     private bool IsDead = false;
@@ -112,6 +114,12 @@ public class Character : KinematicBody2D
             SetCollisionMaskBit(6, true);
         }
 
+        // Death timer
+        if (IsDead)
+        {
+            LastDied += delta;
+        }
+
         // Graphics
         UpdateSprite();
         
@@ -141,19 +149,16 @@ public class Character : KinematicBody2D
         bool jump = Input.IsActionJustPressed($"jump_{PlayerIndex}") && IsGrounded && LastJump > JUMP_DEBOUNCE;
         if (jump) 
         {
+            // Play animation
             AnimationPlayer.Play("Jump");
          
             if (!IsLevelComplete && Input.IsActionPressed($"move_down_{PlayerIndex}"))
             {
-                IsInsideWall = true;
-                ForceFallTime = 0.2f;
-                Velocity.y = +5.0f;
-                Sound_Drop.Play();
+                DropDown();
             } 
             else 
             {
-                Velocity.y = -JUMP_IMPULSE;
-                Sound_Jump.Play();
+                Jump();
             }
             LastJump = 0.0f;
 
@@ -207,11 +212,14 @@ public class Character : KinematicBody2D
 
             LerpedCameraOffset.x = 0.0f;// (Global.NumberOfPlayers == 1) ? 0.0f : Mathf.Lerp(LerpedCameraOffset.x, desiredCameraOffset.x * 70.0f, 0.1f);
             LerpedCameraOffset.y = Mathf.Lerp(LerpedCameraOffset.y, desiredCameraOffset.y * 70.0f, 0.1f);
-        }
+        } 
 
-        float rootCameraOffsetY = Mathf.Clamp(Position.y * 0.2f, -40.0f, 0.0f);
-        Camera.Offset = new Vector2(LerpedCameraOffset.x, rootCameraOffsetY + LerpedCameraOffset.y) + CameraShakeOffset;                
-        Camera.GlobalPosition = GlobalPosition;
+        if (!IsDead || LastDied > 1.0f)
+        {
+            float rootCameraOffsetY = Mathf.Clamp(Position.y * 0.2f, -40.0f, 0.0f);
+            Camera.Offset = new Vector2(LerpedCameraOffset.x, rootCameraOffsetY + LerpedCameraOffset.y) + CameraShakeOffset;                
+            Camera.GlobalPosition = GlobalPosition;
+        }
     }
 
     private void FireBullet(Bullet.ColourEnum colour)
@@ -224,6 +232,32 @@ public class Character : KinematicBody2D
         bullet.Direction = IsRight ? 1.0f : -1.0f;
         bullet.Position = Position + new Vector2(bullet.Direction * 20.0f, -4.0f);
         GetParent().AddChild(bullet);        
+    }
+
+    private void Jump()
+    {
+        Velocity.y = -JUMP_IMPULSE;
+
+        // Play sound
+        Sound_Jump.Play();
+
+        // Spawn particles
+        Scene<Particles2D> jumpParticlesScene = R.Particles.JumpParticles;
+
+        Particles2D jumpParticles = jumpParticlesScene.Instance();
+        jumpParticles.Position = Position + new Vector2(0.0f, 16.0f);
+        GetParent().AddChild(jumpParticles);    
+    }
+
+    private void DropDown()
+    {
+        Velocity.y = +5.0f;
+
+        // Play sound
+        Sound_Drop.Play();
+
+        IsInsideWall = true;
+        ForceFallTime = 0.2f;
     }
 
     private void ApplyPhysics()
@@ -252,9 +286,25 @@ public class Character : KinematicBody2D
 
         IsDead = true;
         Sound_Death.Play();
+        
+        // Queue pixel creation, tell game we died
+        Transform2D deathTransform = new Transform2D
+        {
+            origin = Vector2.Zero,
+            x = Sprite.GlobalTransform.x,
+            y = Sprite.GlobalTransform.y,
+        };
+        CallDeferred(nameof(BurstIntoPixels), Position, deathTransform);
         Game.Instance.PlayerDied(PlayerIndex);
-
+       
+        // MASSIVE camera shake
         ShakeCamera(new Vector2(250.0f, 250.0f));
+    }
+
+    private void BurstIntoPixels(Vector2 position, Transform2D transform)
+    {
+        // Delayed sprite bursting. Because Die() is called from enemy movement, we have to defer this.
+        Sprite.BurstIntoPixels(body: this, overridePosition: position, overrideTransform: transform, suck: false);
     }
 
     public void MarkLevelComplete()
