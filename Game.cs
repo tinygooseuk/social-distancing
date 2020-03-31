@@ -177,21 +177,8 @@ public class Game : Node2D
 
     public async void RestartGame()
     {
-        Scene<Node> sceneToLoad = null;
-
-        switch (Global.NumberOfPlayers)
-        {
-            case 1: sceneToLoad = R.Scenes.SinglePlayer; break;
-            case 2: sceneToLoad = R.Scenes.TwoPlayer; break;
-            default:
-                GD.PrintErr($"Unsupported # of players - {Global.NumberOfPlayers}");
-                break;
-        }
-
-        if (sceneToLoad != null)
-        {
-            GetTree().ChangeSceneTo(await sceneToLoad.LoadAsync());
-        }
+        Scene<Node> gameScene = R.Scenes.GetGameSceneForNumPlayers(Global.NumberOfPlayers);
+        GetTree().ChangeSceneTo(await gameScene.LoadAsync());
     }
 
     private Difficulty GetDifficultyEnumValue(int level)
