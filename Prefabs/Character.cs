@@ -39,8 +39,11 @@ public class Character : KinematicBody2D
     private float LastGrounded = 100.0f;
     private float LastJump = 100.0f;
     private float LastBullet = 100.0f;
+    private Bullet.ColourEnum LastBulletColour = Bullet.ColourEnum.Red;
     private float LastDied = 0.0f;
 
+    private bool RetryBullet = false;
+    
     private bool IsRight = true;
     private Vector2 Velocity = Vector2.Zero;
     private bool IsDead = false;
@@ -140,9 +143,14 @@ public class Character : KinematicBody2D
         Velocity.x += move * MOVE_SPEED;
 
         // Change facing direction if needed
+        bool wasRight = IsRight;
         if (Mathf.Abs(move) > 0.1f)
         {
             IsRight = Mathf.Sign(move) == 1;
+        }
+        if (wasRight != IsRight)
+        {
+            RetryBullet = false;
         }
 
         // Check for jump
@@ -167,7 +175,7 @@ public class Character : KinematicBody2D
         }        
         LastJump += delta;        
 
-        // Force falling
+        // Force falling if required
         if (ForceFallTime > 0.0f)
         {
             ForceFallTime -= delta;
@@ -192,6 +200,12 @@ public class Character : KinematicBody2D
         else
         {
             LastBullet += delta;
+        }
+
+        // Check for retry shooting
+        if (RetryBullet)
+        {
+            FireBullet(LastBulletColour);
         }
     }
 
@@ -224,6 +238,9 @@ public class Character : KinematicBody2D
 
     private void FireBullet(Bullet.ColourEnum colour)
     {
+        RetryBullet = false;
+        LastBulletColour = colour;
+
         Scene<Bullet> bulletScene = R.Prefabs.Bullet;
 
         Bullet bullet = bulletScene.Instance();
@@ -240,6 +257,9 @@ public class Character : KinematicBody2D
 
         // Play sound
         Sound_Jump.Play();
+
+        // Cancel firing
+        RetryBullet = false;
 
         // Spawn particles
         Scene<Particles2D> jumpParticlesScene = R.Particles.JumpParticles;
@@ -312,6 +332,11 @@ public class Character : KinematicBody2D
         IsLevelComplete = true;
     }
 
+    public void MarkBulletFailed()
+    {
+        RetryBullet = true;
+    }
+
     public void ShakeCamera(Vector2 magnitude) => CameraShakeMagnitude += magnitude;
 
     private void UpdateGrounded(float delta)
@@ -364,6 +389,6 @@ public class Character : KinematicBody2D
         {
             sound.PitchScale = 1.0f + ((float)PlayerIndex) / 16.0f;
         }
-    }
+    }    
 }
 

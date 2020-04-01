@@ -6,6 +6,7 @@ public class GoalRoom : Node2D
 {
     // Subnodes
     [Subnode] private Area2D GoalDetector;
+    [Subnode("GoalBanner/GoalBannerSprite")] private Sprite GoalBanner;
 
     // State
     private bool WasTriggered = false;
@@ -15,7 +16,7 @@ public class GoalRoom : Node2D
         this.FindSubnodes();
     }
 
-    private void OnGoalReached(Node2D triggerer)
+    private async void OnGoalReached(Node2D triggerer)
     {   
         if (WasTriggered) return;
 
@@ -30,6 +31,10 @@ public class GoalRoom : Node2D
                 character.GlobalPosition = new Vector2(character.GlobalPosition.x, GoalDetector.GlobalPosition.y);
                 character.MarkLevelComplete();
             }
+
+            await ToSignal(GetTree().CreateTimer(2.0f), "timeout");            
+            GoalBanner.BurstIntoPixels((KinematicBody2D)GoalBanner.GetParent(), suck: true, pixelSize: 3);
+            GoalBanner.QueueFree();
         }
     }
 }

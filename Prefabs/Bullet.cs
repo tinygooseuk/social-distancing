@@ -15,6 +15,8 @@ public class Bullet : KinematicBody2D
 
     public float Direction = 0.0f;
     public ColourEnum Colour = ColourEnum.Red;
+
+    private bool FirstFrame = true;
     
     public override void _Ready()
     {
@@ -34,6 +36,9 @@ public class Bullet : KinematicBody2D
         // Tween up the size
         IntroTween.InterpolateProperty(AnimatedSprite, "scale", null, new Vector2(2.0f, 2.0f), 0.1f, Tween.TransitionType.Cubic, Tween.EaseType.Out);
         IntroTween.Start();
+
+        // Show on next frame
+        AnimatedSprite.CallDeferred("set_visible", true);
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -42,6 +47,15 @@ public class Bullet : KinematicBody2D
         KinematicCollision2D collision = MoveAndCollide(new Vector2(Direction, 0.0f) * delta * 400.0f);
         if (collision != null && IsInstanceValid(collision.Collider))
         {
+            if (FirstFrame)
+            {
+                Character firedByPlayer = Game.Instance.GetPlayer(FiredByPlayerIndex);
+                if (IsInstanceValid(firedByPlayer))
+                {
+                    firedByPlayer.MarkBulletFailed();
+                }
+            }
+
             if (Colour == ColourEnum.Red && collision.Collider is Enemy_Red er)
             {
                 KillEnemy(er);
@@ -65,6 +79,8 @@ public class Bullet : KinematicBody2D
                 QueueFree();
             }
         }
+
+        FirstFrame = false;
     }
 
     private void KillEnemy(Enemy e)

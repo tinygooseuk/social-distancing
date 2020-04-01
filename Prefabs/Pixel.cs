@@ -15,6 +15,8 @@ public class Pixel : RigidBody2D
     private bool IsSucking = false;
     public bool CanSuck = true;
 
+    public Sprite PixelSprite => GetNode<Sprite>("Sprite");
+
     public override void _Ready()
     {
         Lifetime = LIFETIME + (float)GD.RandRange(-LIFETIME_RANDOM, +LIFETIME_RANDOM);

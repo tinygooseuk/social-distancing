@@ -12,25 +12,29 @@ public static class AnimatedSpriteUtil
         }
     }
 
-    public static IEnumerable<Pixel> BurstIntoPixels(this AnimatedSprite sprite, KinematicBody2D body, bool suck = true, Vector2? overridePosition = null, Transform2D? overrideTransform = null)
+    private static IEnumerable<Pixel> BurstIntoPixels_Impl(
+        Node2D sourceNode, 
+        KinematicBody2D body, 
+        Texture spriteTexture, 
+        Image spriteImage, 
+        Vector2 pixelOffset, 
+        bool suck = true, 
+        Vector2? overridePosition = null,
+        Transform2D? overrideTransform = null, 
+        int pixelSize = 1)
     {
-        SceneTree tree = sprite.GetTree();
+        SceneTree tree = sourceNode.GetTree();
 
         Vector2 usePosition = overridePosition.GetValueOrDefault(body.Position);
         Transform2D useTransform = overrideTransform.GetValueOrDefault(new Transform2D
         {
             origin = Vector2.Zero,
-            x = sprite.GlobalTransform.x,
-            y = sprite.GlobalTransform.y,
+            x = sourceNode.GlobalTransform.x,
+            y = sourceNode.GlobalTransform.y,
         });
 
-        AtlasTexture spriteTexture = (AtlasTexture)sprite.Frames.GetFrame("Idle", 0);
-        Image spriteImage = spriteTexture.Atlas.GetData();
-
         Scene<Pixel> pixelScene = R.Prefabs.Pixel;
-        pixelScene.Load();
-
-        
+        pixelScene.Load();        
 
         int numPixels = tree.GetNodesInGroup("pixels").Count;
         int skip = 1 + Mathf.RoundToInt(numPixels / 100);
@@ -40,16 +44,15 @@ public static class AnimatedSpriteUtil
 
         spriteImage.Lock();
         {
-            for (int y = 0; y < spriteTexture.GetHeight(); y++)
+            for (int y = 0; y < spriteTexture.GetHeight(); y += pixelSize)
             {
-                for (int x = 0; x < spriteTexture.GetWidth(); x++)
+                for (int x = 0; x < spriteTexture.GetWidth(); x += pixelSize)
                 {
                     if (counter++ % skip > 0)
                     {
                         continue;
                     }
 
-                    Vector2 pixelOffset = spriteTexture.Region.Position;
                     Color pixelColour = spriteImage.GetPixel((int)pixelOffset.x + x, (int)pixelOffset.y + y);
                     bool isPixel = pixelColour.a > 0.5f;
                     bool isBlack = false;                    
@@ -86,6 +89,7 @@ public static class AnimatedSpriteUtil
                         Vector2 offset = new Vector2((float)x, (float)y) - spriteTexture.GetSize() / 2.0f;
 
                         Pixel pixel = pixelScene.Instance();
+                        pixel.PixelSprite.Scale = new Vector2((float)pixelSize, (float)pixelSize);
                         pixel.CanSuck = suck;
                         pixel.Position = usePosition + useTransform.Xform(offset);
                         pixel.Modulate = isBlack ? Colors.Black : pixelColour * body.Modulate;
@@ -99,5 +103,22 @@ public static class AnimatedSpriteUtil
         spriteImage.Unlock();
 
         return pixels;
+    }
+    
+    public static IEnumerable<Pixel> BurstIntoPixels(this AnimatedSprite sprite, KinematicBody2D body, bool suck = true, Vector2? overridePosition = null, Transform2D? overrideTransform = null, int pixelSize = 1)
+    {
+        AtlasTexture spriteTexture = (AtlasTexture)sprite.Frames.GetFrame("Idle", 0);
+        Image spriteImage = spriteTexture.Atlas.GetData();
+        Vector2 pixelOffset = spriteTexture.Region.Position;
+
+        return BurstIntoPixels_Impl(sprite, body, spriteTexture, spriteImage, pixelOffset, suck, overridePosition, overrideTransform, pixelSize);
+    }
+
+    public static IEnumerable<Pixel> BurstIntoPixels(this Sprite sprite, KinematicBody2D body, bool suck = true, Vector2? overridePosition = null, Transform2D? overrideTransform = null, int pixelSize = 1)
+    {
+        Texture spriteTexture = sprite.Texture;
+        Image spriteImage = spriteTexture.GetData();
+
+        return BurstIntoPixels_Impl(sprite, body, spriteTexture, spriteImage, Vector2.Zero, suck, overridePosition, overrideTransform, pixelSize);
     }
 }

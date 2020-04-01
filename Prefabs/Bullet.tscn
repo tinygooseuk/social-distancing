@@ -29,16 +29,18 @@ animations = [ {
 } ]
 
 [sub_resource type="CircleShape2D" id=6]
-radius = 8.44114
+radius = 8.0
 
 [node name="Bullet" type="KinematicBody2D"]
 collision_mask = 112
 script = ExtResource( 2 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+visible = false
 material = ExtResource( 3 )
 scale = Vector2( 0.1, 0.1 )
 frames = SubResource( 5 )
+frame = 1
 speed_scale = 2.0
 playing = true
 __meta__ = {
