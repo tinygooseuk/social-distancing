@@ -6,6 +6,8 @@ public class Pixel : RigidBody2D
     private float Age = 0.0f;
     private float Lifetime = 0.0f;
 
+    public float LifetimeMultiplier = 1.0f;
+
     private const float LIFETIME = 1.5f;
     private const float LIFETIME_RANDOM = 0.25f;
 
@@ -16,10 +18,11 @@ public class Pixel : RigidBody2D
     public bool CanSuck = true;
 
     public Sprite PixelSprite => GetNode<Sprite>("Sprite");
+    public CollisionShape2D CollisionShape => GetNode<CollisionShape2D>("CollisionShape2D");
 
     public override void _Ready()
     {
-        Lifetime = LIFETIME + (float)GD.RandRange(-LIFETIME_RANDOM, +LIFETIME_RANDOM);
+        Lifetime = LifetimeMultiplier * LIFETIME + (float)GD.RandRange(-LIFETIME_RANDOM, +LIFETIME_RANDOM);
 
         if (!CanSuck)
         {
@@ -53,7 +56,7 @@ public class Pixel : RigidBody2D
                 }
 
                 Vector2 targetVelocity = towardsPlayer.Normalized() * (speed + 10.0f);
-                state.LinearVelocity = targetVelocity;
+                state.LinearVelocity = targetVelocity.Clamped(500.0f);
             }
         }
     }

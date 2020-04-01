@@ -21,7 +21,8 @@ public static class AnimatedSpriteUtil
         bool suck = true, 
         Vector2? overridePosition = null,
         Transform2D? overrideTransform = null, 
-        int pixelSize = 1)
+        int pixelSize = 1,
+        float lifetimeMultiplier = 1.0f)
     {
         SceneTree tree = sourceNode.GetTree();
 
@@ -90,7 +91,9 @@ public static class AnimatedSpriteUtil
 
                         Pixel pixel = pixelScene.Instance();
                         pixel.PixelSprite.Scale = new Vector2((float)pixelSize, (float)pixelSize);
+                        pixel.CollisionShape.Shape = new RectangleShape2D { Extents = pixel.PixelSprite.Scale };
                         pixel.CanSuck = suck;
+                        pixel.LifetimeMultiplier = lifetimeMultiplier;
                         pixel.Position = usePosition + useTransform.Xform(offset);
                         pixel.Modulate = isBlack ? Colors.Black : pixelColour * body.Modulate;
                         body.GetParent().AddChild(pixel);
@@ -105,20 +108,20 @@ public static class AnimatedSpriteUtil
         return pixels;
     }
     
-    public static IEnumerable<Pixel> BurstIntoPixels(this AnimatedSprite sprite, KinematicBody2D body, bool suck = true, Vector2? overridePosition = null, Transform2D? overrideTransform = null, int pixelSize = 1)
+    public static IEnumerable<Pixel> BurstIntoPixels(this AnimatedSprite sprite, KinematicBody2D body, bool suck = true, Vector2? overridePosition = null, Transform2D? overrideTransform = null, int pixelSize = 1, float lifetimeMultiplier = 1.0f)
     {
         AtlasTexture spriteTexture = (AtlasTexture)sprite.Frames.GetFrame("Idle", 0);
         Image spriteImage = spriteTexture.Atlas.GetData();
         Vector2 pixelOffset = spriteTexture.Region.Position;
 
-        return BurstIntoPixels_Impl(sprite, body, spriteTexture, spriteImage, pixelOffset, suck, overridePosition, overrideTransform, pixelSize);
+        return BurstIntoPixels_Impl(sprite, body, spriteTexture, spriteImage, pixelOffset, suck, overridePosition, overrideTransform, pixelSize, lifetimeMultiplier);
     }
 
-    public static IEnumerable<Pixel> BurstIntoPixels(this Sprite sprite, KinematicBody2D body, bool suck = true, Vector2? overridePosition = null, Transform2D? overrideTransform = null, int pixelSize = 1)
+    public static IEnumerable<Pixel> BurstIntoPixels(this Sprite sprite, KinematicBody2D body, bool suck = true, Vector2? overridePosition = null, Transform2D? overrideTransform = null, int pixelSize = 1, float lifetimeMultiplier = 1.0f)
     {
         Texture spriteTexture = sprite.Texture;
         Image spriteImage = spriteTexture.GetData();
 
-        return BurstIntoPixels_Impl(sprite, body, spriteTexture, spriteImage, Vector2.Zero, suck, overridePosition, overrideTransform, pixelSize);
+        return BurstIntoPixels_Impl(sprite, body, spriteTexture, spriteImage, Vector2.Zero, suck, overridePosition, overrideTransform, pixelSize, lifetimeMultiplier);
     }
 }

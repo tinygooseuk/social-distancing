@@ -33,7 +33,7 @@ public class GoalRoom : Node2D
             }
 
             await ToSignal(GetTree().CreateTimer(2.0f), "timeout");            
-            GoalBanner.BurstIntoPixels((KinematicBody2D)GoalBanner.GetParent(), suck: true, pixelSize: 3);
+            GoalBanner.BurstIntoPixels((KinematicBody2D)GoalBanner.GetParent(), suck: true, pixelSize: 4, lifetimeMultiplier: 4.0f);
             GoalBanner.QueueFree();
         }
     }
