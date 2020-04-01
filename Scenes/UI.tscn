@@ -82,4 +82,18 @@ margin_right = 200.0
 margin_bottom = 36.0
 custom_fonts/font = ExtResource( 3 )
 text = "FPS: 60"
+
+[node name="Level" type="Label" parent="DebugUI/Vbox"]
+margin_top = 40.0
+margin_right = 200.0
+margin_bottom = 56.0
+custom_fonts/font = ExtResource( 3 )
+text = "LVL: 00"
+
+[node name="Difficulty" type="Label" parent="DebugUI/Vbox"]
+margin_top = 60.0
+margin_right = 200.0
+margin_bottom = 76.0
+custom_fonts/font = ExtResource( 3 )
+text = "DIFF: Easy (0.2)"
 [connection signal="pressed" from="BG/AgainButton" to="BG/AgainButton" method="OnPressed"]

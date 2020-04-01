@@ -6,6 +6,8 @@ public class DebugUI : Control
     // Subnodes
     [Subnode("Vbox/FrameNum")] private Label FrameNumberLabel;
     [Subnode("Vbox/FPSCounter")] private Label FPSCounter;
+    [Subnode("Vbox/Level")] private Label LevelLabel;
+    [Subnode("Vbox/Difficulty")] private Label DifficultyLabel;
 
     public override void _Ready()
     {
@@ -23,8 +25,10 @@ public class DebugUI : Control
 
         if (!Visible) return;
 
+        // Frame number
         FrameNumberLabel.Text = $"F#: {Engine.GetFramesDrawn():D6}";
         
+        // FPS
         float fps = Engine.GetFramesPerSecond();
         FPSCounter.Text = $"FPS: {fps}";
         if (fps > 58.0f)
@@ -39,5 +43,13 @@ public class DebugUI : Control
         {
             FPSCounter.Modulate = Colors.Red;
         }
-    } 
+
+        // Level
+        int lvl = Game.Instance.CurrentLevel;
+        LevelLabel.Text = $"LVL: {lvl:D2}";
+
+        // Difficulty
+        string diffLevel = Game.GetDifficultyEnumValue(lvl).ToString().ToUpper();
+        DifficultyLabel.Text = $"DIFF: {diffLevel} {Game.Instance.GetAIDifficultyScale(lvl):F1}";
+    }
 }

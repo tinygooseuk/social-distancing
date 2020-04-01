@@ -23,7 +23,7 @@ public class Game : Node2D
     private Godot.Collections.Array Players = new Godot.Collections.Array();
 
     // Enums
-    enum Difficulty { Easy, Medium, Hard };
+    public enum Difficulty { Easy, Medium, Hard };
 
     // State
     public int CurrentLevel { get; private set; } = 0;
@@ -181,7 +181,7 @@ public class Game : Node2D
         GetTree().ChangeSceneTo(await gameScene.LoadAsync());
     }
 
-    private Difficulty GetDifficultyEnumValue(int level)
+    public static Difficulty GetDifficultyEnumValue(int level)
     {
         if (level < 5)
         {
