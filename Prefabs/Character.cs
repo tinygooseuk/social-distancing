@@ -11,7 +11,8 @@ public class Character : KinematicBody2D
         get => _PlayerIndex;
         set
         {
-             _PlayerIndex = value; 
+            _PlayerIndex = value; 
+            this.FindSubnodes(); // just in case
             UpdatePlayerIndex();
         }
     }   
@@ -243,12 +244,22 @@ public class Character : KinematicBody2D
 
         Scene<Bullet> bulletScene = R.Prefabs.Bullet;
 
-        Bullet bullet = bulletScene.Instance();
-        bullet.FiredByPlayerIndex = PlayerIndex;
-        bullet.Colour = colour;
-        bullet.Direction = IsRight ? 1.0f : -1.0f;
-        bullet.Position = Position + new Vector2(bullet.Direction * 20.0f, -4.0f);
-        GetParent().AddChild(bullet);        
+        for (int d = 0; d < 8; d++)
+        {
+            Bullet bullet = bulletScene.Instance();
+            bullet.DisableRetry = true;
+            bullet.FiredByPlayerIndex = PlayerIndex;
+            bullet.Colour = colour;
+            bullet.Direction = Mathf.Polar2Cartesian(1.0f, 2.0f * Mathf.Pi * (d / 8.0f));
+            bullet.Position = Position + /*bullet.Direction * 20.0f +*/ new Vector2(0, -4.0f);
+            GetParent().AddChild(bullet);        
+        }
+        // Bullet bullet = bulletScene.Instance();
+        // bullet.FiredByPlayerIndex = PlayerIndex;
+        // bullet.Colour = colour;
+        // bullet.Direction = new Vector2(IsRight ? 1.0f : -1.0f, 0.0f);
+        // bullet.Position = Position + bullet.Direction * 20.0f + new Vector2(0, -4.0f);
+        // GetParent().AddChild(bullet);        
     }
 
     private void Jump()
@@ -371,6 +382,7 @@ public class Character : KinematicBody2D
     {
         // Set collision layer based on player index
         CollisionLayer = (uint)PlayerIndex+1;
+        InsideWallDetector.CollisionLayer = (uint)PlayerIndex+1;
 
         // Grab reference to our camera
         Camera = Game.Instance.GetPlayerCamera(PlayerIndex);

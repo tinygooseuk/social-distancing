@@ -277,6 +277,7 @@ toggle_debug={
 2d_physics/layer_5="Enemy"
 2d_physics/layer_6="Ground"
 2d_physics/layer_7="Passthrough"
+2d_physics/layer_8="Projectile"
 
 [mono]
 

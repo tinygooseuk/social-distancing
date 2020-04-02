@@ -13,10 +13,14 @@ public class Bullet : KinematicBody2D
     // State
     public int FiredByPlayerIndex = 0;
 
-    public float Direction = 0.0f;
-    public ColourEnum Colour = ColourEnum.Red;
+    public Vector2 Direction = Vector2.Zero;
+    public float Speed = 400.0f;
 
+    public ColourEnum Colour = ColourEnum.Red;
+    
+    public bool DisableRetry = false;
     private bool FirstFrame = true;
+    
     
     public override void _Ready()
     {
@@ -33,6 +37,9 @@ public class Bullet : KinematicBody2D
         IntroTween.InterpolateProperty(AnimatedSprite, "scale", null, new Vector2(2.0f, 2.0f), 0.1f, Tween.TransitionType.Cubic, Tween.EaseType.Out);
         IntroTween.Start();
 
+        // Don't collide with current char
+        SetCollisionMaskBit(FiredByPlayerIndex, false);
+
         // Show on next frame
         AnimatedSprite.CallDeferred("set_visible", true);
     }
@@ -40,10 +47,10 @@ public class Bullet : KinematicBody2D
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _PhysicsProcess(float delta)
     {
-        KinematicCollision2D collision = MoveAndCollide(new Vector2(Direction, 0.0f) * delta * 400.0f);
+        KinematicCollision2D collision = MoveAndCollide(Direction * delta * Speed);
         if (collision != null && IsInstanceValid(collision.Collider))
         {
-            if (FirstFrame)
+            if (FirstFrame && !DisableRetry)
             {
                 Character firedByPlayer = Game.Instance.GetPlayer(FiredByPlayerIndex);
                 if (IsInstanceValid(firedByPlayer))
@@ -101,7 +108,8 @@ public class Bullet : KinematicBody2D
         Character c = Game.Instance.GetPlayer(FiredByPlayerIndex);
         if (IsInstanceValid(c))
         {
-            c.ShakeCamera(new Vector2(Direction * 10.0f, (float)GD.RandRange(-8.0f, +8.0f)));
+            Vector2 randomShake = new Vector2((float)GD.RandRange(-8.0f, +8.0f), (float)GD.RandRange(-8.0f, +8.0f));
+            c.ShakeCamera(Direction * 8.0f + randomShake);
         }
     }
 }
