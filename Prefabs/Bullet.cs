@@ -29,10 +29,6 @@ public class Bullet : KinematicBody2D
             case ColourEnum.Blue: AnimatedSprite.Modulate = new Color(0.0f, 0.0f, 1.0f); break;
         }
 
-        // Play shot sound
-        Asset<AudioStream> Sound_Shoot = R.Sounds.Shoot;
-        GetTree().PlaySound2D(Sound_Shoot, relativeTo: this);
-
         // Tween up the size
         IntroTween.InterpolateProperty(AnimatedSprite, "scale", null, new Vector2(2.0f, 2.0f), 0.1f, Tween.TransitionType.Cubic, Tween.EaseType.Out);
         IntroTween.Start();
@@ -77,7 +73,15 @@ public class Bullet : KinematicBody2D
             else 
             {
                 QueueFree();
+                return;
             }
+        }
+
+        if (FirstFrame)
+        {
+            // Play shot sound        
+            Asset<AudioStream> Sound_Shoot = R.Sounds.Shoot;
+            GetTree().PlaySound2D(Sound_Shoot, relativeTo: this);
         }
 
         FirstFrame = false;
