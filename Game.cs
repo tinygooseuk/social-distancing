@@ -149,7 +149,7 @@ public class Game : Node2D
             Character thisPlayer = GetPlayer(playerIndex);
             if (!IsInstanceValid(thisPlayer)) continue;
 
-            float thisSqrDistance = thisPlayer.GlobalPosition.DistanceSquaredTo(GlobalPosition);
+            float thisSqrDistance = thisPlayer.GlobalPosition.DistanceSquaredTo(globalPosition);
             if (thisSqrDistance < nearestSqrDistance)
             {
                 nearestSqrDistance = thisSqrDistance;
