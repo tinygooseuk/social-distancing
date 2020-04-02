@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Linq;
+using System.Collections.Generic;
 
 public class Character : KinematicBody2D
 {
@@ -26,26 +27,21 @@ public class Character : KinematicBody2D
     [Subnode("Sounds/Jump")] private AudioStreamPlayer2D Sound_Jump;
     [Subnode("Sounds/Drop")] private AudioStreamPlayer2D Sound_Drop;
     [Subnode("Sounds/PlayerDeath")] private AudioStreamPlayer2D Sound_Death;
-    
-    // Consts
-    private static float GRAVITY = 9.8f;
-    private static float MOVE_SPEED = 40.0f;
-    private static float JUMP_IMPULSE = 300.0f;
-    private static float JUMP_DEBOUNCE = 0.4f;
-    private static float FRICTION = 0.15f;
-
-    // State
+        
+    // References
     public Camera2D Camera;
 
+    // State
     private float LastGrounded = 100.0f;
     private float LastJump = 100.0f;
     private float LastBullet = 100.0f;
     private Bullet.ColourEnum LastBulletColour = Bullet.ColourEnum.Red;
     private float LastDied = 0.0f;
+    private bool IsGrounded => LastGrounded < 0.2f;
 
-    private bool RetryBullet = false;
+    private bool ShouldRefireBullet = false;
     
-    private bool IsRight = true;
+    public bool IsFacingRight { get; private set; } = true;
     private Vector2 Velocity = Vector2.Zero;
     private bool IsDead = false;
     private bool IsLevelComplete = false;
@@ -54,13 +50,23 @@ public class Character : KinematicBody2D
     private bool IsInsideWall = false;
     private float ForceFallTime = 0.0f;
 
+    // Camera state
     private Vector2 LerpedCameraOffset = Vector2.Zero;
 
     private Vector2 CameraShakeMagnitude = Vector2.Zero;
     private Vector2 CameraShakeOffset = Vector2.Zero;
 
-    private bool IsGrounded => LastGrounded < 0.2f;
+    // Modifiables
+    public Modifiables Mods => GetModifiables();
+    private Modifiables _CachedModifiables = null;
 
+    // Modifiers
+    private List<IBehaviourModifier> Modifiers = new List<IBehaviourModifier>();
+
+    // Behaviours
+    public IShootBehaviour ShootBehaviour = new DefaultShootBehaviour();
+
+    #region Engine Callbacks
     public override void _Ready()
     {
         this.FindSubnodes();
@@ -69,8 +75,7 @@ public class Character : KinematicBody2D
     public override void _PhysicsProcess(float delta)
     {
         // "Physics"
-        ApplyPhysics();
-        UpdateGrounded(delta);
+        ApplyPhysics(delta);
 
         // Update inside-ness
         int insides = 0;
@@ -125,13 +130,24 @@ public class Character : KinematicBody2D
         }
 
         // Graphics
-        UpdateSprite();
+        if (Mathf.Abs(Velocity.x) < 1.0f)
+        {
+            Sprite.PlayIfNotAlready("Idle");
+        }
+        else
+        {
+            Sprite.PlayIfNotAlready("WalkRight");
+        }
+
+        Sprite.Scale = new Vector2(2.0f * (IsFacingRight ? 1 : -1), 2.0f);
         
         // Update score
         float score = -(Position.y - 207.0f);
         Game.Instance.BaseScore = (int)Mathf.Max(score, Game.Instance.BaseScore);
     }
+    #endregion
 
+    #region Inputs
     private void ProcessInput(float delta)
     {
         if (IsDead)
@@ -141,21 +157,21 @@ public class Character : KinematicBody2D
 
         // Add movement
         float move = Input.GetActionStrength($"move_right_{PlayerIndex}") - Input.GetActionStrength($"move_left_{PlayerIndex}");
-        Velocity.x += move * MOVE_SPEED;
+        Velocity.x += move * Mods.MoveSpeed;
 
         // Change facing direction if needed
-        bool wasRight = IsRight;
+        bool wasRight = IsFacingRight;
         if (Mathf.Abs(move) > 0.1f)
         {
-            IsRight = Mathf.Sign(move) == 1;
+            IsFacingRight = Mathf.Sign(move) == 1;
         }
-        if (wasRight != IsRight)
+        if (wasRight != IsFacingRight)
         {
-            RetryBullet = false;
+            ShouldRefireBullet = false;
         }
 
         // Check for jump
-        bool jump = Input.IsActionJustPressed($"jump_{PlayerIndex}") && IsGrounded && LastJump > JUMP_DEBOUNCE;
+        bool jump = Input.IsActionJustPressed($"jump_{PlayerIndex}") && IsGrounded && LastJump > Mods.JumpDebounce;
         if (jump) 
         {
             // Play animation
@@ -183,17 +199,17 @@ public class Character : KinematicBody2D
         }
 
         // Check for shooting
-        if (LastBullet > 0.5f)
+        if (LastBullet > Mods.ShootDebounce)
         {
-            if (Input.IsActionJustPressed($"hit_red_{PlayerIndex}"))
+            if (Input.IsActionPressed($"hit_red_{PlayerIndex}"))
             {
                 FireBullet(Bullet.ColourEnum.Red);
             }
-            if (Input.IsActionJustPressed($"hit_yellow_{PlayerIndex}"))
+            if (Input.IsActionPressed($"hit_yellow_{PlayerIndex}"))
             {
                 FireBullet(Bullet.ColourEnum.Yellow);
             }
-            if (Input.IsActionJustPressed($"hit_blue_{PlayerIndex}"))
+            if (Input.IsActionPressed($"hit_blue_{PlayerIndex}"))
             {
                 FireBullet(Bullet.ColourEnum.Blue);
             }
@@ -204,7 +220,7 @@ public class Character : KinematicBody2D
         }
 
         // Check for retry shooting
-        if (RetryBullet)
+        if (ShouldRefireBullet)
         {
             FireBullet(LastBulletColour);
         }
@@ -239,38 +255,22 @@ public class Character : KinematicBody2D
 
     private void FireBullet(Bullet.ColourEnum colour)
     {
-        RetryBullet = false;
+        ShouldRefireBullet = false;
         LastBulletColour = colour;
+        LastBullet = 0.0f;
 
-        Scene<Bullet> bulletScene = R.Prefabs.Bullet;
-
-        for (int d = 0; d < 8; d++)
-        {
-            Bullet bullet = bulletScene.Instance();
-            bullet.DisableRetry = true;
-            bullet.FiredByPlayerIndex = PlayerIndex;
-            bullet.Colour = colour;
-            bullet.Direction = Mathf.Polar2Cartesian(1.0f, 2.0f * Mathf.Pi * (d / 8.0f));
-            bullet.Position = Position + /*bullet.Direction * 20.0f +*/ new Vector2(0, -4.0f);
-            GetParent().AddChild(bullet);        
-        }
-        // Bullet bullet = bulletScene.Instance();
-        // bullet.FiredByPlayerIndex = PlayerIndex;
-        // bullet.Colour = colour;
-        // bullet.Direction = new Vector2(IsRight ? 1.0f : -1.0f, 0.0f);
-        // bullet.Position = Position + bullet.Direction * 20.0f + new Vector2(0, -4.0f);
-        // GetParent().AddChild(bullet);        
+        ShootBehaviour?.Shoot(this, colour);     
     }
 
     private void Jump()
     {
-        Velocity.y = -JUMP_IMPULSE;
+        Velocity.y = -Mods.JumpImpulse;
 
         // Play sound
         Sound_Jump.Play();
 
         // Cancel firing
-        RetryBullet = false;
+        ShouldRefireBullet = false;
 
         // Spawn particles
         Scene<Particles2D> jumpParticlesScene = R.Particles.JumpParticles;
@@ -290,24 +290,39 @@ public class Character : KinematicBody2D
         IsInsideWall = true;
         ForceFallTime = 0.2f;
     }
+    #endregion
 
-    private void ApplyPhysics()
+    #region Physics
+    private void ApplyPhysics(float delta)    
     {
         if (IsDead)
         {
-            Velocity.y += GRAVITY;
+            Velocity.y += Mods.Gravity;
             Velocity.x = 0.0f;
 
             Velocity = MoveAndSlide(Velocity, upDirection: Vector2.Up);
             return;
         }
 
-        Velocity.y += GRAVITY;
-        Velocity.x *= (1.0f - FRICTION);
+        Velocity.y += Mods.Gravity;
+        Velocity.x *= (1.0f - Mods.Friction);
 
         Velocity = MoveAndSlide(Velocity, upDirection: Vector2.Up);
-    }
 
+        LastGrounded += delta;
+
+        if (IsOnFloor())
+        {
+            if (LastGrounded > delta)
+            {
+                AnimationPlayer.Play("Land");
+            }
+            LastGrounded = 0.0f;        
+        }     
+    }
+    #endregion
+
+    #region Publically Exposed
     public void Die()
     {
         if (IsDead)
@@ -345,39 +360,42 @@ public class Character : KinematicBody2D
 
     public void MarkBulletFailed()
     {
-        RetryBullet = true;
+        ShouldRefireBullet = true;
     }
 
     public void ShakeCamera(Vector2 magnitude) => CameraShakeMagnitude += magnitude;
+    #endregion
 
-    private void UpdateGrounded(float delta)
+    #region Modifiers/Behaviours
+    private Modifiables GetModifiables()
     {
-        LastGrounded += delta;
+        if (_CachedModifiables != null) return _CachedModifiables;
 
-        if (IsOnFloor())
+        Modifiables mods = new Modifiables();
+        foreach (IBehaviourModifier modifier in Modifiers)
         {
-            if (LastGrounded > delta)
-            {
-                AnimationPlayer.Play("Land");
-            }
-            LastGrounded = 0.0f;        
-        }    
-    }
-
-    private void UpdateSprite()
-    {
-        if (Mathf.Abs(Velocity.x) < 1.0f)
-        {
-            Sprite.PlayIfNotAlready("Idle");
-        }
-        else
-        {
-            Sprite.PlayIfNotAlready("WalkRight");
+            modifier.Modify(mods);
         }
 
-        Sprite.Scale = new Vector2(2.0f * (IsRight ? 1 : -1), 2.0f);
+        _CachedModifiables = mods;
+
+        ApplyModifiers();
+        return _CachedModifiables;
     }
 
+    private void ApplyModifiers()
+    {
+        Scale = new Vector2(Mods.CharacterScale, Mods.CharacterScale);
+    }
+
+    public void AddModifier<T>() where T : IBehaviourModifier, new()
+    {
+        _CachedModifiables = null;
+        Modifiers.Add(new T());
+    }
+    #endregion
+
+    #region Misc
     private void UpdatePlayerIndex()
     {
         // Set collision layer based on player index
@@ -401,6 +419,7 @@ public class Character : KinematicBody2D
         {
             sound.PitchScale = 1.0f + ((float)PlayerIndex) / 16.0f;
         }
-    }    
+    }
+    #endregion
 }
 
