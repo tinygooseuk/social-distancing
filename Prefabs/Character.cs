@@ -108,12 +108,15 @@ public class Character : KinematicBody2D
             float weakShake = Mathf.Clamp(Mathf.Abs(CameraShakeMagnitude.y / 2.0f), 0.01f, 1.0f);
             float strongShake = Mathf.Clamp(Mathf.Abs(CameraShakeMagnitude.x / 2.0f), 0.01f, 1.0f);
 
-            Input.StartJoyVibration(PlayerIndex, weakShake, strongShake, 0.5f);
+            if (Game.Instance.InputMethodManager.InputMethod == InputMethodManager.InputMethodEnum.Controller)
+            {
+                Input.StartJoyVibration(PlayerIndex, weakShake, strongShake, 0.5f);
+            }
         }
         else
         {
-            CameraShakeOffset = Vector2.Zero;
-            Input.StopJoyVibration(PlayerIndex);
+            CameraShakeOffset = Vector2.Zero;            
+            Input.StopJoyVibration(PlayerIndex);            
         }
 
         bool isCancellableSpeed = Velocity.y >= 0;// || Mathf.Abs(Velocity.x) > Mathf.Abs(Velocity.y);

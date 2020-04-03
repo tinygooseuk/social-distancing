@@ -10,15 +10,15 @@ public class Game : Node2D
 
     // Exports
     [Export] private Curve DifficultyCurve;
-
     [Export] private int MaxLevels = 15;
-    
-
+   
     // Subnodes
+    //TODO: try subnodes again?
     private Node2D GameArea;
     public Label TemplateLabel;
     public Label ScoreLabel;
     public Button AgainButton;
+    [Subnode] public InputMethodManager InputMethodManager { get; private set; }
 
     private Godot.Collections.Array Players = new Godot.Collections.Array();
 
@@ -34,6 +34,8 @@ public class Game : Node2D
 
     public override async void _Ready()
     {
+        this.FindSubnodes();
+
         Instance = this;
         GD.Seed(OS.GetSystemTimeMsecs());
         GD.Randomize();

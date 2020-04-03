@@ -8,6 +8,7 @@ public class DebugUI : Control
     [Subnode("Vbox/FPSCounter")] private Label FPSCounter;
     [Subnode("Vbox/Level")] private Label LevelLabel;
     [Subnode("Vbox/Difficulty")] private Label DifficultyLabel;
+    [Subnode("Vbox/Input")] private Label InputMethodLabel;
 
     public override void _Ready()
     {
@@ -51,5 +52,19 @@ public class DebugUI : Control
         // Difficulty
         string diffLevel = Game.GetDifficultyEnumValue(lvl).ToString().ToUpper();
         DifficultyLabel.Text = $"DIFF: {diffLevel} {Game.Instance.GetAIDifficultyScale(lvl):F1}";
+
+        // Input
+        switch (Game.Instance.InputMethodManager.InputMethod)
+        {
+            case InputMethodManager.InputMethodEnum.Controller: 
+                InputMethodLabel.Text = "CNTRL: CTRLR"; 
+                break;
+            case InputMethodManager.InputMethodEnum.Keyboard: 
+                InputMethodLabel.Text = "CNTRL: KYBRD"; 
+                break;
+            default:
+                InputMethodLabel.Text = "CNTRL: ?"; 
+                break;
+        }
     }
 }
