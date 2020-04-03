@@ -174,24 +174,31 @@ public class Character : KinematicBody2D
         }
 
         // Check for jump
-        bool jump = Input.IsActionJustPressed($"jump_{PlayerIndex}") && IsGrounded && LastJump > Mods.JumpDebounce;
-        if (jump) 
-        {
-            // Play animation
-            AnimationPlayer.Play("Jump");
-         
-            if (!IsLevelComplete && Input.IsActionPressed($"move_down_{PlayerIndex}"))
-            {
-                DropDown();
-            } 
-            else 
-            {
-                Jump();
-            }
-            LastJump = 0.0f;
+        bool canJumpOrDrop = IsGrounded && LastJump > Mods.JumpDebounce;
+        bool wantsJump = Input.IsActionJustPressed($"jump_{PlayerIndex}");
+        bool wantsDrop = Input.IsActionPressed($"move_down_{PlayerIndex}");
 
-            IsPassingThrough = true;
-            SetCollisionMaskBit(6, false);
+        if (canJumpOrDrop) 
+        {
+            if (wantsJump)
+            {
+                // Play animation
+                AnimationPlayer.Play("Jump");
+            
+                if (!IsLevelComplete && wantsDrop)
+                {
+                    DropDown();
+                } 
+                else 
+                {
+                    Jump();
+                }
+            } 
+            else if (wantsDrop && Game.Instance.InputMethodManager.InputMethod == InputMethodManager.InputMethodEnum.Keyboard)
+            {
+                // Special case: for keyboard input, don't require jump press too
+                DropDown();
+            }
         }        
         LastJump += delta;        
 
@@ -267,6 +274,13 @@ public class Character : KinematicBody2D
 
     private void Jump()
     {
+        // Set state
+        LastJump = 0.0f;
+
+        IsPassingThrough = true;
+        SetCollisionMaskBit(6, false);
+
+        // Add impulse
         Velocity.y = -Mods.JumpImpulse;
 
         // Play sound
@@ -285,6 +299,13 @@ public class Character : KinematicBody2D
 
     private void DropDown()
     {
+        // Set state
+        LastJump = 0.0f;
+
+        IsPassingThrough = true;
+        SetCollisionMaskBit(6, false);
+
+        // Add impulse
         Velocity.y = +5.0f;
 
         // Play sound
