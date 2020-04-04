@@ -23,6 +23,10 @@ public static class SoundFXUtil
         player.GlobalPosition = useLocation;
 
         await tree.ToSignal(tree.CreateTimer(player.Stream.GetLength() + 0.01f), "timeout");
-        player.QueueFree();
+
+        if (Godot.Object.IsInstanceValid(player))
+        {
+            player.QueueFree();
+        }
     }
 }
