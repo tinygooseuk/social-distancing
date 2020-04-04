@@ -10,7 +10,7 @@ public class Game : Node2D
 
     // Exports
     [Export] private Curve DifficultyCurve;
-    [Export] private int MaxLevels = 15;
+    [Export] private int MaxLevels = 9;
    
     // Subnodes
     //TODO: try subnodes again?
