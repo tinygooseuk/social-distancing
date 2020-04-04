@@ -310,7 +310,6 @@ debugger_agent/wait_timeout=30000
 [physics]
 
 2d/physics_engine="GodotPhysics"
-2d/thread_model=2
 
 [rendering]
 
