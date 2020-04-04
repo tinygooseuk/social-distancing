@@ -32,11 +32,12 @@ public static class R
         public static string[] EasyRooms = new[]
         {
             "res://Rooms/Easy/Easy_1.tscn",
+            "res://Rooms/Easy/Easy_2.tscn",
         };
 
         public static string[] MediumRooms = new[]
         {
-            "res://Rooms/Easy/Easy_1.tscn",
+            //"res://Rooms/Easy/Easy_1.tscn",
             "res://Rooms/Medium/Medium_2.tscn",
         };
 
