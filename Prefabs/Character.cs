@@ -425,11 +425,12 @@ public class Character : KinematicBody2D
         Scale = new Vector2(Mods.CharacterScale, Mods.CharacterScale);
     }
 
-    public void AddModifier<T>() where T : IBehaviourModifier, new()
+    public void AddModifier(IBehaviourModifier mod)
     {
         _CachedModifiables = null;
-        Modifiers.Add(new T());
+        Modifiers.Add(mod);
     }
+    public void AddModifier<T>() where T : IBehaviourModifier, new() => AddModifier(new T());
     #endregion
 
     #region Misc
