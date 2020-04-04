@@ -317,6 +317,19 @@ public class Character : KinematicBody2D
     #endregion
 
     #region Physics
+    public void SetVelocityY(float newVelocityY)
+    {
+        if (newVelocityY < 0.0f)
+        {
+            // Sorta simulate jump
+            LastJump = 0.0f;
+
+            IsPassingThrough = true;
+            SetCollisionMaskBit(6, false);
+        }
+        
+        Velocity.y = newVelocityY;
+    }
     private void ApplyPhysics(float delta)    
     {
         if (IsDead)

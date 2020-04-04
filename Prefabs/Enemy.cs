@@ -55,6 +55,11 @@ public class Enemy : KinematicBody2D
             }
         }
     }
+    
+    public void SetVelocityY(float newVelocityY)
+    {
+        Velocity.y = newVelocityY;
+    }
 
     public void Die()
     {       
