@@ -43,7 +43,14 @@ public static class R
 
         public static string[] HardRooms = new[]
         {
-            "res://Rooms/Easy/Easy_1.tscn"
+            "res://Rooms/Easy/Easy_1.tscn",
+        };
+
+        public static string[] NeutralRooms = new[]
+        {
+            "res://Rooms/Neutral/Neutral_1.tscn",
+            "res://Rooms/Neutral/Neutral_2.tscn",
+            "res://Rooms/Neutral/Neutral_3.tscn",
         };
 
         public static string GoalRoom = "res://Rooms/GoalRoom.tscn";

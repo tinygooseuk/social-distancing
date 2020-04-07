@@ -23,7 +23,7 @@ public class Game : Node2D
     private Godot.Collections.Array Players = new Godot.Collections.Array();
 
     // Enums
-    public enum Difficulty { Easy, Medium, Hard };
+    public enum Difficulty { Easy, Medium, Hard, Neutral };
 
     // State
     public int CurrentLevel { get; private set; } = 0;
@@ -56,10 +56,16 @@ public class Game : Node2D
 
         // Generate world
         bool areViewportsScaledDown = GetPlayerCamera(0).Zoom.x > 1.0f;
+        bool isFirstRound = Global.RoundNumber == 0;
+        int maxLevels = isFirstRound ? 1 : MaxLevels;
 
-        for (int level = 0; level < MaxLevels; level++)
+        for (int level = 0; level < maxLevels; level++)
         {
             Difficulty desiredDifficulty = GetDifficultyEnumValue(level);
+            if (isFirstRound)
+            {
+                desiredDifficulty = Difficulty.Neutral;
+            }
 
             Node2D room = await InstanceRandomRoomAsync(desiredDifficulty); 
             room.Position = new Vector2(-Const.SCREEN_HALF_WIDTH, level * -Const.SCREEN_HEIGHT);
@@ -80,7 +86,7 @@ public class Game : Node2D
             Scene<Node2D> goalRoomScene = R.Rooms.GoalRoom;
 
             Node2D room = await goalRoomScene.InstanceAsync();
-            room.Position = new Vector2(-Const.SCREEN_HALF_WIDTH, MaxLevels * -Const.SCREEN_HEIGHT);
+            room.Position = new Vector2(-Const.SCREEN_HALF_WIDTH, maxLevels * -Const.SCREEN_HEIGHT);
             GameArea.AddChild(room);
         }
          
@@ -177,7 +183,7 @@ public class Game : Node2D
         AgainButton.GrabFocus();
     }
 
-    public async void RestartGame()
+    public async void ReloadGameScene()
     {
         Scene<Node> gameScene = R.Scenes.GetGameSceneForNumPlayers(Global.NumberOfPlayers);
         GetTree().ChangeSceneTo(await gameScene.LoadAsync());
@@ -214,6 +220,7 @@ public class Game : Node2D
             case Difficulty.Easy: sceneArray = R.Rooms.EasyRooms; break;
             case Difficulty.Medium: sceneArray = R.Rooms.MediumRooms; break;
             case Difficulty.Hard: sceneArray = R.Rooms.HardRooms; break;            
+            case Difficulty.Neutral: sceneArray = R.Rooms.NeutralRooms; break;       
         }
 
         Scene<Node2D> roomScene = sceneArray[(int)(GD.Randi() % sceneArray.Length)];
