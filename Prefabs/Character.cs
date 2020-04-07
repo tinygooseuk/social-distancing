@@ -142,7 +142,7 @@ public class Character : KinematicBody2D
             Sprite.PlayIfNotAlready("WalkRight");
         }
 
-        Sprite.Scale = new Vector2(2.0f * (IsFacingRight ? 1 : -1), 2.0f);
+        Sprite.Scale = new Vector2(2.0f * (IsFacingRight ? 1 : -1), Sprite.Scale.y);
         
         // Update score
         float score = -(Position.y - 207.0f);
@@ -272,11 +272,14 @@ public class Character : KinematicBody2D
         ShootBehaviour?.Shoot(this, colour);     
     }
 
-    private void Jump()
+    private async void Jump()
     {
         // Set state
         LastJump = 0.0f;
 
+        await ToSignal(GetTree().CreateTimer(0.1f), "timeout");
+
+        // Set passthrough
         IsPassingThrough = true;
         SetCollisionMaskBit(6, false);
 
