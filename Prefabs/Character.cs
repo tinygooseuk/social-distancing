@@ -44,7 +44,7 @@ public class Character : KinematicBody2D
     public bool IsFacingRight { get; private set; } = true;
     private Vector2 Velocity = Vector2.Zero;
     private bool IsDead = false;
-    private bool IsLevelComplete = false;
+    private bool IsRoundComplete = false;
     
     private bool IsPassingThrough = false;
     private bool IsInsideWall = false;
@@ -246,7 +246,7 @@ public class Character : KinematicBody2D
                 y = Input.GetActionStrength($"look_down_{PlayerIndex}") - Input.GetActionStrength($"look_up_{PlayerIndex}"),
             };
 
-            if (IsLevelComplete)
+            if (IsRoundComplete)
             {
                 desiredCameraOffset.y = (Global.NumberOfPlayers == 2) ? +1.0f : -0.69f; // arbitrary-ish
             }
@@ -392,7 +392,7 @@ public class Character : KinematicBody2D
 
     public void MarkLevelComplete()
     {
-        IsLevelComplete = true;
+        IsRoundComplete = true;
     }
 
     public void MarkBulletFailed()
