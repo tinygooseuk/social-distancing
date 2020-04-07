@@ -3,7 +3,7 @@ using System;
 
 public class Enemy_Yellow : Enemy
 {
-    protected override Color GetColour() => Colors.Yellow;
+    protected override EnemyColour GetColour() => EnemyColour.Yellow;
 
     // Subnodes
     [Subnode] private AudioStreamPlayer2D JumpSound;

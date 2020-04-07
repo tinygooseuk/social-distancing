@@ -35,7 +35,7 @@ public class Character : KinematicBody2D
     private float LastGrounded = 100.0f;
     private float LastJump = 100.0f;
     private float LastBullet = 100.0f;
-    private Bullet.ColourEnum LastBulletColour = Bullet.ColourEnum.Red;
+    private EnemyColour LastBulletColour = EnemyColour.Red;
     private float LastDied = 0.0f;
     private bool IsGrounded => LastGrounded < 0.2f;
 
@@ -213,15 +213,15 @@ public class Character : KinematicBody2D
         {
             if (Input.IsActionPressed($"hit_red_{PlayerIndex}"))
             {
-                FireBullet(Bullet.ColourEnum.Red);
+                FireBullet(EnemyColour.Red);
             }
-            if (Input.IsActionPressed($"hit_yellow_{PlayerIndex}"))
+            else if (Input.IsActionPressed($"hit_yellow_{PlayerIndex}"))
             {
-                FireBullet(Bullet.ColourEnum.Yellow);
+                FireBullet(EnemyColour.Yellow);
             }
-            if (Input.IsActionPressed($"hit_blue_{PlayerIndex}"))
+            else if (Input.IsActionPressed($"hit_blue_{PlayerIndex}"))
             {
-                FireBullet(Bullet.ColourEnum.Blue);
+                FireBullet(EnemyColour.Blue);
             }
         } 
         else
@@ -263,7 +263,7 @@ public class Character : KinematicBody2D
         }
     }
 
-    private void FireBullet(Bullet.ColourEnum colour)
+    private void FireBullet(EnemyColour colour)
     {
         ShouldRefireBullet = false;
         LastBulletColour = colour;

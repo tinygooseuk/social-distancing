@@ -3,12 +3,12 @@ using Godot;
 
 public interface IShootBehaviour
 {
-    void Shoot(Character shooter, Bullet.ColourEnum colour);    
+    void Shoot(Character shooter, EnemyColour colour);    
 }
 
 public class DefaultShootBehaviour : IShootBehaviour
 {
-    public void Shoot(Character shooter, Bullet.ColourEnum colour)
+    public void Shoot(Character shooter, EnemyColour colour)
     {
         Scene<Bullet> bulletScene = R.Prefabs.Bullet;
 

@@ -4,7 +4,7 @@ using System;
 public class Enemy_Red : Enemy
 {
     protected override bool IsAffectedByGravity() => false;
-    protected override Color GetColour() => Colors.Red;
+    protected override EnemyColour GetColour() => EnemyColour.Red;
 
     protected override Vector2 Move(Vector2 playerPosition, float difficultyScale)
     {

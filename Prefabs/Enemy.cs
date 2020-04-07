@@ -12,7 +12,7 @@ public class Enemy : KinematicBody2D
     // Override point
     protected virtual bool IsAffectedByGravity() => true;
     protected virtual Vector2 Move(Vector2 playerPosition, float difficultyScale) => Vector2.Zero;
-    protected virtual Color GetColour() => Colors.White;
+    protected virtual EnemyColour GetColour() => EnemyColour.Red;
 
     // Consts
     private static float GRAVITY = 9.8f;
@@ -78,7 +78,7 @@ public class Enemy : KinematicBody2D
         ParticlesMaterial processMaterial = (ParticlesMaterial)deathParticles.ProcessMaterial;
         GradientTexture gradientTexture = (GradientTexture)processMaterial.ColorRamp;  
         Gradient gradient = gradientTexture.Gradient;
-        gradient.SetColor(0, GetColour());
+        gradient.SetColor(0, GetColour().ToColor());
 
         GetParent().AddChild(deathParticles);      
 

@@ -4,8 +4,6 @@ using System.Threading.Tasks;
 
 public class Bullet : KinematicBody2D
 {
-    public enum ColourEnum { Red, Blue, Yellow }
-
     // Subnodes
     [Subnode] private AnimatedSprite AnimatedSprite;
     [Subnode] private Tween IntroTween;
@@ -16,7 +14,7 @@ public class Bullet : KinematicBody2D
     public Vector2 Direction = Vector2.Zero;
     public float Speed = 400.0f;
 
-    public ColourEnum Colour = ColourEnum.Red;
+    public EnemyColour Colour = EnemyColour.Red;
     
     public bool DisableRetry = false;
     private bool FirstFrame = true;
@@ -26,12 +24,8 @@ public class Bullet : KinematicBody2D
     {
         this.FindSubnodes();
 
-        switch (Colour)
-        {
-            case ColourEnum.Red: AnimatedSprite.Modulate = new Color(1.0f, 0.0f, 0.0f); break;
-            case ColourEnum.Yellow: AnimatedSprite.Modulate = new Color(1.0f, 1.0f, 0.0f); break;
-            case ColourEnum.Blue: AnimatedSprite.Modulate = new Color(0.0f, 0.0f, 1.0f); break;
-        }
+        // Set colour
+        AnimatedSprite.Modulate = Colour.ToColor();
 
         // Tween up the size
         IntroTween.InterpolateProperty(AnimatedSprite, "scale", null, new Vector2(2.0f, 2.0f), 0.1f, Tween.TransitionType.Cubic, Tween.EaseType.Out);
@@ -59,19 +53,19 @@ public class Bullet : KinematicBody2D
                 }
             }
 
-            if (Colour == ColourEnum.Red && collision.Collider is Enemy_Red er)
+            if (Colour == EnemyColour.Red && collision.Collider is Enemy_Red er)
             {
                 KillEnemy(er);
 
                 return;
             }
-            if (Colour == ColourEnum.Yellow && collision.Collider is Enemy_Yellow ey)
+            if (Colour == EnemyColour.Yellow && collision.Collider is Enemy_Yellow ey)
             {
                 KillEnemy(ey);
 
                 return;
             }
-            if (Colour == ColourEnum.Blue && collision.Collider is Enemy_Blue eb)
+            if (Colour == EnemyColour.Blue && collision.Collider is Enemy_Blue eb)
             {
                 KillEnemy(eb);
 
