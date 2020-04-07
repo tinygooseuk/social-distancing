@@ -175,6 +175,7 @@ public class Character : KinematicBody2D
 
         // Check for jump
         bool canJumpOrDrop = IsGrounded && LastJump > Mods.JumpDebounce;
+        bool canDrop = !IsRoundComplete;
         bool wantsJump = Input.IsActionJustPressed($"jump_{PlayerIndex}");
         bool wantsDrop = Input.IsActionPressed($"move_down_{PlayerIndex}");
 
@@ -185,7 +186,7 @@ public class Character : KinematicBody2D
                 // Play animation
                 AnimationPlayer.Play("Jump");
             
-                if (!IsLevelComplete && wantsDrop)
+                if (canDrop && wantsDrop)
                 {
                     DropDown();
                 } 
@@ -194,7 +195,7 @@ public class Character : KinematicBody2D
                     Jump();
                 }
             } 
-            else if (wantsDrop && Game.Instance.InputMethodManager.InputMethod == InputMethodManager.InputMethodEnum.Keyboard)
+            else if (canDrop && wantsDrop && Game.Instance.InputMethodManager.InputMethod == InputMethodManager.InputMethodEnum.Keyboard)
             {
                 // Special case: for keyboard input, don't require jump press too
                 DropDown();
@@ -265,6 +266,12 @@ public class Character : KinematicBody2D
 
     private void FireBullet(EnemyColour colour)
     {
+        if (IsRoundComplete)
+        {
+            // Can't shoot at goal area!
+            return;
+        }
+
         ShouldRefireBullet = false;
         LastBulletColour = colour;
         LastBullet = 0.0f;
@@ -274,6 +281,11 @@ public class Character : KinematicBody2D
 
     private async void Jump()
     {
+        if (IsRoundComplete)
+        {
+            return;
+        }
+
         // Set state
         LastJump = 0.0f;
 
