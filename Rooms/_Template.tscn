@@ -1,9 +1,11 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://Tilesets/StoneTileset.tres" type="TileSet" id=1]
 [ext_resource path="res://Materials/SpriteOutliner.tres" type="Material" id=2]
+[ext_resource path="res://Prefabs/Room.cs" type="Script" id=3]
 
 [node name="Room" type="Node2D"]
+script = ExtResource( 3 )
 
 [node name="Passthrough" type="TileMap" parent="."]
 material = ExtResource( 2 )

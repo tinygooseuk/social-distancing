@@ -2,7 +2,7 @@ using Godot;
 using Godot.Collections;
 using System;
 
-public class GoalRoom : Node2D
+public class GoalRoom : Room
 {
     // Subnodes
     [Subnode] private Area2D GoalDetector;
