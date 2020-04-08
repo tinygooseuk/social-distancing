@@ -107,11 +107,11 @@ public class Game : Node2D
             };
 
             // Limit player camera to top of world
-            int offset = (Global.NumberOfPlayers == 2) ? -28 : 88;
-
             Camera2D camera = GetPlayerCamera(playerIndex);
-            camera.LimitTop = (int)((MaxLevels) * -Const.SCREEN_HEIGHT) + offset; // 88 will arbitrarily make it limit properly. cool.
 
+            int offset = (Global.NumberOfPlayers == 2) ? -28 : 88;
+            camera.LimitTop = (int)((maxLevels) * -Const.SCREEN_HEIGHT) + offset; // 88 will arbitrarily make it limit properly. cool.
+            
             GameArea.AddChild(player);
             Players.Add(player);
         }        
