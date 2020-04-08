@@ -14,7 +14,7 @@ public class DebugUI : Control
     {
         this.FindSubnodes();
 
-        Visible = OS.IsDebugBuild();
+        Visible = false;
     }
 
     public override void _Process(float delta)
