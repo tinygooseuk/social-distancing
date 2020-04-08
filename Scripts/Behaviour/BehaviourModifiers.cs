@@ -63,7 +63,7 @@ public static class BehaviourModifiersFactory
 
     public static IBehaviourModifier CreateRandom()
     {
-        int random = (int)GD.RandRange(0, Enum.GetValues(typeof(BehaviourModifiersEnum)).Length);
+        int random = (int)GD.RandRange(0, EnumUtil.GetCount<BehaviourModifiersEnum>());
         return Create((BehaviourModifiersEnum)random);
     }
 }
