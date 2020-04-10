@@ -183,9 +183,6 @@ public class Character : KinematicBody2D
         {
             if (wantsJump)
             {
-                // Play animation
-                AnimationPlayer.Play("Jump");
-            
                 if (canDrop && wantsDrop)
                 {
                     DropDown();
@@ -289,6 +286,9 @@ public class Character : KinematicBody2D
         // Set state
         LastJump = 0.0f;
 
+        // Play animation
+        AnimationPlayer.Play("Jump");
+        
         await ToSignal(GetTree().CreateTimer(0.1f), "timeout");
 
         // Set passthrough
@@ -322,6 +322,9 @@ public class Character : KinematicBody2D
 
         // Add impulse
         Velocity.y = +5.0f;
+
+        // Play animation
+        AnimationPlayer.Play("Jump");    
 
         // Play sound
         Sound_Drop.Play();
