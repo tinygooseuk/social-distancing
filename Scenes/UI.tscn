@@ -8,6 +8,58 @@
 [sub_resource type="ShaderMaterial" id=1]
 shader = ExtResource( 2 )
 
+[sub_resource type="ShaderMaterial" id=2]
+shader = ExtResource( 5 )
+shader_param/progress = 1.0
+
+[sub_resource type="DynamicFont" id=3]
+size = 32
+outline_size = 2
+outline_color = Color( 0.2, 0.2, 0.2, 1 )
+font_data = ExtResource( 6 )
+
+[sub_resource type="Animation" id=4]
+resource_name = "AnimEnd"
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:material:shader_param/progress")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ 0.0, 1.0 ]
+}
+
+[sub_resource type="Animation" id=5]
+length = 3.0
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:material:shader_param/progress")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 2, 3 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ 1.0, 1.0, 0.0 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("RoundLabel:modulate:a")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 2, 3 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ 1.0, 1.0, 0.0 ]
+}
+
 [node name="UI" type="CanvasLayer"]
 
 [node name="BG" type="ColorRect" parent="."]
@@ -103,4 +155,34 @@ margin_right = 200.0
 margin_bottom = 96.0
 custom_fonts/font = ExtResource( 3 )
 text = "CNTRL: ?"
+
+[node name="TitleCard" type="ColorRect" parent="."]
+material = SubResource( 2 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 7 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="RoundLabel" type="Label" parent="TitleCard"]
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_top = -16.0
+margin_bottom = 16.0
+grow_horizontal = 2
+grow_vertical = 2
+rect_pivot_offset = Vector2( 208, 16 )
+custom_fonts/font = SubResource( 3 )
+text = "ROUND 1"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="TitleCard"]
+anims/AnimEnd = SubResource( 4 )
+anims/AnimStart = SubResource( 5 )
 [connection signal="pressed" from="BG/AgainButton" to="BG/AgainButton" method="OnPressed"]
