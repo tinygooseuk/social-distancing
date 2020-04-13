@@ -172,7 +172,7 @@ public class Game : Node2D
 
     }
 
-    public void PlayerDied(int playerIndex)
+    public async void PlayerDied(int playerIndex)
     {
         //TODO: not in multiplayer?
         Character c = GetPlayer(playerIndex);
@@ -182,6 +182,9 @@ public class Game : Node2D
             c.RotationDegrees = 90.0f;
         }
         
+        // Wait 2s
+        await ToSignal(GetTree().CreateTimer(2.0f), "timeout");
+
         AgainButton.Visible = true;
         AgainButton.GrabFocus();
     }
