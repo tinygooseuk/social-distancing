@@ -146,7 +146,9 @@ public class GachaScreen : Control
             (
                 new Vector2(0.0f, goalRoom.GlobalPosition.y + reel.RectPosition.y + reel.RectSize.y / 2.0f)
             , 0.1f);
-            camera.Offset = new Vector2(-Const.SCREEN_HALF_WIDTH + reel.RectPosition.x + reel.RectSize.x / 2.0f, -32.0f); 
+
+            float yOffset = Global.RoundNumber == 0 ? -32.0f : -64.0f;
+            camera.Offset = new Vector2(-Const.SCREEN_HALF_WIDTH + reel.RectPosition.x + reel.RectSize.x / 2.0f, yOffset); 
             camera.Zoom = camera.Zoom.LinearInterpolate(new Vector2(0.65f, 0.65f), 0.1f);
 
             label.Text = reel.CurrentItem.GachaPrize.Name;  
@@ -210,10 +212,12 @@ public class GachaScreen : Control
     private async Task SpawnPixels()
     {
         // Create each cloud at correct height
-        await SpawnCloudAndAwaitSettled(40.0f, EnemyColour.Blue);
-        await SpawnCloudAndAwaitSettled(140.0f, EnemyColour.Yellow);
-        await SpawnCloudAndAwaitSettled(240.0f, EnemyColour.Red);
-        await SpawnCloudAndAwaitSettled(340.0f, EnemyColour.Green); // Not yet used
+        var blue = SpawnCloudAndAwaitSettled(40.0f, EnemyColour.Blue);
+        var yellow = SpawnCloudAndAwaitSettled(140.0f, EnemyColour.Yellow);
+        var red = SpawnCloudAndAwaitSettled(240.0f, EnemyColour.Red);
+        var green = SpawnCloudAndAwaitSettled(340.0f, EnemyColour.Green); // Not yet used
+
+        await Task.WhenAll(blue, yellow, red, green);
     }
 
     private void SpawnCloud(EnemyColour colour, float xBegin, float heightPercent)
