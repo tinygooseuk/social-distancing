@@ -42,6 +42,7 @@ public static class Global
     {
         Engine.TimeScale = 1.0f;
         RoundNumber = 0;
+        TotalScore = 0;
         
         CollectedPixels[(int)EnemyColour.Blue] = 0;
         CollectedPixels[(int)EnemyColour.Yellow] = 0;
