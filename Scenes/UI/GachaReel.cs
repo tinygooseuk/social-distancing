@@ -21,6 +21,9 @@ public class GachaReel : ScrollContainer
     [Subnode] private VBoxContainer ReelBox;
     [Subnode] private Tween BumpTween;
 
+    [Subnode("Sounds/Tick")] private AudioStreamPlayer2D Sound_Tick;
+    [Subnode("Sounds/Pick")] private AudioStreamPlayer2D Sound_Pick;
+
     // Signals
     [Signal] public delegate void ReelStopped(int item);
 
@@ -32,15 +35,16 @@ public class GachaReel : ScrollContainer
 
     // Getters/Setters
     public bool IsReadyForStop = false;
-    public float ItemHeight => ReelBox.RectSize.y / ReelBox.GetChildCount();
-    public int CurrentItemIndex => Mathf.RoundToInt(ScrollOffset / ItemHeight);
-    public GachaTile CurrentItem => (GachaTile)ReelBox.GetChild(CurrentItemIndex % ReelBox.GetChildCount());
+    public float ItemHeight => ReelBox.RectSize.y / ReelBox.GetChildCount();  
+    public int CurrentItemIndex => Mathf.RoundToInt(ScrollOffset / ItemHeight) % ReelBox.GetChildCount();
+    public GachaTile CurrentItem => (GachaTile)ReelBox.GetChild(CurrentItemIndex);
     public int NumberOfItems => ReelBox.GetChildCount() - NUM_BUFFER_ITEMS;
 
     // Internal State
     public float SpinSpeed = 0.0f;
     private float ScrollOffset = 0.0f;
     private float ActualHoldTime = 0.0f;
+    private int LastItemIndex = -1;
     private GachaReelState GachaReelState = GachaReelState.WaitingToStart;
 
     public override void _Ready()
@@ -132,11 +136,27 @@ public class GachaReel : ScrollContainer
             }
         }
 
-        ScrollVertical = Mathf.FloorToInt(ScrollOffset);        
+        ScrollVertical = Mathf.FloorToInt(ScrollOffset);  
+
+        if (CurrentItemIndex != LastItemIndex)
+        {
+            if (GachaReelState == GachaReelState.SpinningDown)
+            {
+                Sound_Tick.PitchScale = 1.0f + Mathf.Clamp(Mathf.InverseLerp(0.0f, 400.0f, SpinSpeed), 0.0f, 1.0f);
+                Sound_Tick.Play();
+            }
+
+            LastItemIndex = CurrentItemIndex;
+        }      
     }
 
-    public void HighlightWinner(int itemHit)
+    public async void HighlightWinner(int itemHit)
     {
+        await ToSignal(GetTree().CreateTimer(0.3f), "timeout");
+
+        RectClipContent = false;
+        Sound_Pick.Play();
+
         for (int i = 0; i < ReelBox.GetChildCount(); i++)
         {
             GachaTile thisTile = (GachaTile)ReelBox.GetChild(i);

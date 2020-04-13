@@ -175,7 +175,6 @@ public class GachaScreen : Control
 
         // Play animation
         GachaReels[ReelNumber].HighlightWinner(itemHit);
-        GachaReels[ReelNumber].RectClipContent = false;
 
         // Remove pixels for reel
         EnemyColour justStoppedReel = (EnemyColour)ReelNumber;
