@@ -9,6 +9,9 @@ public class MainMenu : Control
     [Subnode("Transition")] private ColorRect Transition;
     [Subnode("Transition/TransitionTween")] private Tween TransitionTween;
 
+    // Private state
+    private bool IsTransitioning = false;
+
     public override void _Ready()
     {
         this.FindSubnodes();
@@ -19,6 +22,8 @@ public class MainMenu : Control
 
     private async void Play(int numPlayers)
     {
+        if (IsTransitioning) return;
+
         // Do the thing
         await RunTransition();
 
@@ -31,14 +36,17 @@ public class MainMenu : Control
 
     private async void QuitGame()
     {
-        // Do the thing
+        if (IsTransitioning) return;
+        
         await RunTransition();
 
         GetTree().Quit();
     }
 
     private async Task RunTransition()
-    {
+    {   
+        IsTransitioning = true;
+
         TransitionTween.InterpolateProperty(Transition.Material, "shader_param/progress", 0.0f, 1.0f, 1.0f); 
         TransitionTween.Start();
 
