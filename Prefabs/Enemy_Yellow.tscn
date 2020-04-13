@@ -1,3 +1,44 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:8bbf1bf0d78606a1addc6dfd922852dff8b970b6971769c34ebd4421d2eaefea
-size 1232
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://Textures/EnemyYellow.png" type="Texture" id=1]
+[ext_resource path="res://Prefabs/Enemy.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Prefabs/Enemy_Yellow.cs" type="Script" id=3]
+[ext_resource path="res://Sounds/EnemyJump.wav" type="AudioStream" id=4]
+
+[sub_resource type="AtlasTexture" id=1]
+atlas = ExtResource( 1 )
+region = Rect2( 0, 0, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=2]
+atlas = ExtResource( 1 )
+region = Rect2( 0, 16, 16, 16 )
+
+[sub_resource type="SpriteFrames" id=3]
+animations = [ {
+"frames": [ SubResource( 1 ), SubResource( 2 ) ],
+"loop": true,
+"name": "Idle",
+"speed": 5.0
+} ]
+
+[sub_resource type="CapsuleShape2D" id=4]
+radius = 10.4051
+height = 7.64859
+
+[node name="Enemy" instance=ExtResource( 2 )]
+script = ExtResource( 3 )
+
+[node name="Sprite" parent="." index="0"]
+frames = SubResource( 3 )
+
+[node name="Collider" parent="." index="1"]
+position = Vector2( -0.246, 2.158 )
+shape = SubResource( 4 )
+
+[node name="VisibilityEnabler2D" parent="." index="2"]
+position = Vector2( -0.197914, -1.12151 )
+
+[node name="JumpSound" type="AudioStreamPlayer2D" parent="." index="3"]
+stream = ExtResource( 4 )
+volume_db = -3.0
+max_distance = 500.0

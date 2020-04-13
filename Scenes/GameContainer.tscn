@@ -1,3 +1,44 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:3d8f4dd347c281d8c3d7cfdc71aa6b5d2550a87889d15864a4bfad5f7a666d89
-size 1395
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://Sounds/Music_1.ogg" type="AudioStream" id=1]
+[ext_resource path="res://Game.cs" type="Script" id=2]
+[ext_resource path="res://Fonts/ScoreFont.tres" type="DynamicFont" id=3]
+[ext_resource path="res://Scripts/InputMethodManager.cs" type="Script" id=4]
+[ext_resource path="res://Rooms/DeadRoom.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Rooms/Bedrock.tscn" type="PackedScene" id=6]
+
+[sub_resource type="Curve" id=1]
+bake_resolution = 300
+_data = [ Vector2( 0, 0.336207 ), 0.0, 0.33867, 0, 0, Vector2( 1, 1 ), 0.922647, 0.0, 0, 0 ]
+
+[node name="GameContainer" type="Node2D"]
+
+[node name="Game" type="Node2D" parent="."]
+script = ExtResource( 2 )
+DifficultyCurve = SubResource( 1 )
+
+[node name="TemplateLabel" type="Label" parent="Game"]
+visible = false
+margin_left = -198.0
+margin_top = 10.0
+margin_right = -78.0
+margin_bottom = 30.0
+custom_fonts/font = ExtResource( 3 )
+text = "Level 0"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Bedrock" parent="Game" instance=ExtResource( 6 )]
+position = Vector2( -208, 240 )
+
+[node name="DeadRoom" parent="Game" instance=ExtResource( 5 )]
+position = Vector2( -208, 480 )
+
+[node name="BGM" type="AudioStreamPlayer" parent="Game"]
+stream = ExtResource( 1 )
+volume_db = -8.0
+autoplay = true
+
+[node name="InputMethodManager" type="Node" parent="Game"]
+script = ExtResource( 4 )

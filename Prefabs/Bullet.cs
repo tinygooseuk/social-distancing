@@ -1,3 +1,109 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:d9b38608bc72a749199a6f17da51794c57cb8d467e1edf3a9264763c8d37a0bc
-size 3164
+using Godot;
+using System;
+using System.Threading.Tasks;
+
+public class Bullet : KinematicBody2D
+{
+    // Subnodes
+    [Subnode] private AnimatedSprite AnimatedSprite;
+    [Subnode] private Tween IntroTween;
+    
+    // State
+    public int FiredByPlayerIndex = 0;
+
+    public Vector2 Direction = Vector2.Zero;
+    public float Speed = 400.0f;
+
+    public EnemyColour Colour = EnemyColour.Red;
+    
+    public bool DisableRetry = false;
+    private bool FirstFrame = true;
+    
+    
+    public override void _Ready()
+    {
+        this.FindSubnodes();
+
+        // Set colour
+        AnimatedSprite.Modulate = Colour.ToColor();
+
+        // Tween up the size
+        IntroTween.InterpolateProperty(AnimatedSprite, "scale", null, new Vector2(2.0f, 2.0f), 0.1f, Tween.TransitionType.Cubic, Tween.EaseType.Out);
+        IntroTween.Start();
+
+        // Don't collide with current char
+        SetCollisionMaskBit(FiredByPlayerIndex, false);
+
+        // Show on next frame
+        AnimatedSprite.CallDeferred("set_visible", true);
+    }
+
+    // Called every frame. 'delta' is the elapsed time since the previous frame.
+    public override void _PhysicsProcess(float delta)
+    {
+        KinematicCollision2D collision = MoveAndCollide(Direction * delta * Speed);
+        if (collision != null && IsInstanceValid(collision.Collider))
+        {
+            if (FirstFrame && !DisableRetry)
+            {
+                Character firedByPlayer = Game.Instance.GetPlayer(FiredByPlayerIndex);
+                if (IsInstanceValid(firedByPlayer))
+                {
+                    firedByPlayer.MarkBulletFailed();
+                }
+            }
+
+            if (Colour == EnemyColour.Red && collision.Collider is Enemy_Red er)
+            {
+                KillEnemy(er);
+
+                return;
+            }
+            if (Colour == EnemyColour.Yellow && collision.Collider is Enemy_Yellow ey)
+            {
+                KillEnemy(ey);
+
+                return;
+            }
+            if (Colour == EnemyColour.Blue && collision.Collider is Enemy_Blue eb)
+            {
+                KillEnemy(eb);
+
+                return;
+            }
+            else 
+            {
+                QueueFree();
+                return;
+            }
+        }
+
+        if (FirstFrame)
+        {
+            // Play shot sound        
+            Asset<AudioStream> Sound_Shoot = R.Sounds.Shoot;
+            GetTree().PlaySound2D(Sound_Shoot, relativeTo: this);
+        }
+
+        FirstFrame = false;
+    }
+
+    private void KillEnemy(Enemy e)
+    {
+        e.Die();
+
+        Game.Instance.KillScore += (int)(500.0f + (float)Game.Instance.CurrentLevel / 10.0f);
+        
+        // Play enemy death sound
+        Asset<AudioStream> Sound_EnemyDeath = R.Sounds.EnemyDeath;
+        GetTree().PlaySound2D(Sound_EnemyDeath, relativeTo: this);
+
+        // Shake correct camera
+        Character c = Game.Instance.GetPlayer(FiredByPlayerIndex);
+        if (IsInstanceValid(c))
+        {
+            Vector2 randomShake = new Vector2((float)GD.RandRange(-8.0f, +8.0f), (float)GD.RandRange(-8.0f, +8.0f));
+            c.ShakeCamera(Direction * 8.0f + randomShake);
+        }
+    }
+}

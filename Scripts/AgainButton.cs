@@ -1,3 +1,14 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:781e375a2b2a4ffa0b04c629f836f0c1219f41ac077bf2c6ad483d19b0220047
-size 268
+using Godot;
+using System;
+
+public class AgainButton : Button
+{
+    private async void OnPressed()
+    {
+        // Wait for animation to end
+        await Game.Instance.TitleCard.AnimateOut();
+
+        Global.Reset();
+        Game.Instance.ReloadGameScene();
+    }
+}

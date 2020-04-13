@@ -1,3 +1,21 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:6c8c331515280eb158f9f2120060de500ccb2f37d8dd905ff0c28e53b7e3764e
-size 428
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/CollectPixel.wav-2703e079d5f59af2a9360d5f6e2627a2.sample"
+
+[deps]
+
+source_file="res://Sounds/CollectPixel.wav"
+dest_files=[ "res://.import/CollectPixel.wav-2703e079d5f59af2a9360d5f6e2627a2.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

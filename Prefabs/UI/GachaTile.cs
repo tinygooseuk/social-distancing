@@ -1,3 +1,36 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:a193d80e7f582f3df36bb25b030938aff0a1ee25860891187d7cbe46ea13f5f0
-size 700
+using Godot;
+using System;
+
+public class GachaTile : Control
+{
+    // Subnodes
+    [Subnode] private TextureRect Background;
+    [Subnode] private TextureRect Icon;
+    
+    [Subnode] private AnimationPlayer AnimationPlayer;
+
+    // State
+    private GachaPrize _GachaPrize;
+    public GachaPrize GachaPrize
+    {
+        get => _GachaPrize;
+        set { _GachaPrize = value; UpdateGachaPrize(); }
+    }
+
+    public override void _Ready()
+    {
+        this.FindSubnodes();    
+    }
+
+    public void UpdateGachaPrize()
+    {
+        this.FindSubnodes();
+
+        Icon.Texture = GachaPrize.Texture.Load();
+    }
+
+    public void PlayWonAnimation()
+    {
+        AnimationPlayer.Play("Won");
+    }
+}

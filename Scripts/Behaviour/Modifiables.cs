@@ -1,3 +1,15 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:2d013ee8268006505ee5f26d36fbd7a7bb4a6416ff425f37c0a56f7b6fd8efc1
-size 301
+
+public class Modifiables
+{
+    public float Gravity = 9.8f;
+    public float MoveSpeed = 40.0f;
+
+    public float JumpImpulse = 300.0f;
+    public float JumpDebounce = 0.4f;
+
+    public float ShootDebounce = 0.2f;
+    
+    public float Friction = 0.15f;
+    
+    public float CharacterScale = 1.0f;
+}

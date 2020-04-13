@@ -1,3 +1,18 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:f3529f56c0357ff3bff2dc2760c2a939cb58aff854e62b005404908442466953
-size 382
+using System;
+using Godot;
+
+public class HigherJumpHeightBehaviourModifier : IBehaviourModifier
+{
+    public void Modify(Modifiables mods)
+    {
+        mods.JumpImpulse *= 1.2f;
+    }
+}
+
+public class LowerJumpHeightBehaviourModifier : IBehaviourModifier
+{
+    public void Modify(Modifiables mods)
+    {
+        mods.JumpImpulse = Mathf.Max(280.0f, mods.JumpImpulse / 1.2f);
+    }
+}

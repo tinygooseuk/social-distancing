@@ -1,3 +1,50 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:597662fb56d60402afef79fb976c2e180a398c62dbbc028bc6038f3c7ee94130
-size 1303
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://Textures/EnemyRed.png" type="Texture" id=1]
+[ext_resource path="res://Prefabs/Enemy.cs" type="Script" id=2]
+[ext_resource path="res://Materials/SpriteOutliner.tres" type="Material" id=3]
+
+[sub_resource type="AtlasTexture" id=1]
+atlas = ExtResource( 1 )
+region = Rect2( 0, 0, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=2]
+atlas = ExtResource( 1 )
+region = Rect2( 0, 16, 16, 16 )
+
+[sub_resource type="SpriteFrames" id=3]
+animations = [ {
+"frames": [ SubResource( 1 ), SubResource( 2 ) ],
+"loop": true,
+"name": "Idle",
+"speed": 5.0
+} ]
+
+[sub_resource type="CapsuleShape2D" id=4]
+radius = 7.89403
+height = 16.0556
+
+[node name="Enemy" type="KinematicBody2D" groups=[
+"enemies",
+]]
+collision_layer = 16
+collision_mask = 127
+script = ExtResource( 2 )
+
+[node name="Sprite" type="AnimatedSprite" parent="."]
+material = ExtResource( 3 )
+scale = Vector2( 2, 2 )
+frames = SubResource( 3 )
+animation = "Idle"
+frame = 1
+playing = true
+
+[node name="Collider" type="CollisionShape2D" parent="."]
+position = Vector2( -1.10416, 0.36805 )
+shape = SubResource( 4 )
+
+[node name="VisibilityEnabler2D" type="VisibilityEnabler2D" parent="."]
+scale = Vector2( 10.7852, 9.54165 )
+rect = Rect2( -20, -20, 40, 40 )
+process_parent = true
+physics_process_parent = true

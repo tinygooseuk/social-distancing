@@ -1,3 +1,22 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:56a9f3b04b6abb8b3d2fcab6fb17f616ffc0b82409ec6f4b5be6c57db7266e49
-size 735
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://Materials/SpriteOutliner.tres" type="Material" id=1]
+[ext_resource path="res://Textures/Spikes.png" type="Texture" id=2]
+[ext_resource path="res://Prefabs/Spike.cs" type="Script" id=3]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 8, 6 )
+
+[node name="Spike" type="Area2D"]
+script = ExtResource( 3 )
+
+[node name="Sprite" type="Sprite" parent="."]
+material = ExtResource( 1 )
+position = Vector2( 0, -7.99998 )
+scale = Vector2( 2, 2 )
+texture = ExtResource( 2 )
+
+[node name="CollisionShape" type="CollisionShape2D" parent="."]
+position = Vector2( 0, -6.00002 )
+shape = SubResource( 1 )
+[connection signal="body_entered" from="." to="." method="OnBodyEntered"]

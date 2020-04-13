@@ -1,3 +1,21 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:810145403375311c1e9ddea8ccabf627b690c03d0aa24496b3f1c086ea551686
-size 422
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/EnemyDeath.wav-1d7cbdb115338efd2d21c6b431f9da7a.sample"
+
+[deps]
+
+source_file="res://Sounds/EnemyDeath.wav"
+dest_files=[ "res://.import/EnemyDeath.wav-1d7cbdb115338efd2d21c6b431f9da7a.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

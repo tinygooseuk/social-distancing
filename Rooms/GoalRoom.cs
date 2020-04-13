@@ -1,3 +1,98 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:2622a745fb6e714eef4e984c23555061dd6f9ad37ab5878f16ac0ccb00446240
-size 3150
+using Godot;
+using Godot.Collections;
+using System;
+
+public class GoalRoom : Room
+{
+    // Subnodes
+    [Subnode] private Area2D GoalDetector;
+    [Subnode("GoalBanner/GoalBannerSprite")] private Sprite GoalBanner;
+    [Subnode] GachaScreen Gacha;
+
+    // State
+    private bool IsFirstRound => Global.RoundNumber == 0;
+    private bool WasTriggered = false;
+
+    public override void _Ready()
+    {
+        this.FindSubnodes();
+
+        if (IsFirstRound)
+        {
+            GoalBanner.QueueFree();
+            GoalBanner = null;
+        }
+    }
+
+    private async void OnGoalReached(Node2D triggerer)
+    {   
+        if (WasTriggered) return;
+
+        if (triggerer is Character c)
+        {
+            WasTriggered = true;
+
+            // Teleport all chars in
+            Array<Character> characters = new Array<Character>(GetTree().GetNodesInGroup(Groups.PLAYERS));
+            foreach (Character character in characters)
+            {
+                character.GlobalPosition = new Vector2(character.GlobalPosition.x, GoalDetector.GlobalPosition.y);
+                character.MarkLevelComplete();
+            }
+
+            if (IsFirstRound)
+            {
+                // Hack for 1st round camera :shrug:
+                for (int i = 0; i < Global.NumberOfPlayers; i++)
+                {
+                    Camera2D camera = Game.Instance.GetPlayerCamera(i);
+                    camera.LimitTop -= 33;
+                    camera.LimitBottom = -240;
+                }
+            }
+            else 
+            {
+                // Burst everything
+                await ToSignal(GetTree().CreateTimer(2.0f), "timeout");            
+                GoalBanner.BurstIntoPixels((KinematicBody2D)GoalBanner.GetParent(), suck: true, pixelSize: 4, lifetimeMultiplier: 4.0f);
+                GoalBanner.QueueFree();
+
+                await ToSignal(GetTree().CreateTimer(7.0f), "timeout");            
+            }
+
+            // Show gacha            
+            Gacha.Visible = true;
+            
+            Gacha.Start();
+            await ToSignal(Gacha, nameof(GachaScreen.AllReelsSpun));
+
+            // Wait a sec
+            await ToSignal(GetTree().CreateTimer(2.0f), "timeout"); 
+
+            // Wait for animation to end too
+            await Game.Instance.TitleCard.AnimateOut();
+
+            // Work out and apply all prizes
+            //TODO: player index!!
+            int reelIdx = 0;
+            foreach (GachaReel reel in Gacha.GachaReels)
+            {
+                GachaPrize prize = reel.CurrentItem.GachaPrize;
+                reelIdx++;
+
+                if (prize.UnlockedShootBehaviour != ShootBehavioursEnum.None)
+                {
+                    Global.ShootBehaviours[0] = ShootBehavioursFactory.Create(prize.UnlockedShootBehaviour);
+                }
+
+                if (prize.UnlockedBehaviourModfier != BehaviourModifiersEnum.None)
+                {
+                    Global.BehaviourModifiers[0].Add(BehaviourModifiersFactory.Create(prize.UnlockedBehaviourModfier));
+                }
+            }
+
+            // Mark end of round
+            Global.EndRound(Game.Instance);
+        }
+    }
+}

@@ -1,3 +1,15 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:48ff374a7433490b3b790907a3018994adbfd58ddceb5b33e0459f138ace222f
-size 298
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/Music_1.ogg-4f38c92f60e2b670be02ada540e23aa4.oggstr"
+
+[deps]
+
+source_file="res://Sounds/Music_1.ogg"
+dest_files=[ "res://.import/Music_1.ogg-4f38c92f60e2b670be02ada540e23aa4.oggstr" ]
+
+[params]
+
+loop=true
+loop_offset=0

@@ -1,3 +1,37 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:ae8ae71e031fac91a83b3d7587896cd6a07f14d89c37870aa0df2578cb3f9f25
-size 858
+using Godot;
+using System;
+
+public class InputMethodManager : Node
+{
+    public enum InputMethodEnum
+    {
+        Unknown,
+        Keyboard,
+        Controller,
+    };
+    public InputMethodEnum InputMethod { get; private set; } = InputMethodEnum.Unknown;
+
+    public override void _Ready()
+    {
+        Timer t = new Timer 
+        {
+            WaitTime = 0.5f,
+            Autostart = true,
+            OneShot = false,
+        };
+        AddChild(t);
+        t.Connect("timeout", this, nameof(UpdateInputMethod));        
+    }
+
+    private void UpdateInputMethod()
+    {
+        if (Input.IsActionPressed("inputmethod_keyboard"))
+        {
+            InputMethod = InputMethodEnum.Keyboard;
+        } 
+        else if (Input.IsActionPressed("inputmethod_controller"))
+        {
+            InputMethod = InputMethodEnum.Controller;
+        }
+    }
+}

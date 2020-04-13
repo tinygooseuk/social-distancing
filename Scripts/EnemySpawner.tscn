@@ -1,3 +1,10 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:18758a45e5d2a58ca677470b50ab08e0590237da5ade0b061c91d89e82d75a85
-size 477
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://Scripts/EnemySpawner.cs" type="Script" id=1]
+[ext_resource path="res://Prefabs/Enemy_Yellow.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Prefabs/Enemy_Blue.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Prefabs/Enemy_Red.tscn" type="PackedScene" id=4]
+
+[node name="EnemySpawner" type="Position2D"]
+script = ExtResource( 1 )
+EnemyScenes = [ ExtResource( 3 ), ExtResource( 4 ), ExtResource( 2 ) ]

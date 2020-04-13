@@ -1,3 +1,13 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:b86169084aba48d76b0b6c54d863ca0bb43c9a0b009b624f1f7961da83f3dcd1
-size 400
+using Godot;
+using System;
+
+public class Enemy_Red : Enemy
+{
+    protected override bool IsAffectedByGravity() => false;
+    protected override EnemyColour GetColour() => EnemyColour.Red;
+
+    protected override Vector2 Move(Vector2 playerPosition, float difficultyScale)
+    {
+        return (playerPosition - GlobalPosition + new Vector2(0.1f, 0.1f)).Normalized() * 4.0f * difficultyScale;
+    }
+}

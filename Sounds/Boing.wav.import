@@ -1,3 +1,21 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:a9dfbdc7440a21d37cbe84887a6e2b406c8fdf0bb7d8a482dc14b2c89f8b6686
-size 407
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/Boing.wav-28736dbafc85b07946bf03ace377ee1a.sample"
+
+[deps]
+
+source_file="res://Sounds/Boing.wav"
+dest_files=[ "res://.import/Boing.wav-28736dbafc85b07946bf03ace377ee1a.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

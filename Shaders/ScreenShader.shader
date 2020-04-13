@@ -1,3 +1,16 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:db7dae5a270adc8c89d1309f35d559da9f7b14566930803ba25dfab5ca3d1554
-size 278
+shader_type canvas_item;
+
+const vec2 SCREEN_SIZE = vec2(416.0, 240.0);
+
+void fragment()
+{		
+	vec3 diffuse = texture(SCREEN_TEXTURE, SCREEN_UV).rgb;
+	vec2 pixelPos = SCREEN_UV * SCREEN_SIZE;
+
+	COLOR = vec4(diffuse, 1.0);
+
+	if (mod(pixelPos.y, 4.0) > 2.0) 
+	{
+		COLOR *= 0.8;
+	}
+}

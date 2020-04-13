@@ -1,3 +1,34 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:2c1689b15024d498ab9eef76cb887f7b4445070f94929a1fff7e01dceace66bf
-size 650
+[remap]
+
+importer="texture"
+type="StreamTexture"
+path="res://.import/Blob.png-564a9a2e1cc79cc857ff1b9bdc03adee.stex"
+metadata={
+"vram_texture": false
+}
+
+[deps]
+
+source_file="res://Textures/Blob.png"
+dest_files=[ "res://.import/Blob.png-564a9a2e1cc79cc857ff1b9bdc03adee.stex" ]
+
+[params]
+
+compress/mode=0
+compress/lossy_quality=0.7
+compress/hdr_mode=0
+compress/bptc_ldr=0
+compress/normal_map=0
+flags/repeat=0
+flags/filter=false
+flags/mipmaps=false
+flags/anisotropic=false
+flags/srgb=2
+process/fix_alpha_border=true
+process/premult_alpha=false
+process/HDR_as_SRGB=false
+process/invert_color=false
+stream=false
+size_limit=0
+detect_3d=true
+svg/scale=1.0

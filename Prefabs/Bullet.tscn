@@ -1,3 +1,54 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:8d1b90c2c3cf1ab66d8a091bb365410a1c20aae7b9243ad483203c2ae2a936b1
-size 1376
+[gd_scene load_steps=10 format=2]
+
+[ext_resource path="res://Textures/Blob.png" type="Texture" id=1]
+[ext_resource path="res://Prefabs/Bullet.cs" type="Script" id=2]
+[ext_resource path="res://Materials/SpriteOutliner.tres" type="Material" id=3]
+
+[sub_resource type="AtlasTexture" id=1]
+atlas = ExtResource( 1 )
+region = Rect2( 0, 0, 8, 8 )
+
+[sub_resource type="AtlasTexture" id=2]
+atlas = ExtResource( 1 )
+region = Rect2( 8, 0, 8, 8 )
+
+[sub_resource type="AtlasTexture" id=3]
+atlas = ExtResource( 1 )
+region = Rect2( 0, 8, 8, 8 )
+
+[sub_resource type="AtlasTexture" id=4]
+atlas = ExtResource( 1 )
+region = Rect2( 8, 8, 8, 8 )
+
+[sub_resource type="SpriteFrames" id=5]
+animations = [ {
+"frames": [ SubResource( 1 ), SubResource( 2 ), SubResource( 3 ), SubResource( 4 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
+
+[sub_resource type="CircleShape2D" id=6]
+radius = 8.0
+
+[node name="Bullet" type="KinematicBody2D"]
+collision_layer = 128
+collision_mask = 127
+script = ExtResource( 2 )
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+visible = false
+material = ExtResource( 3 )
+scale = Vector2( 0.1, 0.1 )
+frames = SubResource( 5 )
+frame = 1
+speed_scale = 2.0
+playing = true
+__meta__ = {
+"_editor_description_": ""
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource( 6 )
+
+[node name="IntroTween" type="Tween" parent="."]

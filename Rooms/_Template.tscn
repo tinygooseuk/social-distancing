@@ -1,3 +1,28 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:7a89034fcc65a4d6dfd63db11222e634b93135d66269757187364ab0a1db3308
-size 1710
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://Tilesets/StoneTileset.tres" type="TileSet" id=1]
+[ext_resource path="res://Materials/SpriteOutliner.tres" type="Material" id=2]
+[ext_resource path="res://Prefabs/Room.cs" type="Script" id=3]
+
+[node name="Room" type="Node2D"]
+script = ExtResource( 3 )
+
+[node name="Passthrough" type="TileMap" parent="."]
+material = ExtResource( 2 )
+tile_set = ExtResource( 1 )
+cell_size = Vector2( 16, 16 )
+collision_layer = 64
+collision_mask = 0
+format = 1
+tile_data = PoolIntArray( 655368, 1, 0, 655369, 1, 0, 655370, 1, 0, 655371, 1, 0, 655372, 1, 0, 655373, 1, 0, 655374, 1, 0, 655375, 1, 0, 655376, 1, 0, 655377, 1, 0, 655378, 1, 0, 655379, 1, 0, 917505, 1, 0, 917506, 1, 0, 917507, 1, 0, 917508, 1, 0, 917509, 1, 0, 917510, 1, 0, 917511, 1, 0, 917512, 1, 0, 917513, 1, 0, 917514, 1, 0, 917515, 1, 0, 917516, 1, 0, 917517, 1, 0, 917518, 1, 0, 917519, 1, 0, 917520, 1, 0, 917521, 1, 0, 917522, 1, 0, 917523, 1, 0, 917524, 1, 0, 917525, 1, 0, 917526, 1, 0, 917527, 1, 0, 917528, 1, 0 )
+
+[node name="Permanent" type="TileMap" parent="."]
+material = ExtResource( 2 )
+tile_set = ExtResource( 1 )
+cell_size = Vector2( 16, 16 )
+collision_layer = 32
+collision_mask = 0
+format = 1
+tile_data = PoolIntArray( 0, 0, 0, 25, 0, 0, 65536, 0, 0, 65561, 0, 0, 131072, 0, 0, 131097, 0, 0, 196608, 0, 0, 196633, 0, 0, 262144, 0, 0, 262169, 0, 0, 327680, 0, 0, 327705, 0, 0, 393216, 0, 0, 393241, 0, 0, 458752, 0, 0, 458777, 0, 0, 524288, 0, 0, 524313, 0, 0, 589824, 0, 0, 589849, 0, 0, 655360, 0, 0, 655385, 0, 0, 720896, 0, 0, 720921, 0, 0, 786432, 0, 0, 786457, 0, 0, 851968, 0, 0, 851993, 0, 0, 917504, 0, 0, 917529, 0, 0 )
+
+[node name="EnemySpawners" type="Node2D" parent="."]

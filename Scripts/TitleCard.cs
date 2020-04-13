@@ -1,3 +1,59 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:c7f4337832655ae1db33ffad177b7049380da9618c3a123e99dd6d3904a138b2
-size 1233
+using Godot;
+using System;
+using System.Threading.Tasks;
+
+public class TitleCard : ColorRect
+{
+    // Subnodes
+    [Subnode] Label RoundLabel;
+    [Subnode] AnimationPlayer AnimationPlayer;
+
+    // Shader params
+    private float TransitionValue 
+    {
+        get => (float)((ShaderMaterial)Material).GetShaderParam("progress");
+        set => ((ShaderMaterial)Material).SetShaderParam("progress", value);
+    }
+
+    public override void _Ready()
+    {
+        this.FindSubnodes();     
+
+        if (Global.RoundNumber == 0)
+        {
+            RoundLabel.Text = "Get Ready!";
+        }
+        else
+        {
+            RoundLabel.Text = $"Round {Global.RoundNumber}";
+        }
+
+        _ = AnimateIn();
+    }
+
+    public override void _Process(float delta)
+    {
+        
+    }
+
+    public async Task AnimateIn()
+    {
+        Visible = true;
+
+        AnimationPlayer.Play("AnimStart");
+        await ToSignal(AnimationPlayer, "animation_finished");
+
+        RoundLabel.Visible = false;
+        Visible = false;
+    }
+
+    public async Task AnimateOut()
+    {
+        Visible = true;
+
+        AnimationPlayer.Play("AnimEnd");
+        await ToSignal(AnimationPlayer, "animation_finished");
+    
+        Visible = false;
+    }
+}

@@ -1,3 +1,26 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:c2535f85cf67c12628be19ade3eef07b9d44ddff19f2ae65af268bd9fc397c74
-size 753
+using Godot;
+using System;
+
+public class Viewports : Container
+{
+    public override void _Ready()
+    {
+        if (GetChildCount() < 2) 
+        {
+            // Only one VP - nothing to do
+            return;
+        }
+      
+        ViewportContainer playerOneViewportContainer = (ViewportContainer)GetChild(0);
+        Viewport playerOneViewport = (Viewport)playerOneViewportContainer.GetChild(0);
+
+        for (int vp = 1; vp < GetChildCount(); vp++)
+        {
+            ViewportContainer otherPlayerViewportContainer = (ViewportContainer)GetChild(vp);
+            Viewport otherPlayerViewport = (Viewport)otherPlayerViewportContainer.GetChild(0);
+
+            otherPlayerViewport.World2d = playerOneViewport.World2d;
+        }
+        
+    }
+}

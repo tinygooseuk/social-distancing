@@ -1,3 +1,25 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:bed4f434481e5708e7c8ac3458ea38e7c843ebc4a248323c7d07a6ce43cc8eff
-size 592
+using Godot;
+using Godot.Collections;
+using System;
+
+public class EnemySpawner : Position2D
+{
+    [Export] private Array<PackedScene> EnemyScenes = new Array<PackedScene>();
+
+    // Called when the node enters the scene tree for the first time.
+    public override void _Ready()
+    {
+        CallDeferred("Spawn");
+    }
+
+    private void Spawn()
+    {
+        PackedScene scene = EnemyScenes[(int)(GD.Randi() % EnemyScenes.Count)];
+
+        Enemy enemy = (Enemy)scene.Instance();
+        enemy.Position = Position;
+        GetParent().AddChild(enemy);
+        
+        QueueFree();
+    }
+}

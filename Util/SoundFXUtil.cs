@@ -1,3 +1,32 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:cceb05db306006b30206dc2569babbebff52ea2053e425d977013e71e3f303fe
-size 918
+using System;
+using Godot;
+using System.Threading.Tasks;
+
+public static class SoundFXUtil
+{
+    public static async void PlaySound2D(this SceneTree tree, Asset<AudioStream> audioToPlay, Vector2? location = null, Node2D relativeTo = null)
+    {
+        // Figure out final location
+        Vector2 useLocation = location.GetValueOrDefault(Vector2.Zero);
+
+        if (relativeTo != null)
+        {
+            useLocation = relativeTo.ToGlobal(useLocation);
+        }
+
+        AudioStreamPlayer2D player = new AudioStreamPlayer2D
+        {
+            Stream = await audioToPlay.LoadAsync(),
+            Playing = true,
+        };
+        Game.Instance.AddChild(player);
+        player.GlobalPosition = useLocation;
+
+        await tree.ToSignal(tree.CreateTimer(player.Stream.GetLength() + 0.01f), "timeout");
+
+        if (Godot.Object.IsInstanceValid(player))
+        {
+            player.QueueFree();
+        }
+    }
+}

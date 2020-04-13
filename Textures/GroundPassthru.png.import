@@ -1,3 +1,34 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:ae26d3ed127a77fc6ffe6cb0db7ae2c1ff26c48d0e4b74f8e4c2a1cdeb2f5044
-size 680
+[remap]
+
+importer="texture"
+type="StreamTexture"
+path="res://.import/GroundPassthru.png-4cdb8a45be4665190fd71a421136f3f5.stex"
+metadata={
+"vram_texture": false
+}
+
+[deps]
+
+source_file="res://Textures/GroundPassthru.png"
+dest_files=[ "res://.import/GroundPassthru.png-4cdb8a45be4665190fd71a421136f3f5.stex" ]
+
+[params]
+
+compress/mode=0
+compress/lossy_quality=0.7
+compress/hdr_mode=0
+compress/bptc_ldr=0
+compress/normal_map=0
+flags/repeat=0
+flags/filter=false
+flags/mipmaps=false
+flags/anisotropic=false
+flags/srgb=2
+process/fix_alpha_border=true
+process/premult_alpha=false
+process/HDR_as_SRGB=false
+process/invert_color=false
+stream=false
+size_limit=0
+detect_3d=true
+svg/scale=1.0

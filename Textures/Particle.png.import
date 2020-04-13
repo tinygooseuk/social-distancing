@@ -1,3 +1,34 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:60071c7232189a62baac3ae4cf287ac2bf13dbcf97b1c69429f0a6f2e3957e84
-size 662
+[remap]
+
+importer="texture"
+type="StreamTexture"
+path="res://.import/Particle.png-0bd335201ce1c46eb9e9dac40666dcc6.stex"
+metadata={
+"vram_texture": false
+}
+
+[deps]
+
+source_file="res://Textures/Particle.png"
+dest_files=[ "res://.import/Particle.png-0bd335201ce1c46eb9e9dac40666dcc6.stex" ]
+
+[params]
+
+compress/mode=0
+compress/lossy_quality=0.7
+compress/hdr_mode=0
+compress/bptc_ldr=0
+compress/normal_map=0
+flags/repeat=0
+flags/filter=false
+flags/mipmaps=false
+flags/anisotropic=false
+flags/srgb=2
+process/fix_alpha_border=true
+process/premult_alpha=false
+process/HDR_as_SRGB=false
+process/invert_color=false
+stream=false
+size_limit=0
+detect_3d=true
+svg/scale=1.0

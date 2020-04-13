@@ -1,3 +1,8 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:59bf80683caa13cab8b02e1677e561694e5cd0612d601413623591d9cc6c6556
-size 226
+[gd_resource type="DynamicFont" load_steps=2 format=2]
+
+[ext_resource path="res://Fonts/FreePixel.ttf" type="DynamicFontData" id=1]
+
+[resource]
+outline_size = 2
+outline_color = Color( 0, 0, 0, 1 )
+font_data = ExtResource( 1 )

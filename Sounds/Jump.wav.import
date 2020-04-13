@@ -1,3 +1,21 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:5283d525b8638f5d211e0516825b0469fa1f6564ac49dd72a186b96377becc4e
-size 404
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/Jump.wav-cc511575d106a169010147884f828c00.sample"
+
+[deps]
+
+source_file="res://Sounds/Jump.wav"
+dest_files=[ "res://.import/Jump.wav-cc511575d106a169010147884f828c00.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

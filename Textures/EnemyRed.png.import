@@ -1,3 +1,34 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:ceddacb5b17c435bd9edf34fb3170dfa6177c908521a1fe91d678e7492ab55c8
-size 662
+[remap]
+
+importer="texture"
+type="StreamTexture"
+path="res://.import/EnemyRed.png-4bb863a9265c64332a071325e49608ac.stex"
+metadata={
+"vram_texture": false
+}
+
+[deps]
+
+source_file="res://Textures/EnemyRed.png"
+dest_files=[ "res://.import/EnemyRed.png-4bb863a9265c64332a071325e49608ac.stex" ]
+
+[params]
+
+compress/mode=0
+compress/lossy_quality=0.7
+compress/hdr_mode=0
+compress/bptc_ldr=0
+compress/normal_map=0
+flags/repeat=0
+flags/filter=false
+flags/mipmaps=false
+flags/anisotropic=false
+flags/srgb=2
+process/fix_alpha_border=true
+process/premult_alpha=false
+process/HDR_as_SRGB=false
+process/invert_color=false
+stream=false
+size_limit=0
+detect_3d=true
+svg/scale=1.0

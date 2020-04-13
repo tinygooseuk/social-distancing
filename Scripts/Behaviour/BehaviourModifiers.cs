@@ -1,3 +1,66 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:464a99f24ce43552bf9121b0f45d54bddf79f96291093e6f637a47e7dba551ac
-size 1946
+using System;
+using System.Reflection;
+using Godot;
+
+public enum BehaviourModifiersEnum
+{
+    None,
+
+    SlippyFriction,
+    GrippyFriction,
+
+    MoonGravity,
+
+    HigherJumpHeight,
+    LowerJumpHeight,
+
+    BiggerScale,
+    SmallerScale,
+
+    ShootFaster,
+    ShootSlower,
+}
+
+public static class BehaviourModifiersFactory 
+{
+    public static IBehaviourModifier Create(BehaviourModifiersEnum behaviourModifier)
+    {
+        switch (behaviourModifier)
+        {
+            case BehaviourModifiersEnum.None:
+                return null;
+
+            case BehaviourModifiersEnum.SlippyFriction:
+                return new SlippyFrictionBehaviourModifier();
+            case BehaviourModifiersEnum.GrippyFriction:
+                return new GrippyFrictionBehaviourModifier();
+
+            case BehaviourModifiersEnum.MoonGravity:
+                return new MoonGravityBehaviourModifier();
+
+            case BehaviourModifiersEnum.HigherJumpHeight:
+                return new HigherJumpHeightBehaviourModifier();
+            case BehaviourModifiersEnum.LowerJumpHeight:
+                return new LowerJumpHeightBehaviourModifier();
+
+            case BehaviourModifiersEnum.BiggerScale:
+                return new BiggerScaleBehaviourModifier();
+            case BehaviourModifiersEnum.SmallerScale:
+                return new SmallerScaleBehaviourModifier();
+
+            case BehaviourModifiersEnum.ShootFaster:
+                return new ShootFasterBehaviourModifier();
+            case BehaviourModifiersEnum.ShootSlower:
+                return new ShootSlowerBehaviourModifier();
+        }
+
+        Type t = MethodBase.GetCurrentMethod().DeclaringType;
+        throw new InvalidOperationException($"Missing case in {t.Name}");
+    }
+
+    public static IBehaviourModifier CreateRandom()
+    {
+        int random = (int)GD.RandRange(0, EnumUtil.GetCount<BehaviourModifiersEnum>());
+        return Create((BehaviourModifiersEnum)random);
+    }
+}

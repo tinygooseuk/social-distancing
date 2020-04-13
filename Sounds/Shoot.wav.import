@@ -1,3 +1,21 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:cfa47c8e4a8dc001ad030ab3cc9a57c82138a77716abd5fbe988bdbb51f1ce92
-size 407
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/Shoot.wav-c98e634a1944a6d3a79967bce70efbfd.sample"
+
+[deps]
+
+source_file="res://Sounds/Shoot.wav"
+dest_files=[ "res://.import/Shoot.wav-c98e634a1944a6d3a79967bce70efbfd.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

@@ -1,3 +1,11 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:d36ee8db9d39b635b0c28395dc0da2c8d5b050e64f6964667dad2b8b0735989f
-size 252
+using Godot;
+using System;
+
+public class SelfRemovingParticles : Particles2D
+{
+    public async override void _Ready()
+    {        
+        await ToSignal(GetTree().CreateTimer(Lifetime * 0.9f), "timeout");
+        CallDeferred("queue_free");
+    }
+}

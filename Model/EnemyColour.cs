@@ -1,3 +1,25 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:5e84f6b864c91b50bb95291f2dbd6a6e5f8e91bd6d55a6e90e7c16b9d347d411
-size 447
+using System;
+using Godot;
+
+public enum EnemyColour
+{
+    Blue, 
+    Yellow,
+    Red,
+    Green
+}
+
+public static class EnemyColourUtils
+{
+    public static Color ToColor(this EnemyColour colour)
+    {
+        switch (colour)
+        {
+            case EnemyColour.Red: return Colors.Red;
+            case EnemyColour.Yellow: return Colors.Yellow;
+            case EnemyColour.Blue: return Colors.Blue;
+        }
+
+        return Colors.Red;
+    }
+}

@@ -1,3 +1,21 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:f99003d664d03bd9226a5955251ca11bd12ab444af17074347e6af91b1ab1fcc
-size 616
+using System;
+using Godot;
+using Godot.Collections;
+
+public class GachaPrize : Resource
+{
+    // Colour/category
+    [Export] public EnemyColour Colour;
+    
+    // Name and description
+    [Export] public string Name;
+    [Export] public string Description;
+
+    // What's unlocked
+    [Export] public BehaviourModifiersEnum UnlockedBehaviourModfier = BehaviourModifiersEnum.None;
+    [Export] public ShootBehavioursEnum UnlockedShootBehaviour = ShootBehavioursEnum.None;
+
+    // Texture to use
+    [Export(PropertyHint.File, "*.png")] private string TexturePath;
+    public Asset<Texture> Texture => TexturePath;
+}

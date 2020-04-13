@@ -1,3 +1,37 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:8a35e93304a004c6d6be73beffc6a9c040df062bd35215e8506e4d764002f049
-size 977
+using System;
+using System.Reflection;
+using Godot;
+
+public enum ShootBehavioursEnum
+{
+    None,
+    Default,
+    OmniDirectional,
+}
+
+public static class ShootBehavioursFactory 
+{
+    public static IShootBehaviour Create(ShootBehavioursEnum behaviourModifier)
+    {
+        switch (behaviourModifier)
+        {
+            case ShootBehavioursEnum.None:
+                return null;
+
+            case ShootBehavioursEnum.Default:
+                return new DefaultShootBehaviour();
+                
+            case ShootBehavioursEnum.OmniDirectional:
+                return new OmniDirectionalShootBehaviour();
+        }
+
+        Type t = MethodBase.GetCurrentMethod().DeclaringType;
+        throw new InvalidOperationException($"Missing case in {t.Name}");
+    }
+
+    public static IShootBehaviour CreateRandom()
+    {
+        int random = (int)GD.RandRange(0, Enum.GetValues(typeof(ShootBehavioursEnum)).Length);
+        return Create((ShootBehavioursEnum)random);
+    }
+}

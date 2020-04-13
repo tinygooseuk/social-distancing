@@ -1,3 +1,125 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:c9504be2d2f679950cf7a68bcabd72d0b8fdb647777d7f1e433f3fb5846950fc
-size 3555
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://Scenes/MainMenu.cs" type="Script" id=1]
+[ext_resource path="res://Fonts/ScoreFont.tres" type="DynamicFont" id=2]
+[ext_resource path="res://Textures/Title.png" type="Texture" id=3]
+[ext_resource path="res://Shaders/ScreenTransition.shader" type="Shader" id=4]
+
+[sub_resource type="Theme" id=1]
+default_font = ExtResource( 2 )
+
+[sub_resource type="ShaderMaterial" id=2]
+shader = ExtResource( 4 )
+shader_param/progress = 0.0
+
+[node name="MainMenu" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+rect_min_size = Vector2( 416, 240 )
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Title" type="TextureRect" parent="."]
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -100.0
+margin_top = 8.0
+margin_right = 100.0
+margin_bottom = 108.0
+grow_horizontal = 2
+rect_min_size = Vector2( 200, 100 )
+texture = ExtResource( 3 )
+expand = true
+stretch_mode = 6
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -62.0
+margin_top = -13.0
+margin_right = 62.0
+margin_bottom = 112.0
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_vertical = 3
+theme = SubResource( 1 )
+custom_constants/separation = 0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SinglePlayer" type="Button" parent="VBoxContainer"]
+margin_right = 124.0
+margin_bottom = 22.0
+focus_neighbour_bottom = NodePath("../TwoPlayer")
+custom_fonts/font = ExtResource( 2 )
+text = "1 player *"
+flat = true
+align = 2
+
+[node name="TwoPlayer" type="Button" parent="VBoxContainer"]
+margin_top = 22.0
+margin_right = 124.0
+margin_bottom = 44.0
+focus_neighbour_top = NodePath("../SinglePlayer")
+focus_neighbour_bottom = NodePath("../ThreePlayer")
+custom_fonts/font = ExtResource( 2 )
+text = "2 players **"
+flat = true
+align = 2
+
+[node name="ThreePlayer" type="Button" parent="VBoxContainer"]
+margin_top = 44.0
+margin_right = 124.0
+margin_bottom = 66.0
+focus_neighbour_top = NodePath("../TwoPlayer")
+focus_neighbour_bottom = NodePath("../FourPlayer")
+custom_fonts/font = ExtResource( 2 )
+text = "3 players ***"
+flat = true
+align = 2
+
+[node name="FourPlayer" type="Button" parent="VBoxContainer"]
+margin_top = 66.0
+margin_right = 124.0
+margin_bottom = 88.0
+focus_neighbour_top = NodePath("../ThreePlayer")
+focus_neighbour_bottom = NodePath("../Quit")
+custom_fonts/font = ExtResource( 2 )
+text = "4 players ****"
+flat = true
+align = 2
+
+[node name="Spacer" type="Control" parent="VBoxContainer"]
+margin_top = 88.0
+margin_right = 124.0
+margin_bottom = 103.0
+rect_min_size = Vector2( 0, 15 )
+
+[node name="Quit" type="Button" parent="VBoxContainer"]
+margin_top = 103.0
+margin_right = 124.0
+margin_bottom = 125.0
+focus_neighbour_top = NodePath("../FourPlayer")
+custom_fonts/font = ExtResource( 2 )
+text = "Quit Game"
+flat = true
+
+[node name="Transition" type="ColorRect" parent="."]
+material = SubResource( 2 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="TransitionTween" type="Tween" parent="Transition"]
+[connection signal="pressed" from="VBoxContainer/SinglePlayer" to="." method="Play" binds= [ 1 ]]
+[connection signal="pressed" from="VBoxContainer/TwoPlayer" to="." method="Play" binds= [ 2 ]]
+[connection signal="pressed" from="VBoxContainer/ThreePlayer" to="." method="Play" binds= [ 3 ]]
+[connection signal="pressed" from="VBoxContainer/FourPlayer" to="." method="Play" binds= [ 4 ]]
+[connection signal="pressed" from="VBoxContainer/Quit" to="." method="QuitGame"]

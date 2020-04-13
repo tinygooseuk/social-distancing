@@ -1,3 +1,21 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:6d1be9758fade8a56083a7d23784d543b19f917b53b3f4638114ad8014ebdc6c
-size 419
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/EnemyJump.wav-21d590382a05da3b96ddc7d5105b2180.sample"
+
+[deps]
+
+source_file="res://Sounds/EnemyJump.wav"
+dest_files=[ "res://.import/EnemyJump.wav-21d590382a05da3b96ddc7d5105b2180.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

@@ -1,3 +1,19 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:c2695077611ee85521bb6f9ef269a92fc8b0bb0e44105e86788cc5aaeeedda94
-size 992
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialDistancing", "SocialDistancing.csproj", "{32F129E2-9D28-4208-9341-5357977AE40D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+	Debug|Any CPU = Debug|Any CPU
+	Release|Any CPU = Release|Any CPU
+	Tools|Any CPU = Tools|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{32F129E2-9D28-4208-9341-5357977AE40D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32F129E2-9D28-4208-9341-5357977AE40D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32F129E2-9D28-4208-9341-5357977AE40D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32F129E2-9D28-4208-9341-5357977AE40D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32F129E2-9D28-4208-9341-5357977AE40D}.Tools|Any CPU.ActiveCfg = Tools|Any CPU
+		{32F129E2-9D28-4208-9341-5357977AE40D}.Tools|Any CPU.Build.0 = Tools|Any CPU
+	EndGlobalSection
+EndGlobal
