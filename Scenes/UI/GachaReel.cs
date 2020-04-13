@@ -176,6 +176,15 @@ public class GachaReel : ScrollContainer
     {
         Array<GachaPrize> prizeList = new Array<GachaPrize>(prizes);
 
+        // Repeat until at least 5 items
+        while (prizeList.Count < 5)
+        {
+            foreach (GachaPrize prize in prizes)
+            {
+                prizeList.Add(prize);
+            }
+        }
+
         // Add first NUM_BUFFER_ITEMS again at end of reelbox
         for (int i = 0; i < Mathf.Min(prizes.Length, NUM_BUFFER_ITEMS); i++)
         {
