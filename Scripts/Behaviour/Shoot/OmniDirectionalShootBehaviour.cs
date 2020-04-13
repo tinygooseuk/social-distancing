@@ -13,8 +13,8 @@ public class OmniDirectionalShootBehaviour : IShootBehaviour
             bullet.DisableRetry = true;
             bullet.FiredByPlayerIndex = shooter.PlayerIndex;
             bullet.Colour = colour;
-            bullet.Direction = Mathf.Polar2Cartesian(1.0f, 2.0f * Mathf.Pi * (d / 8.0f));
-            bullet.Position = shooter.Position + new Vector2(0, -4.0f);
+            bullet.Direction = Mathf.Polar2Cartesian(1f, 2f * Mathf.Pi * (d / 8f));
+            bullet.Position = shooter.Position + new Vector2(0, -4f);
             shooter.GetParent().AddChild(bullet);        
         }
     }

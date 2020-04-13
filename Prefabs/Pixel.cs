@@ -7,17 +7,17 @@ public class Pixel : RigidBody2D
     private const float LIFETIME = 1.5f;
     private const float LIFETIME_RANDOM = 0.25f;
 
-    private const float SUCK_COLLECT_DISTANCE = 20.0f;
-    private const float SUCK_CLOSE_DISTANCE = 50.0f;
+    private const float SUCK_COLLECT_DISTANCE = 20f;
+    private const float SUCK_CLOSE_DISTANCE = 50f;
 
     // Public state
-    public float LifetimeMultiplier = 1.0f;
+    public float LifetimeMultiplier = 1f;
     public Vector2? CustomSuckTarget;
     public bool CanSuck = true;
 
     // State
-    private float Age = 0.0f;
-    private float Lifetime = 0.0f;
+    private float Age = 0f;
+    private float Lifetime = 0f;
     
     private bool IsSucking = false;
     private bool IsSettled = false;
@@ -32,7 +32,7 @@ public class Pixel : RigidBody2D
 
         if (!CanSuck)
         {
-            Lifetime *= 2.0f;
+            Lifetime *= 2f;
         }
     }
 
@@ -92,8 +92,8 @@ public class Pixel : RigidBody2D
                 Scale = new Vector2(newAlpha, newAlpha);
             }
 
-            Vector2 targetVelocity = towardsTarget.Normalized() * (speed + 10.0f);
-            state.LinearVelocity = targetVelocity.Clamped(500.0f);
+            Vector2 targetVelocity = towardsTarget.Normalized() * (speed + 10f);
+            state.LinearVelocity = targetVelocity.Clamped(500f);
         }
     }
 
@@ -104,7 +104,7 @@ public class Pixel : RigidBody2D
         // no suck? fade out!
         if (!CanSuck)
         {
-            Modulate = new Color(Modulate.r, Modulate.g, Modulate.b, 1.0f - (Age / Lifetime));
+            Modulate = new Color(Modulate.r, Modulate.g, Modulate.b, 1f - (Age / Lifetime));
         }
 
         if (Age > Lifetime)
@@ -114,7 +114,7 @@ public class Pixel : RigidBody2D
                 if (!IsSucking)
                 {
                     CollisionMask = 0x00000000;
-                    GravityScale = 0.0f;
+                    GravityScale = 0f;
                     
                     IsSucking = true;             
                 }            
@@ -126,12 +126,12 @@ public class Pixel : RigidBody2D
         }
     }
 
-    public async void SuckUpAndOut(float yChange = -16.0f, float delay = 0.0f)
+    public async void SuckUpAndOut(float yChange = -16f, float delay = 0f)
     {
         Tween tweener = new Tween();
         AddChild(tweener);
 
-        tweener.InterpolateProperty(this, "modulate:a", null, 0.0f, 0.4f, Tween.TransitionType.Expo, Tween.EaseType.Out, delay);
+        tweener.InterpolateProperty(this, "modulate:a", null, 0f, 0.4f, Tween.TransitionType.Expo, Tween.EaseType.Out, delay);
         tweener.InterpolateProperty(PixelSprite, "global_position:y", null, GlobalPosition.y + yChange, 0.5f, Tween.TransitionType.Expo, Tween.EaseType.Out, delay);
         tweener.Start();
 

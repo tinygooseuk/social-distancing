@@ -12,7 +12,7 @@ public class Enemy_Yellow : Enemy
     private const float TIME_TO_JUMP = 1.5f;
 
     // State
-    private float GroundedTime = 0.0f;
+    private float GroundedTime = 0f;
     
     public override void _Ready()
     {
@@ -20,7 +20,7 @@ public class Enemy_Yellow : Enemy
         this.FindSubnodes();
 
         // Don't all jump at once!
-        GroundedTime = (float)GD.RandRange(0.0f, 0.5f);
+        GroundedTime = (float)GD.RandRange(0f, 0.5f);
     }
 
     public override void _Process(float delta)
@@ -34,26 +34,26 @@ public class Enemy_Yellow : Enemy
         }
         else
         {
-            GroundedTime = 0.0f;
+            GroundedTime = 0f;
         }
 
         // Change scale based on time to jump
         float jumpProximity = GroundedTime / TIME_TO_JUMP;
         if (jumpProximity < 0.5f)
         {
-            jumpProximity = 0.0f;
+            jumpProximity = 0f;
         }
         else 
         {
-            jumpProximity = (jumpProximity - 0.5f) * 2.0f;
+            jumpProximity = (jumpProximity - 0.5f) * 2f;
         }
         
         EnemySprite.Scale = new Vector2
         {   
-            x = 2.0f * Mathf.Lerp(1.0f, 1.2f, jumpProximity),
-            y = 2.0f * Mathf.Lerp(1.0f, 0.7f, jumpProximity)
+            x = 2f * Mathf.Lerp(1f, 1.2f, jumpProximity),
+            y = 2f * Mathf.Lerp(1f, 0.7f, jumpProximity)
         };
-        EnemySprite.Position = new Vector2(0.0f, Mathf.Lerp(0.0f, +5.0f, jumpProximity));
+        EnemySprite.Position = new Vector2(0f, Mathf.Lerp(0f, +5f, jumpProximity));
     }
 
     protected override Vector2 Move(Vector2 playerPosition, float difficultyScale)
@@ -61,8 +61,8 @@ public class Enemy_Yellow : Enemy
         // Move towards player a little
         Vector2 move = new Vector2
         {
-            x = Mathf.Sign(playerPosition.x - GlobalPosition.x) * 10.0f * difficultyScale,
-            y = 0.0f
+            x = Mathf.Sign(playerPosition.x - GlobalPosition.x) * 10f * difficultyScale,
+            y = 0f
         };
 
         if (IsOnFloor())
@@ -70,9 +70,9 @@ public class Enemy_Yellow : Enemy
             if (GroundedTime > TIME_TO_JUMP)
             {
                 // BIG JUMP
-                move.x *= 100.0f;
-                move.y = -400.0f;
-                GroundedTime = 0.0f;
+                move.x *= 100f;
+                move.y = -400f;
+                GroundedTime = 0f;
 
                 JumpSound.PitchScale = (float)GD.RandRange(0.8f, 1.2f);
                 JumpSound.Play();

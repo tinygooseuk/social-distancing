@@ -71,10 +71,10 @@ public class GachaScreen : Control
         // Spawn pixel piles
         await SpawnPixels();
 
-        if (Global.GetCollectedPixels(EnemyColour.Blue) > 0.0f)
+        if (Global.GetCollectedPixels(EnemyColour.Blue) > 0f)
         {
             // Wait 2 secs to roll blue to allow bumping
-            await ToSignal(GetTree().CreateTimer(2.0f), "timeout");
+            await ToSignal(GetTree().CreateTimer(2f), "timeout");
         }
 
         // Begin spinning
@@ -91,10 +91,10 @@ public class GachaScreen : Control
          
         if (IsStarted)
         {
-            camera.Offset = camera.Offset.LinearInterpolate(new Vector2(0.0f, -32.0f), 0.1f);
+            camera.Offset = camera.Offset.LinearInterpolate(new Vector2(0f, -32f), 0.1f);
 
             camera.GlobalPosition = camera.GlobalPosition.LinearInterpolate(goalRoom.GlobalPosition + new Vector2(Const.SCREEN_HALF_WIDTH, Const.SCREEN_HALF_HEIGHT), 0.1f);
-            camera.Zoom = camera.Zoom.LinearInterpolate(Global.NumberOfPlayers == 1 ? Vector2.One : new Vector2(2.0f, 2.0f), 0.1f);
+            camera.Zoom = camera.Zoom.LinearInterpolate(Global.NumberOfPlayers == 1 ? Vector2.One : new Vector2(2f, 2f), 0.1f);
         }
 
         if (!IsSpinning) return;
@@ -121,7 +121,7 @@ public class GachaScreen : Control
 
                     foreach (Pixel pixel in pixelList)
                     {
-                        pixel.SuckUpAndOut(-64.0f);
+                        pixel.SuckUpAndOut(-64f);
                     }
 
                     // Remove row from pixel lists
@@ -144,11 +144,11 @@ public class GachaScreen : Control
             //TODO: multiplayer
             camera.GlobalPosition = camera.GlobalPosition.LinearInterpolate
             (
-                new Vector2(0.0f, goalRoom.GlobalPosition.y + reel.RectPosition.y + reel.RectSize.y / 2.0f)
+                new Vector2(0f, goalRoom.GlobalPosition.y + reel.RectPosition.y + reel.RectSize.y / 2f)
             , 0.1f);
 
-            float yOffset = Global.RoundNumber == 0 ? -32.0f : -64.0f;
-            camera.Offset = new Vector2(-Const.SCREEN_HALF_WIDTH + reel.RectPosition.x + reel.RectSize.x / 2.0f, yOffset); 
+            float yOffset = Global.RoundNumber == 0 ? -32f : -64f;
+            camera.Offset = new Vector2(-Const.SCREEN_HALF_WIDTH + reel.RectPosition.x + reel.RectSize.x / 2f, yOffset); 
             camera.Zoom = camera.Zoom.LinearInterpolate(new Vector2(0.65f, 0.65f), 0.1f);
 
             label.Text = reel.CurrentItem.GachaPrize.Name;  
@@ -157,7 +157,7 @@ public class GachaScreen : Control
         {
             ReelTimer -= delta;
 
-            if (ReelTimer <= 0.0f)
+            if (ReelTimer <= 0f)
             {
                 if (ReelNumber < GachaReels.Length)
                 {
@@ -180,13 +180,13 @@ public class GachaScreen : Control
 
         // Remove pixels for reel
         EnemyColour justStoppedReel = (EnemyColour)ReelNumber;
-        float delay = 0.0f;
+        float delay = 0f;
 
         foreach (PixelList pixelList in PixelMap[justStoppedReel])
         {    
             foreach (Pixel pixel in pixelList)
             {
-                pixel.SuckUpAndOut(+32.0f, delay: delay);
+                pixel.SuckUpAndOut(+32f, delay: delay);
             }
 
             delay += 0.05f;
@@ -212,18 +212,18 @@ public class GachaScreen : Control
     private async Task SpawnPixels()
     {
         // Create each cloud at correct height
-        var blue = SpawnCloudAndAwaitSettled(40.0f, EnemyColour.Blue);
-        var yellow = SpawnCloudAndAwaitSettled(140.0f, EnemyColour.Yellow);
-        var red = SpawnCloudAndAwaitSettled(240.0f, EnemyColour.Red);
-        var green = SpawnCloudAndAwaitSettled(340.0f, EnemyColour.Green); // Not yet used
+        var blue = SpawnCloudAndAwaitSettled(40f, EnemyColour.Blue);
+        var yellow = SpawnCloudAndAwaitSettled(140f, EnemyColour.Yellow);
+        var red = SpawnCloudAndAwaitSettled(240f, EnemyColour.Red);
+        var green = SpawnCloudAndAwaitSettled(340f, EnemyColour.Green); // Not yet used
 
         await Task.WhenAll(blue, yellow, red, green);
     }
 
     private void SpawnCloud(EnemyColour colour, float xBegin, float heightPercent)
     {
-        const float pixelSize = 4.0f;
-        const float bottom = 192.0f;
+        const float pixelSize = 4f;
+        const float bottom = 192f;
 
         Scene<Pixel> pixelScene = R.Prefabs.Pixel;
         
@@ -237,7 +237,7 @@ public class GachaScreen : Control
             float y = bottom - ((float)yCoord) * pixelSize;                
 
             PixelList thisHeight = new PixelList();
-            for (float x = xBegin; x < xBegin + 40.0f; x += pixelSize)
+            for (float x = xBegin; x < xBegin + 40f; x += pixelSize)
             {
                 Pixel p = pixelScene.Instance();
                 p.CustomSuckTarget = player1.GetCurrentRoom().GlobalPosition + new Vector2(x, y);
@@ -247,7 +247,7 @@ public class GachaScreen : Control
                 p.CollisionShape.Shape = new RectangleShape2D { Extents = p.PixelSprite.Scale };
                 GetParent().AddChild(p);
 
-                p.GlobalPosition = player1.GlobalPosition + new Vector2((float)GD.RandRange(-20.0f, +20.0f), (float)GD.RandRange(-64.0f, -32.0f));
+                p.GlobalPosition = player1.GlobalPosition + new Vector2((float)GD.RandRange(-20f, +20f), (float)GD.RandRange(-64f, -32f));
 
                 thisHeight.Add(p);
             }
@@ -259,9 +259,9 @@ public class GachaScreen : Control
 
     private async Task SpawnCloudAndAwaitSettled(float xCoord, EnemyColour colour)
     {
-        if (Global.GetCollectedPixels(colour) > 0.0f)
+        if (Global.GetCollectedPixels(colour) > 0f)
         {
-            SpawnCloud(colour, xCoord, Mathf.Min(1.0f, Global.GetCollectedPixels(colour) / 100.0f));
+            SpawnCloud(colour, xCoord, Mathf.Min(1f, Global.GetCollectedPixels(colour) / 100f));
             await ToSignal(GetTree().CreateTimer(1.5f), "timeout");
         }
         else

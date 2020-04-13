@@ -4,7 +4,7 @@ using System;
 public class Spring : Area2D
 {
     // Exports
-    [Export] private float Power = 600.0f;
+    [Export] private float Power = 600f;
 
     // Subnodes
     [Subnode] private Sprite Sprite;
@@ -26,7 +26,7 @@ public class Spring : Area2D
 
         if (body is Character character)
         {
-            character.ShakeCamera(new Vector2(0.0f, -Power / 40.0f));
+            character.ShakeCamera(new Vector2(0f, -Power / 40f));
             character.SetVelocityY(-Power);   
 
             Boing();
@@ -40,9 +40,9 @@ public class Spring : Area2D
 
         // Play tween
         Vector2 originalPosition = Sprite.Position;
-        Sprite.Position = new Vector2(Sprite.Position.x, Sprite.Position.y - 6.0f);
+        Sprite.Position = new Vector2(Sprite.Position.x, Sprite.Position.y - 6f);
 
-        SpringTween.InterpolateProperty(Sprite, "position:y", null, originalPosition.y, 1.0f, Tween.TransitionType.Elastic, Tween.EaseType.Out);
+        SpringTween.InterpolateProperty(Sprite, "position:y", null, originalPosition.y, 1f, Tween.TransitionType.Elastic, Tween.EaseType.Out);
         SpringTween.Start();
     }
 }

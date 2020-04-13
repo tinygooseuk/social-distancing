@@ -28,9 +28,9 @@ public class GachaReel : ScrollContainer
     [Signal] public delegate void ReelStopped(int item);
 
     // Exports 
-    [Export] private float TargetSpinSpeed = 0.0f;
-    [Export] private float DesiredHoldTime = 3.0f;
-    [Export] private float DesiredHoldTimeRandom = 2.0f;
+    [Export] private float TargetSpinSpeed = 0f;
+    [Export] private float DesiredHoldTime = 3f;
+    [Export] private float DesiredHoldTimeRandom = 2f;
     [Export] private bool AutoStart = false;
 
     // Getters/Setters
@@ -41,9 +41,9 @@ public class GachaReel : ScrollContainer
     public int NumberOfItems => ReelBox.GetChildCount() - NUM_BUFFER_ITEMS;
 
     // Internal State
-    public float SpinSpeed = 0.0f;
-    private float ScrollOffset = 0.0f;
-    private float ActualHoldTime = 0.0f;
+    public float SpinSpeed = 0f;
+    private float ScrollOffset = 0f;
+    private float ActualHoldTime = 0f;
     private int LastItemIndex = -1;
     private GachaReelState GachaReelState = GachaReelState.WaitingToStart;
 
@@ -51,7 +51,7 @@ public class GachaReel : ScrollContainer
     {
         this.FindSubnodes();
 
-        ActualHoldTime = DesiredHoldTime + (float)GD.RandRange(0.0f, +DesiredHoldTime);
+        ActualHoldTime = DesiredHoldTime + (float)GD.RandRange(0f, +DesiredHoldTime);
 
         if (AutoStart)
         {
@@ -66,7 +66,7 @@ public class GachaReel : ScrollContainer
             case GachaReelState.SpinningUp:
             {
                 SpinSpeed = Mathf.Lerp(SpinSpeed, TargetSpinSpeed, 0.5f);
-                if (Mathf.Abs(SpinSpeed - TargetSpinSpeed) < 5.0f)
+                if (Mathf.Abs(SpinSpeed - TargetSpinSpeed) < 5f)
                 {
                     GachaReelState = GachaReelState.Holding;
                 }
@@ -75,7 +75,7 @@ public class GachaReel : ScrollContainer
             case GachaReelState.Holding:
             {
                 ActualHoldTime -= delta;
-                if (ActualHoldTime <= 0.0f && IsReadyForStop)
+                if (ActualHoldTime <= 0f && IsReadyForStop)
                 {                    
                     GachaReelState = GachaReelState.SpinningDown;
                 }
@@ -83,11 +83,11 @@ public class GachaReel : ScrollContainer
             }
             case GachaReelState.SpinningDown:
             {
-                SpinSpeed = Mathf.Lerp(SpinSpeed, 0.0f, 0.01f);
-                if (Mathf.Abs(SpinSpeed) < 25.0f)
+                SpinSpeed = Mathf.Lerp(SpinSpeed, 0f, 0.01f);
+                if (Mathf.Abs(SpinSpeed) < 25f)
                 {
                     GachaReelState = GachaReelState.Bumping;
-                    SpinSpeed = 0.0f;
+                    SpinSpeed = 0f;
 
                     EmitSignal(nameof(ReelStopped), CurrentItemIndex);
                 }
@@ -116,7 +116,7 @@ public class GachaReel : ScrollContainer
         {
             case GachaReelState.SpinningDown:
             {
-                SpinSpeed += 50.0f;
+                SpinSpeed += 50f;
                 return true;
             }
         }
@@ -126,7 +126,7 @@ public class GachaReel : ScrollContainer
 
     private void SyncScrollerToGacha(float delta)
     {
-        if (Mathf.Abs(SpinSpeed) > 0.0f)
+        if (Mathf.Abs(SpinSpeed) > 0f)
         {
             ScrollOffset += delta * SpinSpeed;
             
@@ -142,7 +142,7 @@ public class GachaReel : ScrollContainer
         {
             if (GachaReelState == GachaReelState.SpinningDown)
             {
-                Sound_Tick.PitchScale = 1.0f + Mathf.Clamp(Mathf.InverseLerp(0.0f, 400.0f, SpinSpeed), 0.0f, 1.0f);
+                Sound_Tick.PitchScale = 1f + Mathf.Clamp(Mathf.InverseLerp(0f, 400f, SpinSpeed), 0f, 1f);
                 Sound_Tick.Play();
             }
 

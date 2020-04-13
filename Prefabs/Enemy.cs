@@ -40,7 +40,7 @@ public class Enemy : KinematicBody2D
         if (IsAffectedByGravity())
         {
             Velocity.y += GRAVITY;
-            Velocity.x *= (1.0f - FRICTION);
+            Velocity.x *= (1f - FRICTION);
         }      
 
         Velocity = MoveAndSlide(Velocity, upDirection: Vector2.Up);

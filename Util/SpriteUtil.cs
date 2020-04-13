@@ -22,7 +22,7 @@ public static class AnimatedSpriteUtil
         Vector2? overridePosition = null,
         Transform2D? overrideTransform = null, 
         int pixelSize = 1,
-        float lifetimeMultiplier = 1.0f)
+        float lifetimeMultiplier = 1f)
     {
         SceneTree tree = sourceNode.GetTree();
 
@@ -61,7 +61,7 @@ public static class AnimatedSpriteUtil
                     if (!isPixel)
                     {
                         // not a pixel. see if it's a black outline pixel
-                        float neighbourAlpha = 0.0f;
+                        float neighbourAlpha = 0f;
                         for (int xx = -1; xx <= +1; xx++)
                         {
                             for (int yy = -1; yy <= +1; yy++)
@@ -78,7 +78,7 @@ public static class AnimatedSpriteUtil
                             }   
                         }
 
-                        if (neighbourAlpha > 1.0f)
+                        if (neighbourAlpha > 1f)
                         {
                             isPixel = true;
                             isBlack = true;
@@ -87,7 +87,7 @@ public static class AnimatedSpriteUtil
 
                     if (isPixel)
                     {
-                        Vector2 offset = new Vector2((float)x, (float)y) - spriteTexture.GetSize() / 2.0f;
+                        Vector2 offset = new Vector2((float)x, (float)y) - spriteTexture.GetSize() / 2f;
 
                         Pixel pixel = pixelScene.Instance();
                         pixel.PixelSprite.Scale = new Vector2((float)pixelSize, (float)pixelSize);
@@ -108,7 +108,7 @@ public static class AnimatedSpriteUtil
         return pixels;
     }
     
-    public static IEnumerable<Pixel> BurstIntoPixels(this AnimatedSprite sprite, KinematicBody2D body, bool suck = true, Vector2? overridePosition = null, Transform2D? overrideTransform = null, int pixelSize = 1, float lifetimeMultiplier = 1.0f)
+    public static IEnumerable<Pixel> BurstIntoPixels(this AnimatedSprite sprite, KinematicBody2D body, bool suck = true, Vector2? overridePosition = null, Transform2D? overrideTransform = null, int pixelSize = 1, float lifetimeMultiplier = 1f)
     {
         AtlasTexture spriteTexture = (AtlasTexture)sprite.Frames.GetFrame("Idle", 0);
         Image spriteImage = spriteTexture.Atlas.GetData();
@@ -117,7 +117,7 @@ public static class AnimatedSpriteUtil
         return BurstIntoPixels_Impl(sprite, body, spriteTexture, spriteImage, pixelOffset, suck, overridePosition, overrideTransform, pixelSize, lifetimeMultiplier);
     }
 
-    public static IEnumerable<Pixel> BurstIntoPixels(this Sprite sprite, KinematicBody2D body, bool suck = true, Vector2? overridePosition = null, Transform2D? overrideTransform = null, int pixelSize = 1, float lifetimeMultiplier = 1.0f)
+    public static IEnumerable<Pixel> BurstIntoPixels(this Sprite sprite, KinematicBody2D body, bool suck = true, Vector2? overridePosition = null, Transform2D? overrideTransform = null, int pixelSize = 1, float lifetimeMultiplier = 1f)
     {
         Texture spriteTexture = sprite.Texture;
         Image spriteImage = spriteTexture.GetData();

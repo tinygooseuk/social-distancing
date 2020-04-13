@@ -53,11 +53,11 @@ public class GoalRoom : Room
             else 
             {
                 // Burst everything
-                await ToSignal(GetTree().CreateTimer(2.0f), "timeout");            
-                GoalBanner.BurstIntoPixels((KinematicBody2D)GoalBanner.GetParent(), suck: true, pixelSize: 4, lifetimeMultiplier: 4.0f);
+                await ToSignal(GetTree().CreateTimer(2f), "timeout");            
+                GoalBanner.BurstIntoPixels((KinematicBody2D)GoalBanner.GetParent(), suck: true, pixelSize: 4, lifetimeMultiplier: 4f);
                 GoalBanner.QueueFree();
 
-                await ToSignal(GetTree().CreateTimer(7.0f), "timeout");            
+                await ToSignal(GetTree().CreateTimer(7f), "timeout");            
             }
 
             // Show gacha            
@@ -67,7 +67,7 @@ public class GoalRoom : Room
             await ToSignal(Gacha, nameof(GachaScreen.AllReelsSpun));
 
             // Wait a sec
-            await ToSignal(GetTree().CreateTimer(2.0f), "timeout"); 
+            await ToSignal(GetTree().CreateTimer(2f), "timeout"); 
 
             // Wait for animation to end too
             await Game.Instance.TitleCard.AnimateOut();

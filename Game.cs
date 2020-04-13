@@ -58,7 +58,7 @@ public class Game : Node2D
         }
 
         // Generate world
-        bool areViewportsScaledDown = GetPlayerCamera(0).Zoom.x > 1.0f;
+        bool areViewportsScaledDown = GetPlayerCamera(0).Zoom.x > 1f;
         bool isFirstRound = Global.RoundNumber == 0;
         int maxLevels = isFirstRound ? 1 : MaxLevels;
 
@@ -74,10 +74,10 @@ public class Game : Node2D
             room.Position = new Vector2(-Const.SCREEN_HALF_WIDTH, level * -Const.SCREEN_HEIGHT);
             GameArea.AddChild(room);
 
-            float labelScale = areViewportsScaledDown ? 1.75f : 1.0f;
+            float labelScale = areViewportsScaledDown ? 1.75f : 1f;
 
             Label roomLabel = (Label)TemplateLabel.Duplicate();
-            roomLabel.RectPosition = new Vector2(-Const.SCREEN_HALF_WIDTH + 20.0f, level * -Const.SCREEN_HEIGHT);
+            roomLabel.RectPosition = new Vector2(-Const.SCREEN_HALF_WIDTH + 20f, level * -Const.SCREEN_HEIGHT);
             roomLabel.Text = $"Level {level+1}";
             roomLabel.Visible = true;
             roomLabel.RectScale =  new Vector2(labelScale, labelScale);
@@ -95,7 +95,7 @@ public class Game : Node2D
          
         // Create players
         Scene<Character> characterScene = R.Prefabs.Character;
-        const float PLAYER_WIDTH = 20.0f;
+        const float PLAYER_WIDTH = 20f;
         float totalPlayerWidth = PLAYER_WIDTH * Global.NumberOfPlayers;
 
         for (int playerIndex = 0; playerIndex < Global.NumberOfPlayers; playerIndex++)
@@ -105,7 +105,7 @@ public class Game : Node2D
             player.PlayerIndex = playerIndex;
             player.Position = new Vector2
             {
-                x = (-totalPlayerWidth / 2.0f) + playerIndex * PLAYER_WIDTH,
+                x = (-totalPlayerWidth / 2f) + playerIndex * PLAYER_WIDTH,
                 y = Const.SCREEN_HALF_WIDTH
             };
 
@@ -130,7 +130,7 @@ public class Game : Node2D
             Character c = GetPlayer(playerIndex);
             if (Players.Count > playerIndex && IsInstanceValid(c))
             {
-                newLevel = Mathf.FloorToInt(1.0f + c.Position.y / -Const.SCREEN_HEIGHT);
+                newLevel = Mathf.FloorToInt(1f + c.Position.y / -Const.SCREEN_HEIGHT);
             }        
         }
 
@@ -152,7 +152,7 @@ public class Game : Node2D
     public Character GetPlayer(int playerIndex) => (Players.Count > playerIndex) ? Players[playerIndex] as Character : null;
     public Character GetNearestPlayer(Vector2 globalPosition) 
     {
-        float nearestSqrDistance = 1000000000.0f;
+        float nearestSqrDistance = 1000000000f;
         Character nearestPlayer = null;
 
         for (int playerIndex = 0; playerIndex < Global.NumberOfPlayers; playerIndex++)
@@ -178,12 +178,12 @@ public class Game : Node2D
         Character c = GetPlayer(playerIndex);
         if (IsInstanceValid(c))
         {
-            c.Position = new Vector2(-Const.SCREEN_HALF_WIDTH + 40.0f, 480.0f);
-            c.RotationDegrees = 90.0f;
+            c.Position = new Vector2(-Const.SCREEN_HALF_WIDTH + 40f, 480f);
+            c.RotationDegrees = 90f;
         }
         
         // Wait 2s
-        await ToSignal(GetTree().CreateTimer(2.0f), "timeout");
+        await ToSignal(GetTree().CreateTimer(2f), "timeout");
 
         AgainButton.Visible = true;
         AgainButton.GrabFocus();

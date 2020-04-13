@@ -40,7 +40,7 @@ public static class Global
 
     public static void Reset()
     {
-        Engine.TimeScale = 1.0f;
+        Engine.TimeScale = 1f;
         RoundNumber = 0;
         TotalScore = 0;
         
@@ -63,8 +63,8 @@ public static class Global
 
 public static class Const
 {
-    public const float SCREEN_WIDTH = 416.0f;
-    public const float SCREEN_HEIGHT = 240.0f;
+    public const float SCREEN_WIDTH = 416f;
+    public const float SCREEN_HEIGHT = 240f;
 
     public const float SCREEN_HALF_WIDTH = SCREEN_WIDTH * 0.5f;
     public const float SCREEN_HALF_HEIGHT = SCREEN_HEIGHT * 0.5f;

@@ -47,7 +47,7 @@ public class MainMenu : Control
     {   
         IsTransitioning = true;
 
-        TransitionTween.InterpolateProperty(Transition.Material, "shader_param/progress", 0.0f, 1.0f, 1.0f); 
+        TransitionTween.InterpolateProperty(Transition.Material, "shader_param/progress", 0f, 1f, 1f); 
         TransitionTween.Start();
 
         await ToSignal(TransitionTween, "tween_all_completed");

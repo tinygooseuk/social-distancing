@@ -32,11 +32,11 @@ public class DebugUI : Control
         // FPS
         float fps = Engine.GetFramesPerSecond();
         FPSCounter.Text = $"FPS: {fps}";
-        if (fps > 58.0f)
+        if (fps > 58f)
         {
             FPSCounter.Modulate = Colors.Lime;
         }
-        else if (fps > 45.0f)
+        else if (fps > 45f)
         {
             FPSCounter.Modulate = Colors.Yellow;
         } 

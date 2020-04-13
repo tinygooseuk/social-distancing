@@ -12,7 +12,7 @@ public class Bullet : KinematicBody2D
     public int FiredByPlayerIndex = 0;
 
     public Vector2 Direction = Vector2.Zero;
-    public float Speed = 400.0f;
+    public float Speed = 400f;
 
     public EnemyColour Colour = EnemyColour.Red;
     
@@ -28,7 +28,7 @@ public class Bullet : KinematicBody2D
         AnimatedSprite.Modulate = Colour.ToColor();
 
         // Tween up the size
-        IntroTween.InterpolateProperty(AnimatedSprite, "scale", null, new Vector2(2.0f, 2.0f), 0.1f, Tween.TransitionType.Cubic, Tween.EaseType.Out);
+        IntroTween.InterpolateProperty(AnimatedSprite, "scale", null, new Vector2(2f, 2f), 0.1f, Tween.TransitionType.Cubic, Tween.EaseType.Out);
         IntroTween.Start();
 
         // Don't collide with current char
@@ -92,7 +92,7 @@ public class Bullet : KinematicBody2D
     {
         e.Die();
 
-        Game.Instance.KillScore += (int)(500.0f + (float)Game.Instance.CurrentLevel / 10.0f);
+        Game.Instance.KillScore += (int)(500f + (float)Game.Instance.CurrentLevel / 10f);
         
         // Play enemy death sound
         Asset<AudioStream> Sound_EnemyDeath = R.Sounds.EnemyDeath;
@@ -102,8 +102,8 @@ public class Bullet : KinematicBody2D
         Character c = Game.Instance.GetPlayer(FiredByPlayerIndex);
         if (IsInstanceValid(c))
         {
-            Vector2 randomShake = new Vector2((float)GD.RandRange(-8.0f, +8.0f), (float)GD.RandRange(-8.0f, +8.0f));
-            c.ShakeCamera(Direction * 8.0f + randomShake);
+            Vector2 randomShake = new Vector2((float)GD.RandRange(-8f, +8f), (float)GD.RandRange(-8f, +8f));
+            c.ShakeCamera(Direction * 8f + randomShake);
         }
     }
 }
