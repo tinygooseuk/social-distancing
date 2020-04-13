@@ -48,15 +48,19 @@ public class GachaScreen : Control
         Array<GachaPrize> prizes = prizeDatabase.Load().GachaPrizes;
 
         var bluePrizes = prizes.Where(p => p.Colour == EnemyColour.Blue).ToArray();
-        GachaReel1_Blue.SetPrizes(bluePrizes);
+        bluePrizes.Shuffle();
+        GachaReel1_Blue.SetPrizes(bluePrizes);  
 
         var yellowPrizes = prizes.Where(p => p.Colour == EnemyColour.Yellow).ToArray();
+        yellowPrizes.Shuffle();
         GachaReel2_Yellow.SetPrizes(yellowPrizes);
         
         var redPrizes = prizes.Where(p => p.Colour == EnemyColour.Red).ToArray();
+        redPrizes.Shuffle();
         GachaReel3_Red.SetPrizes(redPrizes);
 
         var greenPrizes = prizes.Where(p => p.Colour == EnemyColour.Green).ToArray();
+        greenPrizes.Shuffle();
         GachaReel4_Green.SetPrizes(greenPrizes);
     }
 
