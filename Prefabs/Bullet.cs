@@ -17,6 +17,7 @@ public class Bullet : KinematicBody2D
     public EnemyColour Colour = EnemyColour.Red;
     
     public bool DisableRetry = false;
+    public bool IsSilent = false;
     private bool FirstFrame = true;
     
     
@@ -78,7 +79,7 @@ public class Bullet : KinematicBody2D
             }
         }
 
-        if (FirstFrame)
+        if (FirstFrame && !IsSilent)
         {
             // Play shot sound        
             Asset<AudioStream> Sound_Shoot = R.Sounds.Shoot;

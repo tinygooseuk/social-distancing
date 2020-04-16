@@ -13,6 +13,7 @@ public class OmniDirectionalShootBehaviour : IShootBehaviour
             bullet.DisableRetry = true;
             bullet.FiredByPlayerIndex = shooter.PlayerIndex;
             bullet.Colour = colour;
+            bullet.IsSilent = (d > 0); // Only one should make sound
             bullet.Direction = Mathf.Polar2Cartesian(1f, 2f * Mathf.Pi * (d / 8f));
             bullet.Position = shooter.Position + new Vector2(0, -4f);
             shooter.GetParent().AddChild(bullet);        
