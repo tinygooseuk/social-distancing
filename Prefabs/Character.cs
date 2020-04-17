@@ -98,7 +98,7 @@ public class Character : KinematicBody2D
             float weakShake = Mathf.Clamp(Mathf.Abs(CameraShakeMagnitude.y / 2f), 0.01f, 1f);
             float strongShake = Mathf.Clamp(Mathf.Abs(CameraShakeMagnitude.x / 2f), 0.01f, 1f);
 
-            if (Game.Instance.InputMethodManager.InputMethod == InputMethodManager.InputMethodEnum.Controller)
+            if (Game.Instance.InputMethodManager.IsVibrationEnabled)
             {
                 Input.StartJoyVibration(PlayerIndex, weakShake, strongShake, 0.5f);
             }
