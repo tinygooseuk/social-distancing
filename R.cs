@@ -42,6 +42,9 @@ public static class R
         {
             "res://Rooms/Easy/Easy_1.tscn",
             "res://Rooms/Easy/Easy_2.tscn",
+            "res://Rooms/Easy/Easy_3.tscn",
+            "res://Rooms/Easy/Easy_4.tscn",
+            "res://Rooms/Easy/Easy_5.tscn",
         };
 
         public static string[] MediumRooms = new[]
