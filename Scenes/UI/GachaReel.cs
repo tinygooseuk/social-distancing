@@ -142,8 +142,18 @@ public class GachaReel : ScrollContainer
         {
             if (GachaReelState == GachaReelState.SpinningDown)
             {
+                // Tick
                 Sound_Tick.PitchScale = 1f + Mathf.Clamp(Mathf.InverseLerp(0f, 400f, SpinSpeed), 0f, 1f);
                 Sound_Tick.Play();
+                
+                // Vibrate
+                if (Game.Instance.InputMethodManager.IsVibrationEnabled)
+                {
+                    for (int i = 0; i < Global.NumberOfPlayers; i++)
+                    {
+                        Input.StartJoyVibration(i, 0.8f, 0f, 0.15f);
+                    }
+                }
             }
 
             LastItemIndex = CurrentItemIndex;
@@ -156,6 +166,15 @@ public class GachaReel : ScrollContainer
 
         RectClipContent = false;
         Sound_Pick.Play();
+        
+        // Vibrate
+        if (Game.Instance.InputMethodManager.IsVibrationEnabled)
+        {
+            for (int i = 0; i < Global.NumberOfPlayers; i++)
+            {
+                Input.StartJoyVibration(i, 0.6f, 0.6f, 0.3f);
+            }
+        }
 
         for (int i = 0; i < ReelBox.GetChildCount(); i++)
         {

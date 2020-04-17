@@ -57,6 +57,15 @@ public class GoalRoom : Room
                 GoalBanner.BurstIntoPixels((KinematicBody2D)GoalBanner.GetParent(), suck: true, pixelSize: 4, lifetimeMultiplier: 4f);
                 GoalBanner.QueueFree();
 
+                // Vibrate
+                if (Game.Instance.InputMethodManager.IsVibrationEnabled)
+                {
+                    for (int i = 0; i < Global.NumberOfPlayers; i++)
+                    {
+                        Input.StartJoyVibration(i, 1f, 1f, 0.5f);
+                    }
+                }
+
                 await ToSignal(GetTree().CreateTimer(7f), "timeout");            
             }
 
