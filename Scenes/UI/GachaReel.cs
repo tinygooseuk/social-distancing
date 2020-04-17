@@ -65,7 +65,7 @@ public class GachaReel : ScrollContainer
         {
             case GachaReelState.SpinningUp:
             {
-                SpinSpeed = Mathf.Lerp(SpinSpeed, TargetSpinSpeed, 0.5f);
+                SpinSpeed = Mathf.MoveToward(SpinSpeed, TargetSpinSpeed, delta * 400f);
                 if (Mathf.Abs(SpinSpeed - TargetSpinSpeed) < 5f)
                 {
                     GachaReelState = GachaReelState.Holding;
@@ -83,7 +83,7 @@ public class GachaReel : ScrollContainer
             }
             case GachaReelState.SpinningDown:
             {
-                SpinSpeed = Mathf.Lerp(SpinSpeed, 0f, 0.01f);
+                SpinSpeed = Mathf.MoveToward(SpinSpeed, 0f, delta * 100f);
                 if (Mathf.Abs(SpinSpeed) < 25f)
                 {
                     GachaReelState = GachaReelState.Bumping;
