@@ -54,6 +54,7 @@ public class Character : KinematicBody2D
     // Camera state
     private Vector2 LerpedCameraOffset = Vector2.Zero;
 
+    private bool IsCameraShaking = false;
     private Vector2 CameraShakeMagnitude = Vector2.Zero;
     private Vector2 CameraShakeOffset = Vector2.Zero;
 
@@ -85,6 +86,8 @@ public class Character : KinematicBody2D
         // Camera shake
         if (CameraShakeMagnitude.Length() > 0.001f)
         {
+            IsCameraShaking = true;
+            
             CameraShakeOffset = new Vector2 
             {
                 x = (float)GD.RandRange(-CameraShakeMagnitude.x, +CameraShakeMagnitude.x), 
@@ -102,8 +105,13 @@ public class Character : KinematicBody2D
         }
         else
         {
-            CameraShakeOffset = Vector2.Zero;            
-            Input.StopJoyVibration(PlayerIndex);            
+            CameraShakeOffset = Vector2.Zero;
+
+            if (IsCameraShaking && !IsRoundComplete)
+            {
+                Input.StopJoyVibration(PlayerIndex);
+                IsCameraShaking = false;
+            }
         }
 
         bool isCancellableSpeed = Velocity.y >= 0;// || Mathf.Abs(Velocity.x) > Mathf.Abs(Velocity.y);
