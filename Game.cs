@@ -38,9 +38,9 @@ public class Game : Node2D
     {
         this.FindSubnodes();
 
+        // Seed
+        Engine.TimeScale = 1f;
         Instance = this;
-        GD.Seed(OS.GetSystemTimeMsecs());
-        GD.Randomize();
 
         // Find nodes
         Viewport mainViewport = RootViewport;

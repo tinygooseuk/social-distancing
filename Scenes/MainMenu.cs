@@ -16,7 +16,13 @@ public class MainMenu : Control
     {
         this.FindSubnodes();
         
+        // Hide mouse
         Input.SetMouseMode(Input.MouseMode.Hidden);
+        
+        // Seed random 
+        GD.Seed(OS.GetSystemTimeMsecs());
+        GD.Randomize();
+
         SinglePlayer.GrabFocus();
     }
 
