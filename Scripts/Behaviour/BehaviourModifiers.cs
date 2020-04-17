@@ -55,7 +55,7 @@ public static class BehaviourModifiersFactory
         }
 
         Type t = MethodBase.GetCurrentMethod().DeclaringType;
-        throw new InvalidOperationException($"Missing case in {t.Name}");
+        throw new InvalidOperationException($"Missing case in {t?.Name}");
     }
 
     public static IBehaviourModifier CreateRandom()

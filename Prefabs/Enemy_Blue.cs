@@ -17,7 +17,7 @@ public class Enemy_Blue : Enemy
     private StateEnum State = StateEnum.FollowPlayer;
     private float Timer = 0f;
 
-    protected override EnemyColour GetColour() => EnemyColour.Blue;
+    protected override EnemyColour Colour => EnemyColour.Blue;
 
     public override void _Process(float delta)
     {

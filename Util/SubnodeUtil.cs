@@ -1,11 +1,13 @@
 using System;
+using System.Linq;
 using System.Reflection;
+using Godot;
 using Godot.Collections;
 
 [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
 class SubnodeAttribute : System.Attribute
 {
-	public string NodePath { get; private set; }
+	public string NodePath { get; }
 
 	public SubnodeAttribute(string nodePath = null)
 	{
@@ -18,15 +20,14 @@ public static class NodeExtensions
     public static Array<T> FindAllNodesOf<T>(this Godot.Node node) where T : Godot.Node
     {
 		var matching = new Array<T>();
-        foreach (Godot.Node child in node.GetChildren())
+        foreach (Node child in node.GetChildren())
         {
-            if (child is T)
+            if (child is T tChild)
             {
-                matching.Add((T)child);
+                matching.Add(tChild);
             }
 
-			Array<T> kids = child.FindAllNodesOf<T>();
-			foreach (T kid in kids)
+			foreach (T kid in child.FindAllNodesOf<T>())
 			{
 				matching.Add(kid);
 			}
@@ -37,37 +38,29 @@ public static class NodeExtensions
 
 	public static T FindFirstNodeOf<T>(this Godot.Node node) where T : Godot.Node
 	{
-		foreach (Godot.Node child in node.GetChildren())
-		{
-			if (child is T)
-			{
-				return (T)child;
-			}
-		}
-
-		return null;
+		return node.GetChildren().OfType<T>().FirstOrDefault();
 	}
 
 	public static void FindSubnodes(this Godot.Node node)
 	{
 		foreach (PropertyInfo prop in node.GetType().GetProperties(BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance))
         {
-            SubnodeAttribute Subnode = (SubnodeAttribute)Attribute.GetCustomAttribute(prop, typeof(SubnodeAttribute));
-			if (Subnode != null)
+            var subnodeAttribute = (SubnodeAttribute)Attribute.GetCustomAttribute(prop, typeof(SubnodeAttribute));
+			if (subnodeAttribute != null)
 			{
-				string nodePath = Subnode.NodePath == null ? prop.Name : Subnode.NodePath;
-				var subnode = node.GetNode(nodePath);
+				string nodePath = subnodeAttribute.NodePath ?? prop.Name;
+				Node subnode = node.GetNode(nodePath);
 				prop.SetValue(node, subnode);
 			}
         }
 
 		foreach (FieldInfo field in node.GetType().GetFields(BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance))
 		{
-			SubnodeAttribute Subnode = (SubnodeAttribute)Attribute.GetCustomAttribute(field, typeof(SubnodeAttribute));
+			var Subnode = (SubnodeAttribute)Attribute.GetCustomAttribute(field, typeof(SubnodeAttribute));
 			if (Subnode != null)
 			{
-				string nodePath = Subnode.NodePath == null ? field.Name : Subnode.NodePath;
-				var subnode = node.GetNode(nodePath);
+				string nodePath = Subnode.NodePath ?? field.Name;
+				Node subnode = node.GetNode(nodePath);
 				field.SetValue(node, subnode);
 			}
 		}

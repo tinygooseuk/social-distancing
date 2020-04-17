@@ -5,14 +5,14 @@ public class Spike : Area2D
 {    
     private void OnBodyEntered(Node2D body)
     {
-        if (body is Enemy enemy)
+        switch (body)
         {
-            enemy.Die();
-        }
-
-        if (body is Character character)
-        {
-            character.Die();
+            case Enemy enemy:
+                enemy.Die();
+                break;
+            case Character character:
+                character.Die();
+                break;
         }
     }    
 }

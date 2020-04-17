@@ -41,7 +41,7 @@ public class GachaReel : ScrollContainer
     public int NumberOfItems => ReelBox.GetChildCount() - NUM_BUFFER_ITEMS;
 
     // Internal State
-    public float SpinSpeed = 0f;
+    private float SpinSpeed = 0f;
     private float ScrollOffset = 0f;
     private float ActualHoldTime = 0f;
     private int LastItemIndex = -1;
@@ -70,7 +70,7 @@ public class GachaReel : ScrollContainer
                 {
                     GachaReelState = GachaReelState.Holding;
                 }
-                 break;
+                break;
             }
             case GachaReelState.Holding:
             {

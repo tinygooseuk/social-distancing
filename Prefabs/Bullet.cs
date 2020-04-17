@@ -12,7 +12,7 @@ public class Bullet : KinematicBody2D
     public int FiredByPlayerIndex = 0;
 
     public Vector2 Direction = Vector2.Zero;
-    public float Speed = 400f;
+    private const float SPEED = 400f;
 
     public EnemyColour Colour = EnemyColour.Red;
     
@@ -42,7 +42,7 @@ public class Bullet : KinematicBody2D
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _PhysicsProcess(float delta)
     {
-        KinematicCollision2D collision = MoveAndCollide(Direction * delta * Speed);
+        KinematicCollision2D collision = MoveAndCollide(Direction * delta * SPEED);
         if (collision != null && IsInstanceValid(collision.Collider))
         {
             if (FirstFrame && !DisableRetry)
@@ -54,29 +54,22 @@ public class Bullet : KinematicBody2D
                 }
             }
 
-            if (Colour == EnemyColour.Red && collision.Collider is Enemy_Red er)
+            switch (Colour)
             {
-                KillEnemy(er);
-
-                return;
+                case EnemyColour.Red when collision.Collider is Enemy_Red er:
+                    KillEnemy(er);
+                    break;
+                case EnemyColour.Yellow when collision.Collider is Enemy_Yellow ey:
+                    KillEnemy(ey);
+                    break;
+                case EnemyColour.Blue when collision.Collider is Enemy_Blue eb:
+                    KillEnemy(eb);
+                    break;
+                default:
+                    QueueFree();
+                    break;
             }
-            if (Colour == EnemyColour.Yellow && collision.Collider is Enemy_Yellow ey)
-            {
-                KillEnemy(ey);
-
-                return;
-            }
-            if (Colour == EnemyColour.Blue && collision.Collider is Enemy_Blue eb)
-            {
-                KillEnemy(eb);
-
-                return;
-            }
-            else 
-            {
-                QueueFree();
-                return;
-            }
+            return;
         }
 
         if (FirstFrame && !IsSilent)

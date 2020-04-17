@@ -38,7 +38,7 @@ public static class AnimatedSpriteUtil
         pixelScene.Load();        
 
         int numPixels = tree.GetNodesInGroup("pixels").Count;
-        int skip = 1 + Mathf.RoundToInt(numPixels / 100);
+        int skip = 1 + Mathf.RoundToInt((float)numPixels / 100f);
         int counter = 0;
 
         List<Pixel> pixels = new List<Pixel>();
@@ -110,7 +110,7 @@ public static class AnimatedSpriteUtil
     
     public static IEnumerable<Pixel> BurstIntoPixels(this AnimatedSprite sprite, KinematicBody2D body, bool suck = true, Vector2? overridePosition = null, Transform2D? overrideTransform = null, int pixelSize = 1, float lifetimeMultiplier = 1f)
     {
-        AtlasTexture spriteTexture = (AtlasTexture)sprite.Frames.GetFrame("Idle", 0);
+        var spriteTexture = (AtlasTexture)sprite.Frames.GetFrame("Idle", 0);
         Image spriteImage = spriteTexture.Atlas.GetData();
         Vector2 pixelOffset = spriteTexture.Region.Position;
 

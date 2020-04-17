@@ -18,18 +18,18 @@ public class Spring : Area2D
     
     private void OnBodyEntered(Node2D body)
     {
-        if (body is Enemy enemy)
+        switch (body)
         {
-            enemy.SetVelocityY(-Power);
-            Boing();
-        }
+            case Enemy enemy:
+                enemy.SetVelocityY(-Power);
+                Boing();
+                break;
+            case Character character:
+                character.ShakeCamera(new Vector2(0f, -Power / 40f));
+                character.SetVelocityY(-Power);   
 
-        if (body is Character character)
-        {
-            character.ShakeCamera(new Vector2(0f, -Power / 40f));
-            character.SetVelocityY(-Power);   
-
-            Boing();
+                Boing();
+                break;
         }
     }    
 

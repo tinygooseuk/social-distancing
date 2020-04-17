@@ -13,7 +13,7 @@ public class InputMethodManager : Node
 
     public override void _Ready()
     {
-        Timer t = new Timer 
+        var t = new Timer 
         {
             WaitTime = 0.5f,
             Autostart = true,

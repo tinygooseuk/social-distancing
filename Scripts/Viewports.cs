@@ -11,13 +11,13 @@ public class Viewports : Container
             return;
         }
       
-        ViewportContainer playerOneViewportContainer = (ViewportContainer)GetChild(0);
-        Viewport playerOneViewport = (Viewport)playerOneViewportContainer.GetChild(0);
+        var playerOneViewportContainer = (ViewportContainer)GetChild(0);
+        var playerOneViewport = (Viewport)playerOneViewportContainer.GetChild(0);
 
         for (int vp = 1; vp < GetChildCount(); vp++)
         {
-            ViewportContainer otherPlayerViewportContainer = (ViewportContainer)GetChild(vp);
-            Viewport otherPlayerViewport = (Viewport)otherPlayerViewportContainer.GetChild(0);
+            var otherPlayerViewportContainer = (ViewportContainer)GetChild(vp);
+            var otherPlayerViewport = (Viewport)otherPlayerViewportContainer.GetChild(0);
 
             otherPlayerViewport.World2d = playerOneViewport.World2d;
         }

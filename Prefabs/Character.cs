@@ -64,17 +64,6 @@ public class Character : KinematicBody2D
     public override void _Ready()
     {
         this.FindSubnodes();
-
-        //TODO: Behaviours
-        /*ShootBehaviour = ShootBehavioursFactory.CreateRandom();
-        GD.Print($"Shoot: {ShootBehaviour}");
-
-        for (int i = 0; i < 3; i++)
-        {
-            IBehaviourModifier mod = BehaviourModifiersFactory.CreateRandom();
-            GD.Print($"+Mod: {mod}");
-            AddModifier(mod);
-        }*/
     }
 
     public override void _PhysicsProcess(float delta)
@@ -83,14 +72,7 @@ public class Character : KinematicBody2D
         ApplyPhysics(delta);
 
         // Update inside-ness
-        int insides = 0;
-        foreach (var overlapObject in InsideWallDetector.GetOverlappingBodies())
-        {
-            if (overlapObject is TileMap)
-            {
-                insides++;
-            }
-        }
+        int insides = InsideWallDetector.GetOverlappingBodies().OfType<TileMap>().Count();
         IsInsideWall = insides > 0 || ForceFallTime > 0f;
     }
 

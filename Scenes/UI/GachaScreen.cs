@@ -212,10 +212,10 @@ public class GachaScreen : Control
     private async Task SpawnPixels()
     {
         // Create each cloud at correct height
-        var blue = SpawnCloudAndAwaitSettled(40f, EnemyColour.Blue);
-        var yellow = SpawnCloudAndAwaitSettled(140f, EnemyColour.Yellow);
-        var red = SpawnCloudAndAwaitSettled(240f, EnemyColour.Red);
-        var green = SpawnCloudAndAwaitSettled(340f, EnemyColour.Green); // Not yet used
+        Task blue = SpawnCloudAndAwaitSettled(40f, EnemyColour.Blue);
+        Task yellow = SpawnCloudAndAwaitSettled(140f, EnemyColour.Yellow);
+        Task red = SpawnCloudAndAwaitSettled(240f, EnemyColour.Red);
+        Task green = SpawnCloudAndAwaitSettled(340f, EnemyColour.Green); // Not yet used
 
         await Task.WhenAll(blue, yellow, red, green);
     }

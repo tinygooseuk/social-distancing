@@ -10,7 +10,7 @@ public class GoalRoom : Room
     [Subnode] GachaScreen Gacha;
 
     // State
-    private bool IsFirstRound => Global.RoundNumber == 0;
+    private static bool IsFirstRound => Global.RoundNumber == 0;
     private bool WasTriggered = false;
 
     public override void _Ready()
@@ -74,11 +74,9 @@ public class GoalRoom : Room
 
             // Work out and apply all prizes
             //TODO: player index!!
-            int reelIdx = 0;
             foreach (GachaReel reel in Gacha.GachaReels)
             {
                 GachaPrize prize = reel.CurrentItem.GachaPrize;
-                reelIdx++;
 
                 if (prize.UnlockedShootBehaviour != ShootBehavioursEnum.None)
                 {

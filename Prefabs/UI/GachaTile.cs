@@ -22,7 +22,7 @@ public class GachaTile : Control
         this.FindSubnodes();    
     }
 
-    public void UpdateGachaPrize()
+    private void UpdateGachaPrize()
     {
         this.FindSubnodes();
 

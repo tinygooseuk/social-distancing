@@ -16,13 +16,13 @@ public class Game : Node2D
 
     //TODO: try subnodes again?
     private Node2D GameArea;
-    public Label TemplateLabel;
-    public Label ScoreLabel;
-    public Button AgainButton;
+    private Label TemplateLabel;
+    private Label ScoreLabel;
+    private Button AgainButton;
     public TitleCard TitleCard;
     [Subnode] public InputMethodManager InputMethodManager { get; private set; }
 
-    private Godot.Collections.Array Players = new Godot.Collections.Array();
+    private readonly Godot.Collections.Array Players = new Godot.Collections.Array();
 
     // Enums
     public enum Difficulty { Easy, Medium, Hard, Neutral };
@@ -217,7 +217,7 @@ public class Game : Node2D
         return DifficultyCurve.Interpolate(progression);
     }
 
-    private async Task<Node2D> InstanceRandomRoomAsync(Difficulty d)
+    private static async Task<Node2D> InstanceRandomRoomAsync(Difficulty d)
     {
         string[] sceneArray = null;
 
@@ -226,7 +226,9 @@ public class Game : Node2D
             case Difficulty.Easy: sceneArray = R.Rooms.EasyRooms; break;
             case Difficulty.Medium: sceneArray = R.Rooms.MediumRooms; break;
             case Difficulty.Hard: sceneArray = R.Rooms.HardRooms; break;            
-            case Difficulty.Neutral: sceneArray = R.Rooms.NeutralRooms; break;       
+            case Difficulty.Neutral: sceneArray = R.Rooms.NeutralRooms; break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(d), d, null);
         }
 
         Scene<Node2D> roomScene = sceneArray[(int)(GD.Randi() % sceneArray.Length)];

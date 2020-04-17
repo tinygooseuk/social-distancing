@@ -16,7 +16,7 @@ public class EnemySpawner : Position2D
     {
         PackedScene scene = EnemyScenes[(int)(GD.Randi() % EnemyScenes.Count)];
 
-        Enemy enemy = (Enemy)scene.Instance();
+        var enemy = (Enemy)scene.Instance();
         enemy.Position = Position;
         GetParent().AddChild(enemy);
         
