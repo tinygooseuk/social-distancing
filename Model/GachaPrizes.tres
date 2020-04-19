@@ -1,4 +1,4 @@
-[gd_resource type="Resource" load_steps=13 format=2]
+[gd_resource type="Resource" load_steps=16 format=2]
 
 [ext_resource path="res://Model/GachaPrizeList.cs" type="Script" id=1]
 [ext_resource path="res://Model/GachaPrize.cs" type="Script" id=2]
@@ -102,6 +102,24 @@ UnlockedBehaviourModfier = 0
 UnlockedShootBehaviour = 1
 TexturePath = "res://Textures/Gacha/Shoot/DefaultShoot.png"
 
+[sub_resource type="Resource" id=12]
+script = ExtResource( 2 )
+Colour = 1
+Name = "Extra Jump"
+Description = "You can jump more in mid-air."
+UnlockedBehaviourModfier = 10
+UnlockedShootBehaviour = 0
+TexturePath = "res://Textures/Gacha/BehaviourModifiers/Unknown.png"
+
+[sub_resource type="Resource" id=13]
+script = ExtResource( 2 )
+Colour = 1
+Name = "Less Jump"
+Description = "You can't jump as much in mid-air."
+UnlockedBehaviourModfier = 11
+UnlockedShootBehaviour = 0
+TexturePath = "res://Textures/Gacha/BehaviourModifiers/Unknown.png"
+
 [resource]
 script = ExtResource( 1 )
-GachaPrizes = [ SubResource( 1 ), SubResource( 2 ), SubResource( 3 ), SubResource( 4 ), SubResource( 5 ), SubResource( 6 ), SubResource( 7 ), SubResource( 8 ), SubResource( 9 ), SubResource( 10 ), SubResource( 11 ) ]
+GachaPrizes = [ SubResource( 1 ), SubResource( 2 ), SubResource( 3 ), SubResource( 4 ), SubResource( 5 ), SubResource( 6 ), SubResource( 7 ), SubResource( 8 ), SubResource( 9 ), SubResource( 10 ), SubResource( 11 ), SubResource( 12 ), SubResource( 13 ) ]
