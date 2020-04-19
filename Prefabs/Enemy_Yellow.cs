@@ -73,9 +73,16 @@ public class Enemy_Yellow : Enemy
                 move.x *= 100f;
                 move.y = -400f;
                 GroundedTime = 0f;
-
+                
+                // Jump sound & FX
                 JumpSound.PitchScale = (float)GD.RandRange(0.8f, 1.2f);
                 JumpSound.Play();
+                
+                Scene<Particles2D> jumpParticlesScene = R.Particles.JUMP_PARTICLES;
+
+                Particles2D jumpParticles = jumpParticlesScene.Instance();
+                jumpParticles.Position = Position + new Vector2(0f, 16f);
+                GetParent().AddChild(jumpParticles);  
             }
             else
             {
