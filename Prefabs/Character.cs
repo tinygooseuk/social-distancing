@@ -29,7 +29,7 @@ public class Character : KinematicBody2D
     [Subnode("Sounds/PlayerDeath")] private AudioStreamPlayer2D Sound_Death;
         
     // References
-    public Camera2D Camera;
+    private Camera2D Camera;
 
     // State
     private float LastGrounded = 100f;
@@ -58,7 +58,7 @@ public class Character : KinematicBody2D
     private Vector2 CameraShakeMagnitude = Vector2.Zero;
     private Vector2 CameraShakeOffset = Vector2.Zero;
 
-    public Modifiables Mods => GetModifiables();
+    private Modifiables Mods => GetModifiables();
     private Modifiables _CachedModifiables = null;
 
     #region Engine Callbacks
@@ -231,6 +231,8 @@ public class Character : KinematicBody2D
 
     private void ProcessCameraInput(float delta)
     {
+        if (!IsInstanceValid(Camera)) return;
+        
         if (!IsDead)
         {
             Vector2 desiredCameraOffset = new Vector2
@@ -449,7 +451,7 @@ public class Character : KinematicBody2D
         Scale = new Vector2(Mods.CharacterScale, Mods.CharacterScale);
     }
 
-    public void AddModifier(IBehaviourModifier mod)
+    private void AddModifier(IBehaviourModifier mod)
     {
         _CachedModifiables = null;
         Global.BehaviourModifiers[PlayerIndex].Add(mod);
