@@ -3,7 +3,7 @@ using Godot;
 
 public static class ArrayUtil
 {
-    public static void Shuffle<T>(this T[] inArray)
+    public static T[] Shuffle<T>(this T[] inArray)
     {
         int n = inArray.Length;
         for (int i = 0; i < (n - 1); i++)
@@ -16,5 +16,7 @@ public static class ArrayUtil
             inArray[r] = inArray[i];
             inArray[i] = t;
         }
+
+        return inArray;
     }
 }

@@ -47,20 +47,16 @@ public class GachaScreen : Control
         Asset<GachaPrizeList> prizeDatabase = R.Model.GACHA_PRIZES;
         Array<GachaPrize> prizes = prizeDatabase.Load().GachaPrizes;
 
-        var bluePrizes = prizes.Where(p => p.Colour == EnemyColour.Blue).ToArray();
-        bluePrizes.Shuffle();
+        var bluePrizes = prizes.Where(p => p.Colour == EnemyColour.Blue).ToArray().Shuffle();
         GachaReel1_Blue.SetPrizes(bluePrizes);  
 
-        var yellowPrizes = prizes.Where(p => p.Colour == EnemyColour.Yellow).ToArray();
-        yellowPrizes.Shuffle();
+        var yellowPrizes = prizes.Where(p => p.Colour == EnemyColour.Yellow).ToArray().Shuffle();
         GachaReel2_Yellow.SetPrizes(yellowPrizes);
         
-        var redPrizes = prizes.Where(p => p.Colour == EnemyColour.Red).ToArray();
-        redPrizes.Shuffle();
+        var redPrizes = prizes.Where(p => p.Colour == EnemyColour.Red).ToArray().Shuffle();
         GachaReel3_Red.SetPrizes(redPrizes);
 
-        var greenPrizes = prizes.Where(p => p.Colour == EnemyColour.Green).ToArray();
-        greenPrizes.Shuffle();
+        var greenPrizes = prizes.Where(p => p.Colour == EnemyColour.Green).ToArray().Shuffle();
         GachaReel4_Green.SetPrizes(greenPrizes);
     }
 
