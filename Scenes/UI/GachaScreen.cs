@@ -100,12 +100,12 @@ public class GachaScreen : Control
         if (!IsSpinning) return;
 
         // Fast forward if required
-        float fastForwardAmount = Input.GetActionStrength("fast_forward");
+        float fastForwardAmount = Input.GetActionStrength("fast_forward") * 4f;
         Engine.TimeScale = 1f + fastForwardAmount;        
         
         // Check for bumping
         EnemyColour reelColour = (EnemyColour)ReelNumber;
-        string[] inputs = new[] { "hit_blue", "hit_yellow", "hit_red", "jump"};
+        string[] inputs = { "hit_blue", "hit_yellow", "hit_red", "jump"};
         
         for (int i = 0; i < Global.NumberOfPlayers; i++)
         {
