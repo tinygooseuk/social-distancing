@@ -34,7 +34,7 @@ public static class AnimatedSpriteUtil
             y = sourceNode.GlobalTransform.y,
         });
 
-        Scene<Pixel> pixelScene = R.Prefabs.Pixel;
+        Scene<Pixel> pixelScene = R.Prefabs.PIXEL;
         pixelScene.Load();        
 
         int numPixels = tree.GetNodesInGroup("pixels").Count;

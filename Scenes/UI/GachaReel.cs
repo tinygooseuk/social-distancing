@@ -211,7 +211,7 @@ public class GachaReel : ScrollContainer
         }
 
         // Create tiles
-        Scene<GachaTile> tileScene = R.Prefabs.UI.GachaTile;
+        Scene<GachaTile> tileScene = R.Prefabs.UI.GACHA_TILE;
         tileScene.Load();
 
         foreach (GachaPrize prize in prizeList)

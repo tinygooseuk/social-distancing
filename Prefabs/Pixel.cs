@@ -79,7 +79,7 @@ public class Pixel : RigidBody2D
                 } 
                 else 
                 {
-                    Asset<AudioStream> collectSound = R.Sounds.CollectPixel;
+                    Asset<AudioStream> collectSound = R.Sounds.COLLECT_PIXEL;
                     GetTree().PlaySound2D(collectSound, relativeTo: this);
 
                     if (!CustomSuckTarget.HasValue && Game.Instance.InputMethodManager.IsVibrationEnabled)

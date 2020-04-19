@@ -10,7 +10,7 @@ public class DefaultShootBehaviour : IShootBehaviour
 {
     public void Shoot(Character shooter, EnemyColour colour)
     {
-        Scene<Bullet> bulletScene = R.Prefabs.Bullet;
+        Scene<Bullet> bulletScene = R.Prefabs.BULLET;
 
         Bullet bullet = bulletScene.Instance();
         bullet.FiredByPlayerIndex = shooter.PlayerIndex;

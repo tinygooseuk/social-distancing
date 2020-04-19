@@ -86,7 +86,7 @@ public class Game : Node2D
 
         // Create goal room
         {
-            Scene<Node2D> goalRoomScene = R.Rooms.GoalRoom;
+            Scene<Node2D> goalRoomScene = R.Rooms.GOAL_ROOM;
 
             Node2D room = await goalRoomScene.InstanceAsync();
             room.Position = new Vector2(-Const.SCREEN_HALF_WIDTH, maxLevels * -Const.SCREEN_HEIGHT);
@@ -94,7 +94,7 @@ public class Game : Node2D
         }
          
         // Create players
-        Scene<Character> characterScene = R.Prefabs.Character;
+        Scene<Character> characterScene = R.Prefabs.CHARACTER;
         const float PLAYER_WIDTH = 20f;
         float totalPlayerWidth = PLAYER_WIDTH * Global.NumberOfPlayers;
 
@@ -223,10 +223,10 @@ public class Game : Node2D
 
         switch (d)
         {
-            case Difficulty.Easy: sceneArray = R.Rooms.EasyRooms; break;
-            case Difficulty.Medium: sceneArray = R.Rooms.MediumRooms; break;
-            case Difficulty.Hard: sceneArray = R.Rooms.HardRooms; break;            
-            case Difficulty.Neutral: sceneArray = R.Rooms.NeutralRooms; break;
+            case Difficulty.Easy: sceneArray = R.Rooms.EASY_ROOMS; break;
+            case Difficulty.Medium: sceneArray = R.Rooms.MEDIUM_ROOMS; break;
+            case Difficulty.Hard: sceneArray = R.Rooms.HARD_ROOMS; break;            
+            case Difficulty.Neutral: sceneArray = R.Rooms.NEUTRAL_ROOMS; break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(d), d, null);
         }

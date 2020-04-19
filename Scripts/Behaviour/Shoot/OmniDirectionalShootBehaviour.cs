@@ -5,7 +5,7 @@ public class OmniDirectionalShootBehaviour : IShootBehaviour
 {
     public void Shoot(Character shooter, EnemyColour colour)
     {
-        Scene<Bullet> bulletScene = R.Prefabs.Bullet;
+        Scene<Bullet> bulletScene = R.Prefabs.BULLET;
 
         for (int d = 0; d < 8; d++)
         {

@@ -71,7 +71,7 @@ public class Enemy : KinematicBody2D
         }
 
         // Spawn particles
-        Scene<Particles2D> deathParticlesScene = R.Particles.DeathParticles;
+        Scene<Particles2D> deathParticlesScene = R.Particles.DEATH_PARTICLES;
         
         Particles2D deathParticles = deathParticlesScene.Instance();
         deathParticles.Position = Position;

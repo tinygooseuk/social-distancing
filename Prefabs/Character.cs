@@ -302,7 +302,7 @@ public class Character : KinematicBody2D
         ShouldRefireBullet = false;
 
         // Spawn particles
-        Scene<Particles2D> jumpParticlesScene = R.Particles.JumpParticles;
+        Scene<Particles2D> jumpParticlesScene = R.Particles.JUMP_PARTICLES;
 
         Particles2D jumpParticles = jumpParticlesScene.Instance();
         jumpParticles.Position = Position + new Vector2(0f, 16f);

@@ -44,7 +44,7 @@ public class GachaScreen : Control
         this.FindSubnodes();
 
         // Load in gacha data
-        Asset<GachaPrizeList> prizeDatabase = R.Model.GachaPrizes;
+        Asset<GachaPrizeList> prizeDatabase = R.Model.GACHA_PRIZES;
         Array<GachaPrize> prizes = prizeDatabase.Load().GachaPrizes;
 
         var bluePrizes = prizes.Where(p => p.Colour == EnemyColour.Blue).ToArray();
@@ -229,7 +229,7 @@ public class GachaScreen : Control
         const float pixelSize = 4f;
         const float bottom = 192f;
 
-        Scene<Pixel> pixelScene = R.Prefabs.Pixel;
+        Scene<Pixel> pixelScene = R.Prefabs.PIXEL;
         
         //TODO: multiplayer
         Character player1 = Game.Instance.GetPlayer(0);

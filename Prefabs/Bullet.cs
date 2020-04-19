@@ -75,7 +75,7 @@ public class Bullet : KinematicBody2D
         if (FirstFrame && !IsSilent)
         {
             // Play shot sound        
-            Asset<AudioStream> Sound_Shoot = R.Sounds.Shoot;
+            Asset<AudioStream> Sound_Shoot = R.Sounds.SHOOT;
             GetTree().PlaySound2D(Sound_Shoot, relativeTo: this);
         }
 
@@ -89,7 +89,7 @@ public class Bullet : KinematicBody2D
         Game.Instance.KillScore += (int)(500f + (float)Game.Instance.CurrentLevel / 10f);
         
         // Play enemy death sound
-        Asset<AudioStream> Sound_EnemyDeath = R.Sounds.EnemyDeath;
+        Asset<AudioStream> Sound_EnemyDeath = R.Sounds.ENEMY_DEATH;
         GetTree().PlaySound2D(Sound_EnemyDeath, relativeTo: this);
 
         // Shake correct camera
