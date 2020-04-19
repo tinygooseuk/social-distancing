@@ -100,8 +100,8 @@ public class GachaScreen : Control
         if (!IsSpinning) return;
 
         // Fast forward if required
-        bool shouldFastForward = (Input.IsActionPressed("ui_focus_next"));
-        Engine.TimeScale = shouldFastForward ? 5f : 1f;        
+        float fastForwardAmount = Input.GetActionStrength("fast_forward");
+        Engine.TimeScale = 1f + fastForwardAmount;        
         
         // Check for bumping
         EnemyColour reelColour = (EnemyColour)ReelNumber;
