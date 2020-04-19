@@ -6,17 +6,11 @@ public class EnemySpawner : Position2D
 {
     [Export] private readonly Array<PackedScene> EnemyScenes = new Array<PackedScene>();
 
-    // Called when the node enters the scene tree for the first time.
-    public override void _Ready()
-    {
-        //CallDeferred("Spawn");
-    }
-
     private void OnBodyEntered(Node other)
     {
         if (other is Character)
         {
-            Spawn();
+            CallDeferred(nameof(Spawn));
         }
     }
     
