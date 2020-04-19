@@ -35,6 +35,7 @@ public class Character : KinematicBody2D
     private float LastGrounded = 100f;
     private float LastJump = 100f;
     private float LastBullet = 100f;
+    private int NumAirJumpsRemaining = 0;
     private EnemyColour LastBulletColour = EnemyColour.Red;
     private float LastDied = 0f;
     private bool IsGrounded => LastGrounded < 0.2f;
@@ -84,43 +85,22 @@ public class Character : KinematicBody2D
         ProcessCameraInput(delta);
 
         // Camera shake
-        if (CameraShakeMagnitude.Length() > 0.001f)
-        {
-            IsCameraShaking = true;
-            
-            CameraShakeOffset = new Vector2 
-            {
-                x = (float)GD.RandRange(-CameraShakeMagnitude.x, +CameraShakeMagnitude.x), 
-                y = (float)GD.RandRange(-CameraShakeMagnitude.y, +CameraShakeMagnitude.y), 
-            };
-            CameraShakeMagnitude *= 0.9f;
+        ProcessCameraShake();
 
-            float weakShake = Mathf.Clamp(Mathf.Abs(CameraShakeMagnitude.y / 2f), 0.01f, 1f);
-            float strongShake = Mathf.Clamp(Mathf.Abs(CameraShakeMagnitude.x / 2f), 0.01f, 1f);
-
-            if (Game.Instance.InputMethodManager.IsVibrationEnabled)
-            {
-                Input.StartJoyVibration(PlayerIndex, weakShake, strongShake, 0.5f);
-            }
-        }
-        else
-        {
-            CameraShakeOffset = Vector2.Zero;
-
-            if (IsCameraShaking && !IsRoundComplete)
-            {
-                Input.StopJoyVibration(PlayerIndex);
-                IsCameraShaking = false;
-            }
-        }
-
+        // Cancel pass-thru
         bool isCancellableSpeed = Velocity.y >= 0;// || Mathf.Abs(Velocity.x) > Mathf.Abs(Velocity.y);
         if (IsPassingThrough && isCancellableSpeed && !IsInsideWall)
         {
             IsPassingThrough = false;
             SetCollisionMaskBit(6, true);
         }
-
+        
+        // Re-fill midair jumps    
+        if (IsGrounded)
+        {
+            NumAirJumpsRemaining = Mods.NumAirJumps;
+        }
+        
         // Death timer
         if (IsDead)
         {
@@ -143,6 +123,8 @@ public class Character : KinematicBody2D
         float score = -(Position.y - 207f);
         Game.Instance.BaseScore = (int)Mathf.Max(score, Game.Instance.BaseScore);
     }
+
+  
     #endregion
 
     #region Inputs
@@ -169,7 +151,8 @@ public class Character : KinematicBody2D
         }
 
         // Check for jump
-        bool canJumpOrDrop = IsGrounded && LastJump > Mods.JumpDebounce;
+        bool canMidairJump = NumAirJumpsRemaining > 0;
+        bool canJumpOrDrop = (canMidairJump || IsGrounded) && LastJump > Mods.JumpDebounce;
         bool canDrop = !IsRoundComplete;
         bool wantsJump = Input.IsActionJustPressed($"jump_{PlayerIndex}");
         bool wantsDrop = Input.IsActionPressed($"move_down_{PlayerIndex}");
@@ -257,6 +240,39 @@ public class Character : KinematicBody2D
             Camera.GlobalPosition = GlobalPosition;
         }
     }
+    
+    private void ProcessCameraShake()
+    {
+        if (CameraShakeMagnitude.Length() > 0.001f)
+        {
+            IsCameraShaking = true;
+
+            CameraShakeOffset = new Vector2
+            {
+                x = (float) GD.RandRange(-CameraShakeMagnitude.x, +CameraShakeMagnitude.x),
+                y = (float) GD.RandRange(-CameraShakeMagnitude.y, +CameraShakeMagnitude.y),
+            };
+            CameraShakeMagnitude *= 0.9f;
+
+            float weakShake = Mathf.Clamp(Mathf.Abs(CameraShakeMagnitude.y / 2f), 0.01f, 1f);
+            float strongShake = Mathf.Clamp(Mathf.Abs(CameraShakeMagnitude.x / 2f), 0.01f, 1f);
+
+            if (Game.Instance.InputMethodManager.IsVibrationEnabled)
+            {
+                Input.StartJoyVibration(PlayerIndex, weakShake, strongShake, 0.5f);
+            }
+        }
+        else
+        {
+            CameraShakeOffset = Vector2.Zero;
+
+            if (IsCameraShaking && !IsRoundComplete)
+            {
+                Input.StopJoyVibration(PlayerIndex);
+                IsCameraShaking = false;
+            }
+        }
+    }
 
     private void FireBullet(EnemyColour colour)
     {
@@ -292,11 +308,27 @@ public class Character : KinematicBody2D
         IsPassingThrough = true;
         SetCollisionMaskBit(6, false);
 
-        // Add impulse
-        Velocity.y = -Mods.JumpImpulse;
+        if (IsGrounded)
+        {
+            // Add impulse
+            Velocity.y = -Mods.JumpImpulse;
 
-        // Play sound
-        Sound_Jump.Play();
+            // Play sound
+            Sound_Jump.PitchScale = 1f;
+            Sound_Jump.Play();
+        }
+        else
+        {
+            // Add impulse
+            Velocity.y = -Mods.JumpImpulse * 0.66f;
+            
+            // Remove a remaining jump
+            NumAirJumpsRemaining--;
+
+            // Play sound
+            Sound_Jump.PitchScale = 1.3f;
+            Sound_Jump.Play();
+        }
 
         // Cancel firing
         ShouldRefireBullet = false;
@@ -449,6 +481,7 @@ public class Character : KinematicBody2D
     private void ApplyModifiers()
     {
         Scale = new Vector2(Mods.CharacterScale, Mods.CharacterScale);
+        NumAirJumpsRemaining = Mods.NumAirJumps;
     }
 
     private void AddModifier(IBehaviourModifier mod)
