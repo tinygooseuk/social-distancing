@@ -43,7 +43,6 @@ autoplay = true
 
 [node name="RoundComplete" type="AudioStreamPlayer" parent="Game"]
 stream = ExtResource( 7 )
-volume_db = -8.0
 
 [node name="InputMethodManager" type="Node" parent="Game"]
 script = ExtResource( 4 )
