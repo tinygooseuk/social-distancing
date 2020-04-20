@@ -13,6 +13,8 @@ public class Game : Node2D
     [Export] private int MaxLevels = 9;
    
     // Subnodes
+    [Subnode] private AudioStreamPlayer BGM;
+    [Subnode] private AudioStreamPlayer RoundComplete;
 
     //TODO: try subnodes again?
     private Node2D GameArea;
@@ -36,6 +38,8 @@ public class Game : Node2D
 
     public override async void _Ready()
     {
+        base._Ready();
+        
         this.FindSubnodes();
 
         // Seed
@@ -50,7 +54,7 @@ public class Game : Node2D
             TemplateLabel = GameArea.GetNode<Label>("TemplateLabel");
         }
 
-        CanvasLayer uiLayer = GetUICanvasLayer();
+        CanvasLayer uiLayer = UICanvasLayer;
         {
             ScoreLabel = uiLayer.GetNode<Label>("BG/Score");
             AgainButton = uiLayer.GetNode<Button>("BG/AgainButton");    
@@ -147,7 +151,7 @@ public class Game : Node2D
     public Viewport GetPlayerViewport(int playerIndex) => GetNode<Viewport>($"/root/RootControl/Viewports/Player{playerIndex+1}_ViewportContainer/Player{playerIndex+1}_Viewport");
     public Camera2D GetPlayerCamera(int playerIndex) => (Camera2D)GetPlayerViewport(playerIndex).GetChild(0);
 
-    public CanvasLayer GetUICanvasLayer() => GetNode<CanvasLayer>("/root/RootControl/UI");
+    public CanvasLayer UICanvasLayer => GetNode<CanvasLayer>("/root/RootControl/UI");
 
     public Character GetPlayer(int playerIndex) => (Players.Count > playerIndex) ? Players[playerIndex] as Character : null;
     public Character GetNearestPlayer(Vector2 globalPosition) 
@@ -170,6 +174,12 @@ public class Game : Node2D
 
         return nearestPlayer;
 
+    }
+    
+    public void MarkRoundComplete()
+    {
+        BGM.Stop();
+        RoundComplete.Play();
     }
 
     public async void PlayerDied(int playerIndex)
@@ -234,5 +244,6 @@ public class Game : Node2D
         Scene<Node2D> roomScene = sceneArray[(int)(GD.Randi() % sceneArray.Length)];
         return await roomScene.InstanceAsync();
     }
+
 }
 

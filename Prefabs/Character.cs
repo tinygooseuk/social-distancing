@@ -448,7 +448,7 @@ public class Character : KinematicBody2D
         Sprite.BurstIntoPixels(body: this, overridePosition: position, overrideTransform: transform, suck: false);
     }
 
-    public void MarkLevelComplete()
+    public void MarkRoundComplete()
     {
         IsRoundComplete = true;
     }

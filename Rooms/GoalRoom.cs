@@ -32,12 +32,15 @@ public class GoalRoom : Room
         {
             WasTriggered = true;
 
+            // Tell game
+            Game.Instance.MarkRoundComplete();
+            
             // Teleport all chars in
             Array<Character> characters = new Array<Character>(GetTree().GetNodesInGroup(Groups.PLAYERS));
             foreach (Character character in characters)
             {
                 character.GlobalPosition = new Vector2(character.GlobalPosition.x, GoalDetector.GlobalPosition.y);
-                character.MarkLevelComplete();
+                character.MarkRoundComplete();
             }
 
             if (IsFirstRound)
