@@ -212,7 +212,7 @@ action = "hit_red_0"
 visibility_mode = 1
 
 [node name="Blue" type="TouchScreenButton" parent="TouchControls"]
-position = Vector2( 362.83, 160.445 )
+position = Vector2( 364, 162 )
 normal = ExtResource( 11 )
 pressed = ExtResource( 11 )
 shape = SubResource( 8 )
@@ -264,7 +264,6 @@ position = Vector2( 69.5603, 203.288 )
 texture = ExtResource( 14 )
 
 [node name="TitleCard" type="ColorRect" parent="."]
-visible = false
 material = SubResource( 2 )
 anchor_right = 1.0
 anchor_bottom = 1.0
