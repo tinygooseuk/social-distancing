@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=24 format=2]
 
 [ext_resource path="res://Scripts/AgainButton.cs" type="Script" id=1]
 [ext_resource path="res://Shaders/ScreenShader.shader" type="Shader" id=2]
@@ -7,9 +7,26 @@
 [ext_resource path="res://Shaders/ScreenTransition.shader" type="Shader" id=5]
 [ext_resource path="res://Fonts/FreePixel.ttf" type="DynamicFontData" id=6]
 [ext_resource path="res://Scripts/TitleCard.cs" type="Script" id=7]
+[ext_resource path="res://Textures/MobileUI/TouchRed.png" type="Texture" id=8]
+[ext_resource path="res://Textures/MobileUI/TouchJump.png" type="Texture" id=9]
+[ext_resource path="res://Textures/MobileUI/TouchYellow.png" type="Texture" id=10]
+[ext_resource path="res://Textures/MobileUI/TouchBlue.png" type="Texture" id=11]
+[ext_resource path="res://Textures/MobileUI/TouchUp.png" type="Texture" id=12]
+[ext_resource path="res://Textures/MobileUI/TouchLeft.png" type="Texture" id=13]
+[ext_resource path="res://Textures/MobileUI/TouchDown.png" type="Texture" id=14]
+[ext_resource path="res://Textures/MobileUI/TouchRight.png" type="Texture" id=15]
 
 [sub_resource type="ShaderMaterial" id=1]
 shader = ExtResource( 2 )
+
+[sub_resource type="CircleShape2D" id=8]
+radius = 22.0
+
+[sub_resource type="RectangleShape2D" id=9]
+extents = Vector2( 32, 32 )
+
+[sub_resource type="RectangleShape2D" id=10]
+extents = Vector2( 20, 20 )
 
 [sub_resource type="ShaderMaterial" id=2]
 shader = ExtResource( 5 )
@@ -70,6 +87,7 @@ material = SubResource( 1 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 rect_min_size = Vector2( 416, 240 )
+mouse_filter = 2
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -109,6 +127,7 @@ __meta__ = {
 [node name="DebugUI" type="Control" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
+mouse_filter = 2
 script = ExtResource( 4 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -159,10 +178,97 @@ margin_bottom = 96.0
 custom_fonts/font = ExtResource( 3 )
 text = "CNTRL: ?"
 
+[node name="TouchControls" type="Control" parent="."]
+modulate = Color( 1, 1, 1, 0.501961 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Jump" type="TouchScreenButton" parent="TouchControls"]
+position = Vector2( 334.545, 187.755 )
+normal = ExtResource( 9 )
+pressed = ExtResource( 9 )
+shape = SubResource( 8 )
+action = "jump_0"
+visibility_mode = 1
+
+[node name="Yellow" type="TouchScreenButton" parent="TouchControls"]
+position = Vector2( 334.057, 136.549 )
+normal = ExtResource( 10 )
+pressed = ExtResource( 10 )
+shape = SubResource( 8 )
+action = "hit_yellow_0"
+visibility_mode = 1
+
+[node name="Red" type="TouchScreenButton" parent="TouchControls"]
+position = Vector2( 304.797, 162.883 )
+normal = ExtResource( 8 )
+pressed = ExtResource( 8 )
+shape = SubResource( 8 )
+action = "hit_red_0"
+visibility_mode = 1
+
+[node name="Blue" type="TouchScreenButton" parent="TouchControls"]
+position = Vector2( 362.83, 160.445 )
+normal = ExtResource( 11 )
+pressed = ExtResource( 11 )
+shape = SubResource( 8 )
+action = "hit_blue_0"
+visibility_mode = 1
+
+[node name="Left" type="TouchScreenButton" parent="TouchControls"]
+position = Vector2( 0, 148 )
+shape = SubResource( 9 )
+passby_press = true
+action = "move_left_0"
+visibility_mode = 1
+
+[node name="Right" type="TouchScreenButton" parent="TouchControls"]
+position = Vector2( 76, 148 )
+shape = SubResource( 9 )
+passby_press = true
+action = "move_right_0"
+visibility_mode = 1
+
+[node name="Up" type="TouchScreenButton" parent="TouchControls"]
+position = Vector2( 49, 132 )
+shape = SubResource( 10 )
+passby_press = true
+action = "look_up_0"
+visibility_mode = 1
+
+[node name="Down" type="TouchScreenButton" parent="TouchControls"]
+position = Vector2( 49, 183 )
+shape = SubResource( 10 )
+passby_press = true
+action = "move_down_0"
+visibility_mode = 1
+
+[node name="LeftImage" type="Sprite" parent="TouchControls"]
+position = Vector2( 39.9893, 178.001 )
+texture = ExtResource( 13 )
+
+[node name="UpImage" type="Sprite" parent="TouchControls"]
+position = Vector2( 69.7622, 152.229 )
+texture = ExtResource( 12 )
+
+[node name="RightImage" type="Sprite" parent="TouchControls"]
+position = Vector2( 98.8061, 176.051 )
+texture = ExtResource( 15 )
+
+[node name="DownImage" type="Sprite" parent="TouchControls"]
+position = Vector2( 69.5603, 203.288 )
+texture = ExtResource( 14 )
+
 [node name="TitleCard" type="ColorRect" parent="."]
+visible = false
 material = SubResource( 2 )
 anchor_right = 1.0
 anchor_bottom = 1.0
+mouse_filter = 2
 script = ExtResource( 7 )
 __meta__ = {
 "_edit_use_anchors_": false

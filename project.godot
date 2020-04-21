@@ -23,6 +23,7 @@ run/main_scene="res://Scenes/MainMenu.tscn"
 window/size/width=416
 window/size/height=240
 window/size/fullscreen=true
+window/handheld/orientation="sensor_landscape"
 window/stretch/mode="viewport"
 window/stretch/aspect="keep"
 

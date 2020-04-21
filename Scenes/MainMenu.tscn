@@ -16,6 +16,7 @@ shader_param/progress = 0.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 rect_min_size = Vector2( 416, 240 )
+mouse_filter = 1
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -48,6 +49,8 @@ margin_right = 62.0
 margin_bottom = 112.0
 grow_horizontal = 2
 grow_vertical = 0
+focus_mode = 1
+mouse_filter = 2
 size_flags_vertical = 3
 theme = SubResource( 1 )
 custom_constants/separation = 0
@@ -116,6 +119,10 @@ flat = true
 material = SubResource( 2 )
 anchor_right = 1.0
 anchor_bottom = 1.0
+mouse_filter = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="TransitionTween" type="Tween" parent="Transition"]
 [connection signal="pressed" from="VBoxContainer/SinglePlayer" to="." method="Play" binds= [ 1 ]]
