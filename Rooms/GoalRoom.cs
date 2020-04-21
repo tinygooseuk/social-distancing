@@ -65,7 +65,7 @@ public class GoalRoom : Room
                 {
                     for (int i = 0; i < Global.NumberOfPlayers; i++)
                     {
-                        Input.StartJoyVibration(i, 1f, 1f, 0.5f);
+                        Game.Instance.GetPlayer(i).Vibrate(1f, 1f, 0.5f);
                     }
                 }
 

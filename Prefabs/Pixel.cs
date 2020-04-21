@@ -84,10 +84,9 @@ public class Pixel : RigidBody2D
 
                     if (!CustomSuckTarget.HasValue && Game.Instance.InputMethodManager.IsVibrationEnabled)
                     {
-                        Character nearestPlayer = Game.Instance.GetNearestPlayer(GlobalPosition);
-                        
                         // Vibrate
-                        Input.StartJoyVibration(nearestPlayer.PlayerIndex, 0.8f, 0.2f, 0.2f);
+                        Character nearestPlayer = Game.Instance.GetNearestPlayer(GlobalPosition);
+                        nearestPlayer.Vibrate(0.8f, 0.2f, 0.2f);
                     }
                     
                     QueueFree();

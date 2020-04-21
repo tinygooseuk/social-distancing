@@ -151,7 +151,7 @@ public class GachaReel : ScrollContainer
                 {
                     for (int i = 0; i < Global.NumberOfPlayers; i++)
                     {
-                        Input.StartJoyVibration(i, 0.8f, 0f, 0.15f);
+                        Game.Instance.GetPlayer(i).Vibrate(0.8f, 0f, 0.15f);
                     }
                 }
             }
@@ -172,7 +172,7 @@ public class GachaReel : ScrollContainer
         {
             for (int i = 0; i < Global.NumberOfPlayers; i++)
             {
-                Input.StartJoyVibration(i, 0.6f, 0.6f, 0.3f);
+                Game.Instance.GetPlayer(i).Vibrate(0.6f, 0.6f, 0.3f);
             }
         }
 

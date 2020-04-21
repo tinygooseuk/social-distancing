@@ -259,7 +259,7 @@ public class Character : KinematicBody2D
 
             if (Game.Instance.InputMethodManager.IsVibrationEnabled)
             {
-                Input.StartJoyVibration(PlayerIndex, weakShake, strongShake, 0.5f);
+                Vibrate(weakShake, strongShake, 0.5f);
             }
         }
         else
@@ -268,7 +268,7 @@ public class Character : KinematicBody2D
 
             if (IsCameraShaking && !IsRoundComplete)
             {
-                Input.StopJoyVibration(PlayerIndex);
+                StopVibration();
                 IsCameraShaking = false;
             }
         }
@@ -532,6 +532,28 @@ public class Character : KinematicBody2D
         {
             sound.PitchScale = 1f + ((float)PlayerIndex) / 16f;
         }
+    }
+
+    public void Vibrate(float weakMagnitude, float strongMagnitude, float duration = 0f)
+    {
+        Input.StartJoyVibration(PlayerIndex, weakMagnitude, strongMagnitude, duration);
+
+        if (OS.GetName() == "Android" || OS.GetName() == "iOS")
+        {
+            float magnitude = (weakMagnitude + strongMagnitude) / 2f;
+            
+            if (Mathf.Abs(duration) < 0.01f)
+            {
+                duration = 0.1f * magnitude;
+            }
+
+            Input.VibrateHandheld((int) (duration * magnitude * 1000f));
+        }
+    }
+
+    public void StopVibration()
+    {
+        Input.StopJoyVibration(PlayerIndex);
     }
     #endregion
 }
