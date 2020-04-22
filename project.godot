@@ -313,6 +313,8 @@ fast_forward={
 
 debugger_agent/port=55555
 debugger_agent/wait_timeout=30000
+export/aot/enabled=true
+export/aot/full_aot=true
 
 [physics]
 
