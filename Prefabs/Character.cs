@@ -153,7 +153,7 @@ public class Character : KinematicBody2D
         // Check for jump
         bool canMidairJump = NumAirJumpsRemaining > 0;
         bool canJumpOrDrop = (canMidairJump || IsGrounded) && LastJump > Mods.JumpDebounce;
-        bool canDrop = !IsRoundComplete;
+        bool canDrop = !IsRoundComplete && IsGrounded;
         bool wantsJump = Input.IsActionJustPressed($"jump_{PlayerIndex}");
         bool wantsDrop = Input.IsActionPressed($"move_down_{PlayerIndex}");
 
