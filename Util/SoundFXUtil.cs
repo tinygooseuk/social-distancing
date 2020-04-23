@@ -14,7 +14,7 @@ public static class SoundFXUtil
             useLocation = relativeTo.ToGlobal(useLocation);
         }
 
-        AudioStreamPlayer2D player = new AudioStreamPlayer2D
+        var player = new AudioStreamPlayer2D
         {
             Stream = await audioToPlay.LoadAsync(),
             Playing = true,

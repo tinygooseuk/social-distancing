@@ -1,0 +1,125 @@
+[gd_resource type="Resource" load_steps=16 format=2]
+
+[ext_resource path="res://Model/GachaPrizeList.cs" type="Script" id=1]
+[ext_resource path="res://Model/GachaPrize.cs" type="Script" id=2]
+
+[sub_resource type="Resource" id=1]
+script = ExtResource( 2 )
+Colour = 0
+Name = "Grippy Foot"
+Description = "Foot friction is increased."
+UnlockedBehaviourModfier = 2
+UnlockedShootBehaviour = 0
+TexturePath = "res://Textures/Gacha/BehaviourModifiers/GrippyFoot.png"
+
+[sub_resource type="Resource" id=2]
+script = ExtResource( 2 )
+Colour = 1
+Name = "Flea Jump"
+Description = "Jump height is increased."
+UnlockedBehaviourModfier = 4
+UnlockedShootBehaviour = 0
+TexturePath = "res://Textures/Gacha/BehaviourModifiers/JumpHigher.png"
+
+[sub_resource type="Resource" id=3]
+script = ExtResource( 2 )
+Colour = 1
+Name = "Potato Jump"
+Description = "Jump height is decreased."
+UnlockedBehaviourModfier = 5
+UnlockedShootBehaviour = 0
+TexturePath = "res://Textures/Gacha/BehaviourModifiers/JumpLower.png"
+
+[sub_resource type="Resource" id=4]
+script = ExtResource( 2 )
+Colour = 3
+Name = "Moon Gravity"
+Description = "Gravity is not as strong."
+UnlockedBehaviourModfier = 3
+UnlockedShootBehaviour = 0
+TexturePath = "res://Textures/Gacha/BehaviourModifiers/MoonGravity.png"
+
+[sub_resource type="Resource" id=5]
+script = ExtResource( 2 )
+Colour = 0
+Name = "Speedy Legs"
+Description = "You move faster."
+UnlockedBehaviourModfier = 7
+UnlockedShootBehaviour = 0
+TexturePath = "res://Textures/Gacha/BehaviourModifiers/MoveFaster.png"
+
+[sub_resource type="Resource" id=6]
+script = ExtResource( 2 )
+Colour = 0
+Name = "Slowpoke"
+Description = "You move slooower."
+UnlockedBehaviourModfier = 6
+UnlockedShootBehaviour = 0
+TexturePath = "res://Textures/Gacha/BehaviourModifiers/MoveSlower.png"
+
+[sub_resource type="Resource" id=7]
+script = ExtResource( 2 )
+Colour = 2
+Name = "Quick Shot"
+Description = "You attack faster."
+UnlockedBehaviourModfier = 8
+UnlockedShootBehaviour = 0
+TexturePath = "res://Textures/Gacha/BehaviourModifiers/ShootFaster.png"
+
+[sub_resource type="Resource" id=8]
+script = ExtResource( 2 )
+Colour = 2
+Name = "Careful Shot"
+Description = "You attack slooower."
+UnlockedBehaviourModfier = 9
+UnlockedShootBehaviour = 0
+TexturePath = "res://Textures/Gacha/BehaviourModifiers/ShootSlower.png"
+
+[sub_resource type="Resource" id=9]
+script = ExtResource( 2 )
+Colour = 0
+Name = "Bananaskin Foot"
+Description = "Foot friction is far decreased."
+UnlockedBehaviourModfier = 1
+UnlockedShootBehaviour = 0
+TexturePath = "res://Textures/Gacha/BehaviourModifiers/SlipperyFoot.png"
+
+[sub_resource type="Resource" id=10]
+script = ExtResource( 2 )
+Colour = 2
+Name = "Multi Shot"
+Description = "You attack in a circular pattern."
+UnlockedBehaviourModfier = 0
+UnlockedShootBehaviour = 2
+TexturePath = "res://Textures/Gacha/Shoot/MultiShoot.png"
+
+[sub_resource type="Resource" id=11]
+script = ExtResource( 2 )
+Colour = 2
+Name = "Single Shot"
+Description = "You attack using a single shot."
+UnlockedBehaviourModfier = 0
+UnlockedShootBehaviour = 1
+TexturePath = "res://Textures/Gacha/Shoot/DefaultShoot.png"
+
+[sub_resource type="Resource" id=12]
+script = ExtResource( 2 )
+Colour = 1
+Name = "Extra Jump"
+Description = "You can jump more in mid-air."
+UnlockedBehaviourModfier = 10
+UnlockedShootBehaviour = 0
+TexturePath = "res://Textures/Gacha/BehaviourModifiers/Unknown.png"
+
+[sub_resource type="Resource" id=13]
+script = ExtResource( 2 )
+Colour = 1
+Name = "Less Jump"
+Description = "You can't jump as much in mid-air."
+UnlockedBehaviourModfier = 11
+UnlockedShootBehaviour = 0
+TexturePath = "res://Textures/Gacha/BehaviourModifiers/Unknown.png"
+
+[resource]
+script = ExtResource( 1 )
+GachaPrizes = [ SubResource( 1 ), SubResource( 2 ), SubResource( 3 ), SubResource( 4 ), SubResource( 5 ), SubResource( 6 ), SubResource( 7 ), SubResource( 8 ), SubResource( 9 ), SubResource( 10 ), SubResource( 11 ), SubResource( 12 ), SubResource( 13 ) ]

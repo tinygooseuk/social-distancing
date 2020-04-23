@@ -4,6 +4,8 @@ using Godot;
 
 public enum BehaviourModifiersEnum
 {
+    None,
+
     SlippyFriction,
     GrippyFriction,
 
@@ -12,14 +14,14 @@ public enum BehaviourModifiersEnum
     HigherJumpHeight,
     LowerJumpHeight,
 
-    MoveFaster,
-    MoveSlower,
-
     BiggerScale,
     SmallerScale,
 
     ShootFaster,
     ShootSlower,
+    
+    AirJumpMore,
+    AirJumpLess,
 }
 
 public static class BehaviourModifiersFactory 
@@ -28,6 +30,9 @@ public static class BehaviourModifiersFactory
     {
         switch (behaviourModifier)
         {
+            case BehaviourModifiersEnum.None:
+                return null;
+
             case BehaviourModifiersEnum.SlippyFriction:
                 return new SlippyFrictionBehaviourModifier();
             case BehaviourModifiersEnum.GrippyFriction:
@@ -41,11 +46,6 @@ public static class BehaviourModifiersFactory
             case BehaviourModifiersEnum.LowerJumpHeight:
                 return new LowerJumpHeightBehaviourModifier();
 
-            case BehaviourModifiersEnum.MoveFaster:
-                return new MoveFasterBehaviourModifier();
-            case BehaviourModifiersEnum.MoveSlower:
-                return new MoveSlowerBehaviourModifier();
-
             case BehaviourModifiersEnum.BiggerScale:
                 return new BiggerScaleBehaviourModifier();
             case BehaviourModifiersEnum.SmallerScale:
@@ -55,10 +55,16 @@ public static class BehaviourModifiersFactory
                 return new ShootFasterBehaviourModifier();
             case BehaviourModifiersEnum.ShootSlower:
                 return new ShootSlowerBehaviourModifier();
+            
+            case BehaviourModifiersEnum.AirJumpMore:
+                return new AirJumpMoreBehaviourModifier();
+            
+            case BehaviourModifiersEnum.AirJumpLess:
+                return new AirJumpLessBehaviourModifier();
         }
 
         Type t = MethodBase.GetCurrentMethod().DeclaringType;
-        throw new InvalidOperationException($"Missing case in {t.Name}");
+        throw new InvalidOperationException($"Missing case in {t?.Name}");
     }
 
     public static IBehaviourModifier CreateRandom()

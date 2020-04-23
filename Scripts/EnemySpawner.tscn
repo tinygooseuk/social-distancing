@@ -1,10 +1,20 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Scripts/EnemySpawner.cs" type="Script" id=1]
 [ext_resource path="res://Prefabs/Enemy_Yellow.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Prefabs/Enemy_Blue.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Prefabs/Enemy_Red.tscn" type="PackedScene" id=4]
 
+[sub_resource type="RectangleShape2D" id=6]
+extents = Vector2( 344, 152 )
+
 [node name="EnemySpawner" type="Position2D"]
 script = ExtResource( 1 )
 EnemyScenes = [ ExtResource( 3 ), ExtResource( 4 ), ExtResource( 2 ) ]
+
+[node name="PlayerDetector" type="Area2D" parent="."]
+
+[node name="CollisionPolygon2D" type="CollisionShape2D" parent="PlayerDetector"]
+position = Vector2( 0, 152 )
+shape = SubResource( 6 )
+[connection signal="body_entered" from="PlayerDetector" to="." method="OnBodyEntered"]

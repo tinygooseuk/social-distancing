@@ -5,6 +5,6 @@ public class MoonGravityBehaviourModifier : IBehaviourModifier
 {
     public void Modify(Modifiables mods)
     {
-        mods.Gravity /= 2.0f;
+        mods.Gravity *= 0.8f;
     }
 }

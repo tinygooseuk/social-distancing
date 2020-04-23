@@ -4,6 +4,7 @@ using Godot;
 
 public enum ShootBehavioursEnum
 {
+    None,
     Default,
     OmniDirectional,
 }
@@ -14,6 +15,9 @@ public static class ShootBehavioursFactory
     {
         switch (behaviourModifier)
         {
+            case ShootBehavioursEnum.None:
+                return null;
+
             case ShootBehavioursEnum.Default:
                 return new DefaultShootBehaviour();
                 

@@ -25,20 +25,20 @@ region = Rect2( 16, 16, 16, 16 )
 
 [sub_resource type="SpriteFrames" id=5]
 animations = [ {
-"frames": [ SubResource( 1 ) ],
-"loop": true,
-"name": "Idle",
-"speed": 5.0
-}, {
 "frames": [ SubResource( 1 ), SubResource( 2 ), SubResource( 3 ), SubResource( 4 ) ],
 "loop": true,
 "name": "WalkRight",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 1 ) ],
+"loop": true,
+"name": "Idle",
 "speed": 5.0
 } ]
 
 [sub_resource type="CapsuleShape2D" id=6]
 radius = 7.89403
-height = 16.0556
+height = 13.0942
 
 [sub_resource type="Animation" id=7]
 length = 0.3

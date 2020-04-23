@@ -29,14 +29,15 @@ public class Character : KinematicBody2D
     [Subnode("Sounds/PlayerDeath")] private AudioStreamPlayer2D Sound_Death;
         
     // References
-    public Camera2D Camera;
+    private Camera2D Camera;
 
     // State
-    private float LastGrounded = 100.0f;
-    private float LastJump = 100.0f;
-    private float LastBullet = 100.0f;
+    private float LastGrounded = 100f;
+    private float LastJump = 100f;
+    private float LastBullet = 100f;
+    private int NumAirJumpsRemaining = 0;
     private EnemyColour LastBulletColour = EnemyColour.Red;
-    private float LastDied = 0.0f;
+    private float LastDied = 0f;
     private bool IsGrounded => LastGrounded < 0.2f;
 
     private bool ShouldRefireBullet = false;
@@ -45,26 +46,21 @@ public class Character : KinematicBody2D
     private Vector2 Velocity = Vector2.Zero;
     private bool IsDead = false;
     private bool IsRoundComplete = false;
+    public bool UpdateCamera = true;
     
     private bool IsPassingThrough = false;
     private bool IsInsideWall = false;
-    private float ForceFallTime = 0.0f;
+    private float ForceFallTime = 0f;
 
     // Camera state
     private Vector2 LerpedCameraOffset = Vector2.Zero;
 
+    private bool IsCameraShaking = false;
     private Vector2 CameraShakeMagnitude = Vector2.Zero;
     private Vector2 CameraShakeOffset = Vector2.Zero;
 
-    // Modifiables
-    public Modifiables Mods => GetModifiables();
+    private Modifiables Mods => GetModifiables();
     private Modifiables _CachedModifiables = null;
-
-    // Modifiers
-    private List<IBehaviourModifier> Modifiers = new List<IBehaviourModifier>();
-
-    // Behaviours
-    public IShootBehaviour ShootBehaviour = new DefaultShootBehaviour();
 
     #region Engine Callbacks
     public override void _Ready()
@@ -78,15 +74,8 @@ public class Character : KinematicBody2D
         ApplyPhysics(delta);
 
         // Update inside-ness
-        int insides = 0;
-        foreach (var overlapObject in InsideWallDetector.GetOverlappingBodies())
-        {
-            if (overlapObject is TileMap)
-            {
-                insides++;
-            }
-        }
-        IsInsideWall = insides > 0 || ForceFallTime > 0.0f;
+        int insides = InsideWallDetector.GetOverlappingBodies().OfType<TileMap>().Count();
+        IsInsideWall = insides > 0 || ForceFallTime > 0f;
     }
 
     public override void _Process(float delta)
@@ -96,36 +85,22 @@ public class Character : KinematicBody2D
         ProcessCameraInput(delta);
 
         // Camera shake
-        if (CameraShakeMagnitude.Length() > 0.001f)
-        {
-            CameraShakeOffset = new Vector2 
-            {
-                x = (float)GD.RandRange(-CameraShakeMagnitude.x, +CameraShakeMagnitude.x), 
-                y = (float)GD.RandRange(-CameraShakeMagnitude.y, +CameraShakeMagnitude.y), 
-            };
-            CameraShakeMagnitude *= 0.9f;
+        ProcessCameraShake();
 
-            float weakShake = Mathf.Clamp(Mathf.Abs(CameraShakeMagnitude.y / 2.0f), 0.01f, 1.0f);
-            float strongShake = Mathf.Clamp(Mathf.Abs(CameraShakeMagnitude.x / 2.0f), 0.01f, 1.0f);
-
-            if (Game.Instance.InputMethodManager.InputMethod == InputMethodManager.InputMethodEnum.Controller)
-            {
-                Input.StartJoyVibration(PlayerIndex, weakShake, strongShake, 0.5f);
-            }
-        }
-        else
-        {
-            CameraShakeOffset = Vector2.Zero;            
-            Input.StopJoyVibration(PlayerIndex);            
-        }
-
+        // Cancel pass-thru
         bool isCancellableSpeed = Velocity.y >= 0;// || Mathf.Abs(Velocity.x) > Mathf.Abs(Velocity.y);
         if (IsPassingThrough && isCancellableSpeed && !IsInsideWall)
         {
             IsPassingThrough = false;
             SetCollisionMaskBit(6, true);
         }
-
+        
+        // Re-fill midair jumps    
+        if (IsGrounded)
+        {
+            NumAirJumpsRemaining = Mods.NumAirJumps;
+        }
+        
         // Death timer
         if (IsDead)
         {
@@ -133,7 +108,7 @@ public class Character : KinematicBody2D
         }
 
         // Graphics
-        if (Mathf.Abs(Velocity.x) < 1.0f)
+        if (Mathf.Abs(Velocity.x) < 1f)
         {
             Sprite.PlayIfNotAlready("Idle");
         }
@@ -142,12 +117,14 @@ public class Character : KinematicBody2D
             Sprite.PlayIfNotAlready("WalkRight");
         }
 
-        Sprite.Scale = new Vector2(2.0f * (IsFacingRight ? 1 : -1), Sprite.Scale.y);
+        Sprite.Scale = new Vector2(2f * (IsFacingRight ? 1 : -1), Sprite.Scale.y);
         
         // Update score
-        float score = -(Position.y - 207.0f);
+        float score = -(Position.y - 207f);
         Game.Instance.BaseScore = (int)Mathf.Max(score, Game.Instance.BaseScore);
     }
+
+  
     #endregion
 
     #region Inputs
@@ -174,8 +151,9 @@ public class Character : KinematicBody2D
         }
 
         // Check for jump
-        bool canJumpOrDrop = IsGrounded && LastJump > Mods.JumpDebounce;
-        bool canDrop = !IsRoundComplete;
+        bool canMidairJump = NumAirJumpsRemaining > 0;
+        bool canJumpOrDrop = (canMidairJump || IsGrounded) && LastJump > Mods.JumpDebounce;
+        bool canDrop = !IsRoundComplete && IsGrounded;
         bool wantsJump = Input.IsActionJustPressed($"jump_{PlayerIndex}");
         bool wantsDrop = Input.IsActionPressed($"move_down_{PlayerIndex}");
 
@@ -201,7 +179,7 @@ public class Character : KinematicBody2D
         LastJump += delta;        
 
         // Force falling if required
-        if (ForceFallTime > 0.0f)
+        if (ForceFallTime > 0f)
         {
             ForceFallTime -= delta;
         }
@@ -236,6 +214,8 @@ public class Character : KinematicBody2D
 
     private void ProcessCameraInput(float delta)
     {
+        if (!IsInstanceValid(Camera)) return;
+        
         if (!IsDead)
         {
             Vector2 desiredCameraOffset = new Vector2
@@ -246,18 +226,51 @@ public class Character : KinematicBody2D
 
             if (IsRoundComplete)
             {
-                desiredCameraOffset.y = (Global.NumberOfPlayers == 2) ? +1.0f : -0.69f; // arbitrary-ish
+                desiredCameraOffset.y = (Global.NumberOfPlayers == 2) ? +1f : -0.69f; // arbitrary-ish
             }
 
-            LerpedCameraOffset.x = 0.0f;// (Global.NumberOfPlayers == 1) ? 0.0f : Mathf.Lerp(LerpedCameraOffset.x, desiredCameraOffset.x * 70.0f, 0.1f);
-            LerpedCameraOffset.y = Mathf.Lerp(LerpedCameraOffset.y, desiredCameraOffset.y * 70.0f, 0.1f);
+            LerpedCameraOffset.x = 0f;// (Global.NumberOfPlayers == 1) ? 0f : Mathf.Lerp(LerpedCameraOffset.x, desiredCameraOffset.x * 70f, 0.1f);
+            LerpedCameraOffset.y = Mathf.Lerp(LerpedCameraOffset.y, desiredCameraOffset.y * 70f, 0.1f);
         } 
 
-        if (!IsDead || LastDied > 1.0f)
+        if (UpdateCamera && (!IsDead || LastDied > 1f))
         {
-            float rootCameraOffsetY = Mathf.Clamp(Position.y * 0.2f, -40.0f, 0.0f);
+            float rootCameraOffsetY = Mathf.Clamp(Position.y * 0.2f, -40f, 0f);
             Camera.Offset = new Vector2(LerpedCameraOffset.x, rootCameraOffsetY + LerpedCameraOffset.y) + CameraShakeOffset;                
             Camera.GlobalPosition = GlobalPosition;
+        }
+    }
+    
+    private void ProcessCameraShake()
+    {
+        if (CameraShakeMagnitude.Length() > 0.001f)
+        {
+            IsCameraShaking = true;
+
+            CameraShakeOffset = new Vector2
+            {
+                x = (float) GD.RandRange(-CameraShakeMagnitude.x, +CameraShakeMagnitude.x),
+                y = (float) GD.RandRange(-CameraShakeMagnitude.y, +CameraShakeMagnitude.y),
+            };
+            CameraShakeMagnitude *= 0.9f;
+
+            float weakShake = Mathf.Clamp(Mathf.Abs(CameraShakeMagnitude.y / 2f), 0.01f, 1f);
+            float strongShake = Mathf.Clamp(Mathf.Abs(CameraShakeMagnitude.x / 2f), 0.01f, 1f);
+
+            if (Game.Instance.InputMethodManager.IsVibrationEnabled)
+            {
+                Vibrate(weakShake, strongShake, 0.5f);
+            }
+        }
+        else
+        {
+            CameraShakeOffset = Vector2.Zero;
+
+            if (IsCameraShaking && !IsRoundComplete)
+            {
+                StopVibration();
+                IsCameraShaking = false;
+            }
         }
     }
 
@@ -271,9 +284,9 @@ public class Character : KinematicBody2D
 
         ShouldRefireBullet = false;
         LastBulletColour = colour;
-        LastBullet = 0.0f;
+        LastBullet = 0f;
 
-        ShootBehaviour?.Shoot(this, colour);     
+        Global.ShootBehaviours[PlayerIndex]?.Shoot(this, colour);     
     }
 
     private async void Jump()
@@ -284,7 +297,7 @@ public class Character : KinematicBody2D
         }
 
         // Set state
-        LastJump = 0.0f;
+        LastJump = 0f;
 
         // Play animation
         AnimationPlayer.Play("Jump");
@@ -295,33 +308,49 @@ public class Character : KinematicBody2D
         IsPassingThrough = true;
         SetCollisionMaskBit(6, false);
 
-        // Add impulse
-        Velocity.y = -Mods.JumpImpulse;
+        if (IsGrounded)
+        {
+            // Add impulse
+            Velocity.y = -Mods.JumpImpulse;
 
-        // Play sound
-        Sound_Jump.Play();
+            // Play sound
+            Sound_Jump.PitchScale = 1f;
+            Sound_Jump.Play();
+        }
+        else
+        {
+            // Add impulse
+            Velocity.y = -Mods.JumpImpulse * 0.66f;
+            
+            // Remove a remaining jump
+            NumAirJumpsRemaining--;
+
+            // Play sound
+            Sound_Jump.PitchScale = 1.3f;
+            Sound_Jump.Play();
+        }
 
         // Cancel firing
         ShouldRefireBullet = false;
 
         // Spawn particles
-        Scene<Particles2D> jumpParticlesScene = R.Particles.JumpParticles;
+        Scene<Particles2D> jumpParticlesScene = R.Particles.JUMP_PARTICLES;
 
         Particles2D jumpParticles = jumpParticlesScene.Instance();
-        jumpParticles.Position = Position + new Vector2(0.0f, 16.0f);
+        jumpParticles.Position = Position + new Vector2(0f, 16f);
         GetParent().AddChild(jumpParticles);    
     }
 
     private void DropDown()
     {
         // Set state
-        LastJump = 0.0f;
+        LastJump = 0f;
 
         IsPassingThrough = true;
         SetCollisionMaskBit(6, false);
 
         // Add impulse
-        Velocity.y = +5.0f;
+        Velocity.y = +5f;
 
         // Play animation
         AnimationPlayer.Play("Jump");    
@@ -337,10 +366,10 @@ public class Character : KinematicBody2D
     #region Physics
     public void SetVelocityY(float newVelocityY)
     {
-        if (newVelocityY < 0.0f)
+        if (newVelocityY < 0f)
         {
             // Sorta simulate jump
-            LastJump = 0.0f;
+            LastJump = 0f;
 
             IsPassingThrough = true;
             SetCollisionMaskBit(6, false);
@@ -353,14 +382,14 @@ public class Character : KinematicBody2D
         if (IsDead)
         {
             Velocity.y += Mods.Gravity;
-            Velocity.x = 0.0f;
+            Velocity.x = 0f;
 
             Velocity = MoveAndSlide(Velocity, upDirection: Vector2.Up);
             return;
         }
 
         Velocity.y += Mods.Gravity;
-        Velocity.x *= (1.0f - Mods.Friction);
+        Velocity.x *= (1f - Mods.Friction);
 
         Velocity = MoveAndSlide(Velocity, upDirection: Vector2.Up);
 
@@ -372,7 +401,7 @@ public class Character : KinematicBody2D
             {
                 AnimationPlayer.Play("Land");
             }
-            LastGrounded = 0.0f;        
+            LastGrounded = 0f;        
         }     
     }
     #endregion
@@ -398,8 +427,19 @@ public class Character : KinematicBody2D
         CallDeferred(nameof(BurstIntoPixels), Position, deathTransform);
         Game.Instance.PlayerDied(PlayerIndex);
        
+        // Zoom in 
+        Vector2 zoomIn = new Vector2(1f / 2.5f, 1f / 2.5f);
+
+        Tween zoomTween = new Tween();
+        zoomTween.InterpolateMethod(Engine.Singleton, "set_time_scale", 1f, 0.35f, 0.1f, Tween.TransitionType.Circ, Tween.EaseType.Out);
+        zoomTween.InterpolateProperty(Camera, "zoom", Vector2.One, zoomIn, 0.3f, Tween.TransitionType.Circ, Tween.EaseType.Out);
+
+        zoomTween.InterpolateProperty(Camera, "zoom", zoomIn, Vector2.One, 0.3f, Tween.TransitionType.Circ, Tween.EaseType.In, delay: 1.5f);
+        zoomTween.InterpolateMethod(Engine.Singleton, "set_time_scale", 0.1f, 1f, 0.01f, Tween.TransitionType.Circ, Tween.EaseType.In, delay: 1.5f);
+        zoomTween.FireAndForget(this);
+
         // MASSIVE camera shake
-        ShakeCamera(new Vector2(250.0f, 250.0f));
+        //ShakeCamera(new Vector2(250f, 250f));
     }
 
     private void BurstIntoPixels(Vector2 position, Transform2D transform)
@@ -408,7 +448,7 @@ public class Character : KinematicBody2D
         Sprite.BurstIntoPixels(body: this, overridePosition: position, overrideTransform: transform, suck: false);
     }
 
-    public void MarkLevelComplete()
+    public void MarkRoundComplete()
     {
         IsRoundComplete = true;
     }
@@ -427,7 +467,7 @@ public class Character : KinematicBody2D
         if (_CachedModifiables != null) return _CachedModifiables;
 
         Modifiables mods = new Modifiables();
-        foreach (IBehaviourModifier modifier in Modifiers)
+        foreach (IBehaviourModifier modifier in Global.BehaviourModifiers[PlayerIndex])
         {
             modifier.Modify(mods);
         }
@@ -441,17 +481,34 @@ public class Character : KinematicBody2D
     private void ApplyModifiers()
     {
         Scale = new Vector2(Mods.CharacterScale, Mods.CharacterScale);
+        NumAirJumpsRemaining = Mods.NumAirJumps;
     }
 
-    public void AddModifier(IBehaviourModifier mod)
+    private void AddModifier(IBehaviourModifier mod)
     {
         _CachedModifiables = null;
-        Modifiers.Add(mod);
+        Global.BehaviourModifiers[PlayerIndex].Add(mod);
     }
     public void AddModifier<T>() where T : IBehaviourModifier, new() => AddModifier(new T());
     #endregion
 
     #region Misc
+    public Room GetCurrentRoom()
+    {
+        foreach (Node gameChild in Game.Instance.GetChildren())
+        {
+            if (gameChild is Room room)
+            {
+                Rect2 roomRect = new Rect2(room.GlobalPosition, new Vector2(Const.SCREEN_WIDTH, Const.SCREEN_HEIGHT));
+                if (roomRect.HasPoint(GlobalPosition))
+                {
+                    return room;
+                }
+            }
+        }
+
+        return null;
+    }
     private void UpdatePlayerIndex()
     {
         // Set collision layer based on player index
@@ -473,8 +530,30 @@ public class Character : KinematicBody2D
         // Update all pitches
         foreach (AudioStreamPlayer2D sound in GetNode("Sounds").GetChildren())
         {
-            sound.PitchScale = 1.0f + ((float)PlayerIndex) / 16.0f;
+            sound.PitchScale = 1f + ((float)PlayerIndex) / 16f;
         }
+    }
+
+    public void Vibrate(float weakMagnitude, float strongMagnitude, float duration = 0f)
+    {
+        Input.StartJoyVibration(PlayerIndex, weakMagnitude, strongMagnitude, duration);
+
+        if (OS.GetName() == "Android" || OS.GetName() == "iOS")
+        {
+            float magnitude = (weakMagnitude + strongMagnitude) / 2f;
+            
+            if (Mathf.Abs(duration) < 0.01f)
+            {
+                duration = 0.1f * magnitude;
+            }
+
+            Input.VibrateHandheld((int) (duration * magnitude * 1000f));
+        }
+    }
+
+    public void StopVibration()
+    {
+        Input.StopJoyVibration(PlayerIndex);
     }
     #endregion
 }

@@ -3,20 +3,26 @@ using System;
 
 public class Pixel : RigidBody2D
 {
-    private float Age = 0.0f;
-    private float Lifetime = 0.0f;
-
-    public float LifetimeMultiplier = 1.0f;
-
+    // Consts
     private const float LIFETIME = 1.5f;
     private const float LIFETIME_RANDOM = 0.25f;
 
-    private const float SUCK_COLLECT_DISTANCE = 20.0f;
-    private const float SUCK_CLOSE_DISTANCE = 50.0f;
+    private const float SUCK_COLLECT_DISTANCE = 20f;
+    private const float SUCK_CLOSE_DISTANCE = 50f;
 
-    private bool IsSucking = false;
+    // Public state
+    public float LifetimeMultiplier = 1f;
+    public Vector2? CustomSuckTarget;
     public bool CanSuck = true;
 
+    // State
+    private float Age = 0f;
+    private float Lifetime = 0f;
+    
+    private bool IsSucking = false;
+    private bool IsSettled = false;
+
+    // Subnodes
     public Sprite PixelSprite => GetNode<Sprite>("Sprite");
     public CollisionShape2D CollisionShape => GetNode<CollisionShape2D>("CollisionShape2D");
 
@@ -26,38 +32,75 @@ public class Pixel : RigidBody2D
 
         if (!CanSuck)
         {
-            Lifetime *= 2.0f;
+            Lifetime *= 2f;
         }
     }
 
     public override void _IntegrateForces(Physics2DDirectBodyState state)
     {
+        if (IsSettled) 
+        {
+            state.LinearVelocity = Vector2.Zero;
+            state.AngularVelocity *= 0.99f;
+
+            GlobalPosition = CustomSuckTarget.GetValueOrDefault();
+            return;
+        }
+
         if (IsSucking && CanSuck)
         {
-            Character nearestPlayer = Game.Instance.GetNearestPlayer(GlobalPosition);
-            if (IsInstanceValid(nearestPlayer))
-            {
-                float speed = state.LinearVelocity.Length();
-                Vector2 towardsPlayer = (nearestPlayer.GlobalPosition - GlobalPosition);
+            Vector2 target = Vector2.Zero;
+            bool mustSettle = false;
 
-                float distance = towardsPlayer.Length();
-                if (distance < SUCK_COLLECT_DISTANCE)
+            if (CustomSuckTarget.HasValue)
+            {
+                target = CustomSuckTarget.GetValueOrDefault();
+                mustSettle = true;
+            } 
+            else 
+            {
+                Character nearestPlayer = Game.Instance.GetNearestPlayer(GlobalPosition);
+                if (IsInstanceValid(nearestPlayer))
                 {
-                    Asset<AudioStream> collectSound = R.Sounds.CollectPixel;
+                    target = nearestPlayer.GlobalPosition;
+                }
+            }
+
+            float speed = state.LinearVelocity.Length();
+            Vector2 towardsTarget = (target - GlobalPosition);
+
+            float distance = towardsTarget.Length();
+            if (distance < SUCK_COLLECT_DISTANCE)
+            {
+                if (mustSettle)
+                {
+                    GlobalPosition = target;
+                    IsSettled = true;
+                } 
+                else 
+                {
+                    Asset<AudioStream> collectSound = R.Sounds.COLLECT_PIXEL;
                     GetTree().PlaySound2D(collectSound, relativeTo: this);
 
+                    if (!CustomSuckTarget.HasValue && Game.Instance.InputMethodManager.IsVibrationEnabled)
+                    {
+                        // Vibrate
+                        Character nearestPlayer = Game.Instance.GetNearestPlayer(GlobalPosition);
+                        nearestPlayer.Vibrate(0.8f, 0.2f, 0.2f);
+                    }
+                    
                     QueueFree();
-                } 
-                else if (distance < SUCK_CLOSE_DISTANCE)
-                {
-                    float newAlpha = Mathf.InverseLerp(SUCK_COLLECT_DISTANCE, SUCK_CLOSE_DISTANCE, distance);
-                    //Modulate = new Color(Modulate.r, Modulate.g, Modulate.b, newAlpha);
-                    Scale = new Vector2(newAlpha, newAlpha);
                 }
-
-                Vector2 targetVelocity = towardsPlayer.Normalized() * (speed + 10.0f);
-                state.LinearVelocity = targetVelocity.Clamped(500.0f);
+            } 
+            else if (distance < SUCK_CLOSE_DISTANCE)
+            {
+                float newAlpha = Mathf.InverseLerp(SUCK_COLLECT_DISTANCE, SUCK_CLOSE_DISTANCE, distance);
+                //Modulate = new Color(Modulate.r, Modulate.g, Modulate.b, newAlpha);
+                Scale = new Vector2(newAlpha, newAlpha);
             }
+
+            Vector2 targetVelocity = towardsTarget.Normalized() * (speed + 10f);
+            state.LinearVelocity = targetVelocity.Clamped(500f);
         }
     }
 
@@ -68,7 +111,7 @@ public class Pixel : RigidBody2D
         // no suck? fade out!
         if (!CanSuck)
         {
-            Modulate = new Color(Modulate.r, Modulate.g, Modulate.b, 1.0f - (Age / Lifetime));
+            Modulate = new Color(Modulate.r, Modulate.g, Modulate.b, 1f - (Age / Lifetime));
         }
 
         if (Age > Lifetime)
@@ -78,7 +121,7 @@ public class Pixel : RigidBody2D
                 if (!IsSucking)
                 {
                     CollisionMask = 0x00000000;
-                    GravityScale = 0.0f;
+                    GravityScale = 0f;
                     
                     IsSucking = true;             
                 }            
@@ -88,5 +131,19 @@ public class Pixel : RigidBody2D
                 QueueFree();
             }
         }
+    }
+
+    public async void SuckUpAndOut(float yChange = -16f, float delay = 0f)
+    {
+        Tween tweener = new Tween();
+        AddChild(tweener);
+
+        tweener.InterpolateProperty(this, "modulate:a", null, 0f, 0.4f, Tween.TransitionType.Expo, Tween.EaseType.Out, delay);
+        tweener.InterpolateProperty(PixelSprite, "global_position:y", null, GlobalPosition.y + yChange, 0.5f, Tween.TransitionType.Expo, Tween.EaseType.Out, delay);
+        tweener.Start();
+
+        // Wait for tween finish
+        await ToSignal(tweener, "tween_all_completed");
+        QueueFree();
     }
 }

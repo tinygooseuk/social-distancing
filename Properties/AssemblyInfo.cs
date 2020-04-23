@@ -6,9 +6,9 @@ using System.Reflection;
 [assembly: AssemblyTitle("Social Distancing")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("TinyGoose")]
 [assembly: AssemblyProduct("")]
-[assembly: AssemblyCopyright("")]
+[assembly: AssemblyCopyright("(c) 2020 TinyGoose Ltd., All Rights Reserved.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

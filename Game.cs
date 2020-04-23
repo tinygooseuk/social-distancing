@@ -13,14 +13,18 @@ public class Game : Node2D
     [Export] private int MaxLevels = 9;
    
     // Subnodes
+    [Subnode] private AudioStreamPlayer BGM;
+    [Subnode] private AudioStreamPlayer RoundComplete;
+
     //TODO: try subnodes again?
     private Node2D GameArea;
-    public Label TemplateLabel;
-    public Label ScoreLabel;
-    public Button AgainButton;
+    private Label TemplateLabel;
+    private Label ScoreLabel;
+    private Button AgainButton;
+    public TitleCard TitleCard;
     [Subnode] public InputMethodManager InputMethodManager { get; private set; }
 
-    private Godot.Collections.Array Players = new Godot.Collections.Array();
+    private readonly Godot.Collections.Array Players = new Godot.Collections.Array();
 
     // Enums
     public enum Difficulty { Easy, Medium, Hard, Neutral };
@@ -34,11 +38,13 @@ public class Game : Node2D
 
     public override async void _Ready()
     {
+        base._Ready();
+        
         this.FindSubnodes();
 
+        // Seed
+        Engine.TimeScale = 1f;
         Instance = this;
-        GD.Seed(OS.GetSystemTimeMsecs());
-        GD.Randomize();
 
         // Find nodes
         Viewport mainViewport = RootViewport;
@@ -48,14 +54,15 @@ public class Game : Node2D
             TemplateLabel = GameArea.GetNode<Label>("TemplateLabel");
         }
 
-        CanvasLayer uiLayer = GetUICanvasLayer();
+        CanvasLayer uiLayer = UICanvasLayer;
         {
             ScoreLabel = uiLayer.GetNode<Label>("BG/Score");
-            AgainButton = uiLayer.GetNode<Button>("BG/AgainButton");        
+            AgainButton = uiLayer.GetNode<Button>("BG/AgainButton");    
+            TitleCard = uiLayer.GetNode<TitleCard>("TitleCard");    
         }
 
         // Generate world
-        bool areViewportsScaledDown = GetPlayerCamera(0).Zoom.x > 1.0f;
+        bool areViewportsScaledDown = GetPlayerCamera(0).Zoom.x > 1f;
         bool isFirstRound = Global.RoundNumber == 0;
         int maxLevels = isFirstRound ? 1 : MaxLevels;
 
@@ -71,10 +78,10 @@ public class Game : Node2D
             room.Position = new Vector2(-Const.SCREEN_HALF_WIDTH, level * -Const.SCREEN_HEIGHT);
             GameArea.AddChild(room);
 
-            float labelScale = areViewportsScaledDown ? 1.75f : 1.0f;
+            float labelScale = areViewportsScaledDown ? 1.75f : 1f;
 
             Label roomLabel = (Label)TemplateLabel.Duplicate();
-            roomLabel.RectPosition = new Vector2(-Const.SCREEN_HALF_WIDTH + 20.0f, level * -Const.SCREEN_HEIGHT);
+            roomLabel.RectPosition = new Vector2(-Const.SCREEN_HALF_WIDTH + 20f, level * -Const.SCREEN_HEIGHT);
             roomLabel.Text = $"Level {level+1}";
             roomLabel.Visible = true;
             roomLabel.RectScale =  new Vector2(labelScale, labelScale);
@@ -83,7 +90,7 @@ public class Game : Node2D
 
         // Create goal room
         {
-            Scene<Node2D> goalRoomScene = R.Rooms.GoalRoom;
+            Scene<Node2D> goalRoomScene = R.Rooms.GOAL_ROOM;
 
             Node2D room = await goalRoomScene.InstanceAsync();
             room.Position = new Vector2(-Const.SCREEN_HALF_WIDTH, maxLevels * -Const.SCREEN_HEIGHT);
@@ -91,8 +98,8 @@ public class Game : Node2D
         }
          
         // Create players
-        Scene<Character> characterScene = R.Prefabs.Character;
-        const float PLAYER_WIDTH = 20.0f;
+        Scene<Character> characterScene = R.Prefabs.CHARACTER;
+        const float PLAYER_WIDTH = 20f;
         float totalPlayerWidth = PLAYER_WIDTH * Global.NumberOfPlayers;
 
         for (int playerIndex = 0; playerIndex < Global.NumberOfPlayers; playerIndex++)
@@ -102,7 +109,7 @@ public class Game : Node2D
             player.PlayerIndex = playerIndex;
             player.Position = new Vector2
             {
-                x = (-totalPlayerWidth / 2.0f) + playerIndex * PLAYER_WIDTH,
+                x = (-totalPlayerWidth / 2f) + playerIndex * PLAYER_WIDTH,
                 y = Const.SCREEN_HALF_WIDTH
             };
 
@@ -127,7 +134,7 @@ public class Game : Node2D
             Character c = GetPlayer(playerIndex);
             if (Players.Count > playerIndex && IsInstanceValid(c))
             {
-                newLevel = Mathf.FloorToInt(1.0f + c.Position.y / -Const.SCREEN_HEIGHT);
+                newLevel = Mathf.FloorToInt(1f + c.Position.y / -Const.SCREEN_HEIGHT);
             }        
         }
 
@@ -137,19 +144,19 @@ public class Game : Node2D
         }
 
         // Update score label
-        ScoreLabel.Text = $"Score: {TotalScore}";
+        ScoreLabel.Text = $"Score: {Global.TotalScore + TotalScore:d8}";
     }
 
     public Viewport RootViewport => GetPlayerViewport(0);
     public Viewport GetPlayerViewport(int playerIndex) => GetNode<Viewport>($"/root/RootControl/Viewports/Player{playerIndex+1}_ViewportContainer/Player{playerIndex+1}_Viewport");
     public Camera2D GetPlayerCamera(int playerIndex) => (Camera2D)GetPlayerViewport(playerIndex).GetChild(0);
 
-    public CanvasLayer GetUICanvasLayer() => GetNode<CanvasLayer>("/root/RootControl/UI");
+    public CanvasLayer UICanvasLayer => GetNode<CanvasLayer>("/root/RootControl/UI");
 
     public Character GetPlayer(int playerIndex) => (Players.Count > playerIndex) ? Players[playerIndex] as Character : null;
     public Character GetNearestPlayer(Vector2 globalPosition) 
     {
-        float nearestSqrDistance = 1000000000.0f;
+        float nearestSqrDistance = 1000000000f;
         Character nearestPlayer = null;
 
         for (int playerIndex = 0; playerIndex < Global.NumberOfPlayers; playerIndex++)
@@ -168,17 +175,26 @@ public class Game : Node2D
         return nearestPlayer;
 
     }
+    
+    public void MarkRoundComplete()
+    {
+        BGM.Stop();
+        RoundComplete.Play();
+    }
 
-    public void PlayerDied(int playerIndex)
+    public async void PlayerDied(int playerIndex)
     {
         //TODO: not in multiplayer?
         Character c = GetPlayer(playerIndex);
         if (IsInstanceValid(c))
         {
-            c.Position = new Vector2(-Const.SCREEN_HALF_WIDTH + 40.0f, 480.0f);
-            c.RotationDegrees = 90.0f;
+            c.Position = new Vector2(-Const.SCREEN_HALF_WIDTH + 40f, 480f);
+            c.RotationDegrees = 90f;
         }
         
+        // Wait 2s
+        await ToSignal(GetTree().CreateTimer(2f), "timeout");
+
         AgainButton.Visible = true;
         AgainButton.GrabFocus();
     }
@@ -211,20 +227,23 @@ public class Game : Node2D
         return DifficultyCurve.Interpolate(progression);
     }
 
-    private async Task<Node2D> InstanceRandomRoomAsync(Difficulty d)
+    private static async Task<Node2D> InstanceRandomRoomAsync(Difficulty d)
     {
         string[] sceneArray = null;
 
         switch (d)
         {
-            case Difficulty.Easy: sceneArray = R.Rooms.EasyRooms; break;
-            case Difficulty.Medium: sceneArray = R.Rooms.MediumRooms; break;
-            case Difficulty.Hard: sceneArray = R.Rooms.HardRooms; break;            
-            case Difficulty.Neutral: sceneArray = R.Rooms.NeutralRooms; break;       
+            case Difficulty.Easy: sceneArray = R.Rooms.EASY_ROOMS; break;
+            case Difficulty.Medium: sceneArray = R.Rooms.MEDIUM_ROOMS; break;
+            case Difficulty.Hard: sceneArray = R.Rooms.HARD_ROOMS; break;            
+            case Difficulty.Neutral: sceneArray = R.Rooms.NEUTRAL_ROOMS; break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(d), d, null);
         }
 
         Scene<Node2D> roomScene = sceneArray[(int)(GD.Randi() % sceneArray.Length)];
         return await roomScene.InstanceAsync();
     }
+
 }
 

@@ -6,6 +6,7 @@ public enum EnemyColour
     Blue, 
     Yellow,
     Red,
+    Green
 }
 
 public static class EnemyColourUtils
@@ -17,8 +18,9 @@ public static class EnemyColourUtils
             case EnemyColour.Red: return Colors.Red;
             case EnemyColour.Yellow: return Colors.Yellow;
             case EnemyColour.Blue: return Colors.Blue;
+            case EnemyColour.Green: return Colors.Green;
+            default:
+                return Colors.Red;
         }
-
-        return Colors.Red;
     }
 }

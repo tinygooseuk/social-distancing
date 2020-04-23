@@ -10,10 +10,11 @@ public class InputMethodManager : Node
         Controller,
     };
     public InputMethodEnum InputMethod { get; private set; } = InputMethodEnum.Unknown;
-
+    public bool IsVibrationEnabled => InputMethod == InputMethodEnum.Controller;
+    
     public override void _Ready()
     {
-        Timer t = new Timer 
+        var t = new Timer 
         {
             WaitTime = 0.5f,
             Autostart = true,

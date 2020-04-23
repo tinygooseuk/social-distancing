@@ -12,11 +12,12 @@ public class Bullet : KinematicBody2D
     public int FiredByPlayerIndex = 0;
 
     public Vector2 Direction = Vector2.Zero;
-    public float Speed = 400.0f;
+    private const float SPEED = 400f;
 
     public EnemyColour Colour = EnemyColour.Red;
     
     public bool DisableRetry = false;
+    public bool IsSilent = false;
     private bool FirstFrame = true;
     
     
@@ -28,7 +29,7 @@ public class Bullet : KinematicBody2D
         AnimatedSprite.Modulate = Colour.ToColor();
 
         // Tween up the size
-        IntroTween.InterpolateProperty(AnimatedSprite, "scale", null, new Vector2(2.0f, 2.0f), 0.1f, Tween.TransitionType.Cubic, Tween.EaseType.Out);
+        IntroTween.InterpolateProperty(AnimatedSprite, "scale", null, new Vector2(2f, 2f), 0.1f, Tween.TransitionType.Cubic, Tween.EaseType.Out);
         IntroTween.Start();
 
         // Don't collide with current char
@@ -41,7 +42,7 @@ public class Bullet : KinematicBody2D
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _PhysicsProcess(float delta)
     {
-        KinematicCollision2D collision = MoveAndCollide(Direction * delta * Speed);
+        KinematicCollision2D collision = MoveAndCollide(Direction * delta * SPEED);
         if (collision != null && IsInstanceValid(collision.Collider))
         {
             if (FirstFrame && !DisableRetry)
@@ -53,35 +54,28 @@ public class Bullet : KinematicBody2D
                 }
             }
 
-            if (Colour == EnemyColour.Red && collision.Collider is Enemy_Red er)
+            switch (Colour)
             {
-                KillEnemy(er);
-
-                return;
+                case EnemyColour.Red when collision.Collider is Enemy_Red er:
+                    KillEnemy(er);
+                    break;
+                case EnemyColour.Yellow when collision.Collider is Enemy_Yellow ey:
+                    KillEnemy(ey);
+                    break;
+                case EnemyColour.Blue when collision.Collider is Enemy_Blue eb:
+                    KillEnemy(eb);
+                    break;
+                default:
+                    QueueFree();
+                    break;
             }
-            if (Colour == EnemyColour.Yellow && collision.Collider is Enemy_Yellow ey)
-            {
-                KillEnemy(ey);
-
-                return;
-            }
-            if (Colour == EnemyColour.Blue && collision.Collider is Enemy_Blue eb)
-            {
-                KillEnemy(eb);
-
-                return;
-            }
-            else 
-            {
-                QueueFree();
-                return;
-            }
+            return;
         }
 
-        if (FirstFrame)
+        if (FirstFrame && !IsSilent)
         {
             // Play shot sound        
-            Asset<AudioStream> Sound_Shoot = R.Sounds.Shoot;
+            Asset<AudioStream> Sound_Shoot = R.Sounds.SHOOT;
             GetTree().PlaySound2D(Sound_Shoot, relativeTo: this);
         }
 
@@ -92,18 +86,18 @@ public class Bullet : KinematicBody2D
     {
         e.Die();
 
-        Game.Instance.KillScore += (int)(500.0f + (float)Game.Instance.CurrentLevel / 10.0f);
+        Game.Instance.KillScore += (int)(500f + (float)Game.Instance.CurrentLevel / 10f);
         
         // Play enemy death sound
-        Asset<AudioStream> Sound_EnemyDeath = R.Sounds.EnemyDeath;
+        Asset<AudioStream> Sound_EnemyDeath = R.Sounds.ENEMY_DEATH;
         GetTree().PlaySound2D(Sound_EnemyDeath, relativeTo: this);
 
         // Shake correct camera
         Character c = Game.Instance.GetPlayer(FiredByPlayerIndex);
         if (IsInstanceValid(c))
         {
-            Vector2 randomShake = new Vector2((float)GD.RandRange(-8.0f, +8.0f), (float)GD.RandRange(-8.0f, +8.0f));
-            c.ShakeCamera(Direction * 8.0f + randomShake);
+            Vector2 randomShake = new Vector2((float)GD.RandRange(-8f, +8f), (float)GD.RandRange(-8f, +8f));
+            c.ShakeCamera(Direction * 8f + randomShake);
         }
     }
 }

@@ -5,7 +5,7 @@ public class SlippyFrictionBehaviourModifier : IBehaviourModifier
 {
     public void Modify(Modifiables mods)
     {
-        mods.Friction /= 2.0f;
+        mods.Friction /= 1.2f;
     }
 }
 
@@ -13,6 +13,6 @@ public class GrippyFrictionBehaviourModifier : IBehaviourModifier
 {
     public void Modify(Modifiables mods)
     {
-        mods.Friction *= 2.0f;
+        mods.Friction *= 1.2f;
     }
 }

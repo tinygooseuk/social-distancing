@@ -4,19 +4,21 @@ using System;
 
 public class EnemySpawner : Position2D
 {
-    [Export] private Array<PackedScene> EnemyScenes = new Array<PackedScene>();
+    [Export] private readonly Array<PackedScene> EnemyScenes = new Array<PackedScene>();
 
-    // Called when the node enters the scene tree for the first time.
-    public override void _Ready()
+    private void OnBodyEntered(Node other)
     {
-        CallDeferred("Spawn");
+        if (other is Character)
+        {
+            CallDeferred(nameof(Spawn));
+        }
     }
-
+    
     private void Spawn()
     {
         PackedScene scene = EnemyScenes[(int)(GD.Randi() % EnemyScenes.Count)];
 
-        Enemy enemy = (Enemy)scene.Instance();
+        var enemy = (Enemy)scene.Instance();
         enemy.Position = Position;
         GetParent().AddChild(enemy);
         

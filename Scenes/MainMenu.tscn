@@ -1,16 +1,22 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Scenes/MainMenu.cs" type="Script" id=1]
 [ext_resource path="res://Fonts/ScoreFont.tres" type="DynamicFont" id=2]
 [ext_resource path="res://Textures/Title.png" type="Texture" id=3]
+[ext_resource path="res://Shaders/ScreenTransition.shader" type="Shader" id=4]
 
 [sub_resource type="Theme" id=1]
 default_font = ExtResource( 2 )
+
+[sub_resource type="ShaderMaterial" id=2]
+shader = ExtResource( 4 )
+shader_param/progress = 0.0
 
 [node name="MainMenu" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 rect_min_size = Vector2( 416, 240 )
+mouse_filter = 1
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -43,6 +49,8 @@ margin_right = 62.0
 margin_bottom = 112.0
 grow_horizontal = 2
 grow_vertical = 0
+focus_mode = 1
+mouse_filter = 2
 size_flags_vertical = 3
 theme = SubResource( 1 )
 custom_constants/separation = 0
@@ -106,6 +114,17 @@ focus_neighbour_top = NodePath("../FourPlayer")
 custom_fonts/font = ExtResource( 2 )
 text = "Quit Game"
 flat = true
+
+[node name="Transition" type="ColorRect" parent="."]
+material = SubResource( 2 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TransitionTween" type="Tween" parent="Transition"]
 [connection signal="pressed" from="VBoxContainer/SinglePlayer" to="." method="Play" binds= [ 1 ]]
 [connection signal="pressed" from="VBoxContainer/TwoPlayer" to="." method="Play" binds= [ 2 ]]
 [connection signal="pressed" from="VBoxContainer/ThreePlayer" to="." method="Play" binds= [ 3 ]]

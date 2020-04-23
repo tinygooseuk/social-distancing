@@ -10,9 +10,10 @@ public class Enemy : KinematicBody2D
     protected AnimatedSprite EnemySprite;
 
     // Override point
-    protected virtual bool IsAffectedByGravity() => true;
+    protected virtual bool IsAffectedByGravity => true;
+    protected virtual EnemyColour Colour => EnemyColour.Red;
     protected virtual Vector2 Move(Vector2 playerPosition, float difficultyScale) => Vector2.Zero;
-    protected virtual EnemyColour GetColour() => EnemyColour.Red;
+    
 
     // Consts
     private static float GRAVITY = 9.8f;
@@ -37,10 +38,10 @@ public class Enemy : KinematicBody2D
             Velocity += move;
         }
 
-        if (IsAffectedByGravity())
+        if (IsAffectedByGravity)
         {
             Velocity.y += GRAVITY;
-            Velocity.x *= (1.0f - FRICTION);
+            Velocity.x *= (1f - FRICTION);
         }      
 
         Velocity = MoveAndSlide(Velocity, upDirection: Vector2.Up);
@@ -70,7 +71,7 @@ public class Enemy : KinematicBody2D
         }
 
         // Spawn particles
-        Scene<Particles2D> deathParticlesScene = R.Particles.DeathParticles;
+        Scene<Particles2D> deathParticlesScene = R.Particles.DEATH_PARTICLES;
         
         Particles2D deathParticles = deathParticlesScene.Instance();
         deathParticles.Position = Position;
@@ -78,9 +79,12 @@ public class Enemy : KinematicBody2D
         ParticlesMaterial processMaterial = (ParticlesMaterial)deathParticles.ProcessMaterial;
         GradientTexture gradientTexture = (GradientTexture)processMaterial.ColorRamp;  
         Gradient gradient = gradientTexture.Gradient;
-        gradient.SetColor(0, GetColour().ToColor());
+        gradient.SetColor(0, Colour.ToColor());
 
         GetParent().AddChild(deathParticles);      
+
+        // Store pixels
+        Global.IncrementCollectedPixels(Colour);
 
         // Free
         QueueFree();
