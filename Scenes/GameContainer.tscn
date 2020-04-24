@@ -31,10 +31,10 @@ __meta__ = {
 }
 
 [node name="Bedrock" parent="Game" instance=ExtResource( 6 )]
-position = Vector2( -208, 240 )
+position = Vector2( -208, 0 )
 
 [node name="DeadRoom" parent="Game" instance=ExtResource( 5 )]
-position = Vector2( -208, 480 )
+position = Vector2( -208, 240 )
 
 [node name="BGM" type="AudioStreamPlayer" parent="Game"]
 stream = ExtResource( 1 )

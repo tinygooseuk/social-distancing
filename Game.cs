@@ -66,6 +66,8 @@ public class Game : Node2D
         bool isFirstRound = Global.RoundNumber == 0;
         int maxLevels = isFirstRound ? 1 : MaxLevels;
 
+        float caret = 0f;
+        
         for (int level = 0; level < maxLevels; level++)
         {
             Difficulty desiredDifficulty = GetDifficultyEnumValue(level);
@@ -74,14 +76,20 @@ public class Game : Node2D
                 desiredDifficulty = Difficulty.Neutral;
             }
 
-            Node2D room = await InstanceRandomRoomAsync(desiredDifficulty); 
-            room.Position = new Vector2(-Const.SCREEN_HALF_WIDTH, level * -Const.SCREEN_HEIGHT);
+            Room room = await InstanceRandomRoomAsync(desiredDifficulty);
+                        
+            // Move caret up
+            caret -= room.PixelHeight;
+
+            // Position room
+            room.Position = new Vector2(-Const.SCREEN_HALF_WIDTH, caret);
             GameArea.AddChild(room);
 
+            // Add label
             float labelScale = areViewportsScaledDown ? 1.75f : 1f;
 
             Label roomLabel = (Label)TemplateLabel.Duplicate();
-            roomLabel.RectPosition = new Vector2(-Const.SCREEN_HALF_WIDTH + 20f, level * -Const.SCREEN_HEIGHT);
+            roomLabel.RectPosition = new Vector2(-Const.SCREEN_HALF_WIDTH + 20f, caret);
             roomLabel.Text = $"Level {level+1}";
             roomLabel.Visible = true;
             roomLabel.RectScale =  new Vector2(labelScale, labelScale);
@@ -90,10 +98,13 @@ public class Game : Node2D
 
         // Create goal room
         {
-            Scene<Node2D> goalRoomScene = R.Rooms.GOAL_ROOM;
+            Scene<Room> goalRoomScene = R.Rooms.GOAL_ROOM;
+            Room room = await goalRoomScene.InstanceAsync();
 
-            Node2D room = await goalRoomScene.InstanceAsync();
-            room.Position = new Vector2(-Const.SCREEN_HALF_WIDTH, maxLevels * -Const.SCREEN_HEIGHT);
+            // Move caret up
+            caret -= room.PixelHeight;
+            
+            room.Position = new Vector2(-Const.SCREEN_HALF_WIDTH, caret);
             GameArea.AddChild(room);
         }
          
@@ -110,14 +121,14 @@ public class Game : Node2D
             player.Position = new Vector2
             {
                 x = (-totalPlayerWidth / 2f) + playerIndex * PLAYER_WIDTH,
-                y = Const.SCREEN_HALF_WIDTH
+                y = -32f
             };
 
             // Limit player camera to top of world
             Camera2D camera = GetPlayerCamera(playerIndex);
 
             int offset = (Global.NumberOfPlayers == 2) ? -28 : 88;
-            camera.LimitTop = (int)((maxLevels) * -Const.SCREEN_HEIGHT) + offset; // 88 will arbitrarily make it limit properly. cool.
+            camera.LimitTop = (int)caret + offset; // 88 will arbitrarily make it limit properly. cool.
             
             GameArea.AddChild(player);
             Players.Add(player);
@@ -227,7 +238,7 @@ public class Game : Node2D
         return DifficultyCurve.Interpolate(progression);
     }
 
-    private static async Task<Node2D> InstanceRandomRoomAsync(Difficulty d)
+    private static async Task<Room> InstanceRandomRoomAsync(Difficulty d)
     {
         string[] sceneArray = null;
 
@@ -241,7 +252,7 @@ public class Game : Node2D
                 throw new ArgumentOutOfRangeException(nameof(d), d, null);
         }
 
-        Scene<Node2D> roomScene = sceneArray[(int)(GD.Randi() % sceneArray.Length)];
+        Scene<Room> roomScene = sceneArray[(int)(GD.Randi() % sceneArray.Length)];
         return await roomScene.InstanceAsync();
     }
 
