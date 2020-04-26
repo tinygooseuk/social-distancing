@@ -189,8 +189,12 @@ public class Game : Node2D
     
     public void MarkRoundComplete()
     {
-        BGM.Stop();
+        // Switch over music
+        BGM.VolumeDb *= 0.5f;
         RoundComplete.Play();
+        
+        // Hide touch controls
+        TouchControls.Instance.SetTouchControlsVisible(false);
     }
 
     public async void PlayerDied(int playerIndex)

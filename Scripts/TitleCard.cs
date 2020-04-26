@@ -45,6 +45,11 @@ public class TitleCard : ColorRect
 
         RoundLabel.Visible = false;
         Visible = false;
+
+        if (PlatformUtil.IsMobile)
+        {
+            TouchControls.Instance.SetTouchControlsVisible(true);   
+        }
     }
 
     public async Task AnimateOut()

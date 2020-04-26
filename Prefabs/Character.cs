@@ -427,6 +427,9 @@ public class Character : KinematicBody2D
         CallDeferred(nameof(BurstIntoPixels), Position, deathTransform);
         Game.Instance.PlayerDied(PlayerIndex);
        
+        // Hide the touch controls on mobile
+        TouchControls.Instance.SetTouchControlsVisible(false);
+        
         // Zoom in 
         Vector2 zoomIn = new Vector2(1f / 2.5f, 1f / 2.5f);
 
