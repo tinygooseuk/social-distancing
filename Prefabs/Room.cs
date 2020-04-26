@@ -15,9 +15,7 @@ public class Room : Node2D
     {
         base._Ready();
         
-        this.FindSubnodes();
-        
-        GD.Print($"Tileheight is {TileHeight}");
+        this.FindSubnodes(); 
     }
 
     public int TileHeight
