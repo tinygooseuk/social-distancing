@@ -218,10 +218,17 @@ public class Character : KinematicBody2D
         
         if (!IsDead)
         {
+            float lookDown = Input.GetActionStrength($"look_down_{PlayerIndex}") - Input.GetActionStrength($"look_up_{PlayerIndex}");
+            if (PlatformUtil.IsMobile)
+            {
+                // Also allow down arrow to look on mobile
+                lookDown += Input.GetActionStrength($"move_down_{PlayerIndex}") - Input.GetActionStrength($"move_up_{PlayerIndex}");
+            }
+
             Vector2 desiredCameraOffset = new Vector2
             {
                 x = Input.GetActionStrength($"look_right_{PlayerIndex}") - Input.GetActionStrength($"look_left_{PlayerIndex}"),
-                y = Input.GetActionStrength($"look_down_{PlayerIndex}") - Input.GetActionStrength($"look_up_{PlayerIndex}"),
+                y = lookDown,
             };
 
             if (IsRoundComplete)
