@@ -178,7 +178,10 @@ public class GachaScreen : Control
                     reel.IsReadyForStop = true;
                     reel.Connect(nameof(GachaReel.ReelStopped), this, nameof(OnReelStopped));
                     reel.Connect(nameof(GachaReel.ReelTicked), this, nameof(OnReelTicked));
-                    
+
+                    // Hide description
+                    DescriptionLabel.Visible = false;
+
                     IsAwaitingReelStop = true;
                 }
             }
@@ -192,6 +195,9 @@ public class GachaScreen : Control
 
         // Play animation
         GachaReels[ReelNumber].HighlightWinner(itemHit);
+
+        // Show description
+        DescriptionLabel.Visible = true;
 
         // Remove pixels for reel
         EnemyColour justStoppedReel = (EnemyColour)ReelNumber;
