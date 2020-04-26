@@ -15,6 +15,9 @@ public class GachaPrize : Resource
     [Export] public BehaviourModifiersEnum UnlockedBehaviourModfier = BehaviourModifiersEnum.None;
     [Export] public ShootBehavioursEnum UnlockedShootBehaviour = ShootBehavioursEnum.None;
 
+    // Weighting
+    [Export] public int Weight = 1;
+    
     // Texture to use
     [Export(PropertyHint.File, "*.png")] private string TexturePath;
     public Asset<Texture> Texture => TexturePath;

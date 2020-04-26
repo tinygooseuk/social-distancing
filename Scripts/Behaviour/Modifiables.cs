@@ -1,17 +1,39 @@
 
 public class Modifiables
 {
-    public float Gravity = 9.8f;
-    public float MoveSpeed = 40f;
+    public float Gravity;
+    public float MoveSpeed;
 
-    public int NumAirJumps = 1;
+    public int NumAirJumps;
     
-    public float JumpImpulse = 300f;
-    public float JumpDebounce = 0.4f;
+    public float JumpImpulse;
+    public float JumpDebounce;
 
-    public float ShootDebounce = 0.2f;
+    public float ShootDebounce;
     
-    public float Friction = 0.15f;
+    public float Friction;
     
-    public float CharacterScale = 1f;
+    public float CharacterScale;
+
+    public Modifiables()
+    {
+        Reset();
+    }
+
+    public void Reset()
+    {
+        Gravity = 9.8f;
+        MoveSpeed = 40f;
+
+        NumAirJumps = 1;
+    
+        JumpImpulse = 300f;
+        JumpDebounce = 0.4f;
+
+        ShootDebounce = 0.2f;
+    
+        Friction = 0.15f;
+    
+        CharacterScale = 1f;
+    }
 }

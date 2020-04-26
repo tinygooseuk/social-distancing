@@ -47,19 +47,29 @@ public class GachaScreen : Control
         Asset<GachaPrizeList> prizeDatabase = R.Model.GACHA_PRIZES;
         Array<GachaPrize> prizes = prizeDatabase.Load().GachaPrizes;
 
-        var bluePrizes = prizes.Where(p => p.Colour == EnemyColour.Blue).ToArray().Shuffle();
-        GachaReel1_Blue.SetPrizes(bluePrizes);  
-
-        var yellowPrizes = prizes.Where(p => p.Colour == EnemyColour.Yellow).ToArray().Shuffle();
-        GachaReel2_Yellow.SetPrizes(yellowPrizes);
-        
-        var redPrizes = prizes.Where(p => p.Colour == EnemyColour.Red).ToArray().Shuffle();
-        GachaReel3_Red.SetPrizes(redPrizes);
-
-        var greenPrizes = prizes.Where(p => p.Colour == EnemyColour.Green).ToArray().Shuffle();
-        GachaReel4_Green.SetPrizes(greenPrizes);
+        GachaReel1_Blue.SetPrizes(FilterAndExpandPrizes(prizes, EnemyColour.Blue));  
+        GachaReel2_Yellow.SetPrizes(FilterAndExpandPrizes(prizes, EnemyColour.Yellow));
+        GachaReel3_Red.SetPrizes(FilterAndExpandPrizes(prizes, EnemyColour.Red));
+        GachaReel4_Green.SetPrizes(FilterAndExpandPrizes(prizes, EnemyColour.Green));
     }
 
+    private GachaPrize[] FilterAndExpandPrizes(Array<GachaPrize> allPrizes, EnemyColour colour)
+    {
+        var outPrizes = new Array<GachaPrize>();
+
+        foreach (GachaPrize prize in allPrizes)
+        {
+            if (prize.Colour != colour) continue;
+
+            for (int i = 0; i < prize.Weight; i++)
+            {
+                outPrizes.Add(prize);
+            }
+        }
+        
+        return outPrizes.ToArray().Shuffle();
+    }
+    
     public async void Start()
     {
         IsStarted = true;

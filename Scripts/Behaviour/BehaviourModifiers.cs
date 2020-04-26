@@ -22,6 +22,8 @@ public enum BehaviourModifiersEnum
     
     AirJumpMore,
     AirJumpLess,
+    
+    Reset,
 }
 
 public static class BehaviourModifiersFactory 
@@ -61,6 +63,9 @@ public static class BehaviourModifiersFactory
             
             case BehaviourModifiersEnum.AirJumpLess:
                 return new AirJumpLessBehaviourModifier();
+            
+            case BehaviourModifiersEnum.Reset:
+                return new ResetBehaviourModifier();
         }
 
         Type t = MethodBase.GetCurrentMethod().DeclaringType;
