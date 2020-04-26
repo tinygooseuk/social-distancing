@@ -85,15 +85,18 @@ public class Game : Node2D
             room.Position = new Vector2(-Const.SCREEN_HALF_WIDTH, caret);
             GameArea.AddChild(room);
 
-            // Add label
-            float labelScale = areViewportsScaledDown ? 1.75f : 1f;
+            if (!isFirstRound)
+            {
+                // Add label
+                float labelScale = areViewportsScaledDown ? 1.75f : 1f;
 
-            Label roomLabel = (Label)TemplateLabel.Duplicate();
-            roomLabel.RectPosition = new Vector2(-Const.SCREEN_HALF_WIDTH + 20f, caret);
-            roomLabel.Text = $"Level {level+1}";
-            roomLabel.Visible = true;
-            roomLabel.RectScale =  new Vector2(labelScale, labelScale);
-            GameArea.AddChild(roomLabel);
+                Label roomLabel = (Label) TemplateLabel.Duplicate();
+                roomLabel.RectPosition = new Vector2(-Const.SCREEN_HALF_WIDTH + 20f, caret);
+                roomLabel.Text = $"Level {level + 1}";
+                roomLabel.Visible = true;
+                roomLabel.RectScale = new Vector2(labelScale, labelScale);
+                GameArea.AddChild(roomLabel);
+            }
         }
 
         // Create goal room
