@@ -2,21 +2,8 @@ using Godot;
 
 public class TouchControls : Control
 {
-    // Singleton
-    public static TouchControls Instance { get; private set; } = null;
-    
     // Consts
     private const float CONTROLS_ALPHA = 0.25f;
-    
-    public override void _Ready()
-    {
-        Instance = this;
-    }
-
-    public override void _ExitTree()
-    {
-        Instance = null;
-    }
 
     public async void SetTouchControlsVisible(bool newVisible, bool animated = true)
     {
@@ -32,7 +19,6 @@ public class TouchControls : Control
             Visible = true;
 
             // Fade in/out to new alpha => wait till done
-            
             Tween fadeTween = new Tween();
             fadeTween.InterpolateProperty(this, "modulate:a", sourceAlpha, destAlpha, 0.3f, Tween.TransitionType.Cubic,
                 Tween.EaseType.InOut);

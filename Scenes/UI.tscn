@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=2]
+[gd_scene load_steps=26 format=2]
 
 [ext_resource path="res://Scripts/AgainButton.cs" type="Script" id=1]
 [ext_resource path="res://Shaders/ScreenShader.shader" type="Shader" id=2]
@@ -16,12 +16,13 @@
 [ext_resource path="res://Textures/MobileUI/TouchDown.png" type="Texture" id=14]
 [ext_resource path="res://Textures/MobileUI/TouchRight.png" type="Texture" id=15]
 [ext_resource path="res://Scripts/TouchControls.cs" type="Script" id=16]
+[ext_resource path="res://Textures/MobileUI/TouchFastForward.png" type="Texture" id=17]
 
 [sub_resource type="ShaderMaterial" id=1]
 shader = ExtResource( 2 )
 
 [sub_resource type="CircleShape2D" id=2]
-radius = 22.0
+radius = 32.0
 
 [sub_resource type="RectangleShape2D" id=3]
 extents = Vector2( 32, 32 )
@@ -256,6 +257,24 @@ texture = ExtResource( 15 )
 [node name="DownImage" type="Sprite" parent="TouchControls"]
 position = Vector2( 69.5603, 203.288 )
 texture = ExtResource( 14 )
+
+[node name="EndOfLevelTouchControls" type="Control" parent="."]
+visible = false
+modulate = Color( 1, 1, 1, 0.25 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+script = ExtResource( 16 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="FastForward" type="TouchScreenButton" parent="EndOfLevelTouchControls"]
+position = Vector2( 354.467, 180.806 )
+normal = ExtResource( 17 )
+pressed = ExtResource( 17 )
+shape = SubResource( 2 )
+action = "fast_forward"
 
 [node name="TitleCard" type="ColorRect" parent="."]
 material = SubResource( 5 )

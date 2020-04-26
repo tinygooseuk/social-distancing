@@ -48,7 +48,7 @@ public class TitleCard : ColorRect
 
         if (PlatformUtil.IsMobile)
         {
-            TouchControls.Instance.SetTouchControlsVisible(true);   
+            Game.Instance.TouchControls_Main.SetTouchControlsVisible(true);   
         }
     }
 

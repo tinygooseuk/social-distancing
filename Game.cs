@@ -167,6 +167,9 @@ public class Game : Node2D
 
     public CanvasLayer UICanvasLayer => GetNode<CanvasLayer>("/root/RootControl/UI");
 
+    public TouchControls TouchControls_Main => UICanvasLayer.GetNode<TouchControls>("TouchControls");
+    public TouchControls TouchControls_EndOfLevel => UICanvasLayer.GetNode<TouchControls>("EndOfLevelTouchControls");
+
     public Character GetPlayer(int playerIndex) => (Players.Count > playerIndex) ? Players[playerIndex] as Character : null;
     public Character GetNearestPlayer(Vector2 globalPosition) 
     {
@@ -189,15 +192,19 @@ public class Game : Node2D
         return nearestPlayer;
 
     }
-    
+
     public void MarkRoundComplete()
     {
         // Switch over music
         BGM.VolumeDb -= 10f;
         RoundComplete.Play();
-        
-        // Hide touch controls
-        TouchControls.Instance.SetTouchControlsVisible(false);
+
+        if (PlatformUtil.IsMobile)
+        {
+            // Hide touch controls
+            Game.Instance.TouchControls_Main.SetTouchControlsVisible(false);
+            Game.Instance.TouchControls_EndOfLevel.SetTouchControlsVisible(true);
+        }
     }
 
     public async void PlayerDied(int playerIndex)
