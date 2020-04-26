@@ -12,7 +12,7 @@ public class PixelList : System.Collections.Generic.List<Pixel> {}
 public class GachaScreen : Control
 {
     // Consts
-    private const float REEL_TIMER_MAX = 0.75f;
+    private const float REEL_TIMER_MAX = 2.5f;
 
     // Signals
     [Signal] public delegate void AllReelsSpun();
@@ -28,6 +28,9 @@ public class GachaScreen : Control
     [Subnode("Labels/JumpLabel")] private Label Label2_Yellow;
     [Subnode("Labels/AttackLabel")] private Label Label3_Red;
     [Subnode("Labels/WildLabel")] private Label Label4_Green;
+
+    [Subnode] public Label DescriptionLabel { get; private set; }
+    
     private Label[] Labels => new[] { Label1_Blue, Label2_Yellow, Label3_Red, Label4_Green };
 
     // State
@@ -174,7 +177,8 @@ public class GachaScreen : Control
                     GachaReel reel = GachaReels[ReelNumber];
                     reel.IsReadyForStop = true;
                     reel.Connect(nameof(GachaReel.ReelStopped), this, nameof(OnReelStopped));
-
+                    reel.Connect(nameof(GachaReel.ReelTicked), this, nameof(OnReelTicked));
+                    
                     IsAwaitingReelStop = true;
                 }
             }
@@ -184,6 +188,7 @@ public class GachaScreen : Control
     private void OnReelStopped(int itemHit)
     {
         GachaReels[ReelNumber].Disconnect(nameof(GachaReel.ReelStopped), this, nameof(OnReelStopped));
+        GachaReels[ReelNumber].Disconnect(nameof(GachaReel.ReelTicked), this, nameof(OnReelTicked));
 
         // Play animation
         GachaReels[ReelNumber].HighlightWinner(itemHit);
@@ -218,6 +223,13 @@ public class GachaScreen : Control
             EmitSignal(nameof(AllReelsSpun));
         }
     }
+
+    private void OnReelTicked(int itemHit)
+    {
+        string description = GachaReels[ReelNumber].CurrentItem.GachaPrize.Description;
+        DescriptionLabel.Text = description;
+    }
+    
 
     private async Task SpawnPixels()
     {

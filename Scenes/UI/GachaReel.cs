@@ -25,6 +25,7 @@ public class GachaReel : ScrollContainer
     [Subnode("Sounds/Pick")] private AudioStreamPlayer2D Sound_Pick;
 
     // Signals
+    [Signal] public delegate void ReelTicked(int item);
     [Signal] public delegate void ReelStopped(int item);
 
     // Exports 
@@ -145,6 +146,8 @@ public class GachaReel : ScrollContainer
                 // Tick
                 Sound_Tick.PitchScale = 1f + Mathf.Clamp(Mathf.InverseLerp(0f, 400f, SpinSpeed), 0f, 1f);
                 Sound_Tick.Play();
+                
+                EmitSignal(nameof(ReelTicked), CurrentItemIndex);
                 
                 // Vibrate
                 if (Game.Instance.InputMethodManager.IsVibrationEnabled)
