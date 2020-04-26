@@ -20,6 +20,8 @@ public class TouchControls : Control
 
     public async void SetTouchControlsVisible(bool newVisible, bool animated = true)
     {
+        if (Visible == newVisible) return;
+        
         if (animated)
         {
             float sourceAlpha = newVisible == true ? 0f : CONTROLS_ALPHA;
