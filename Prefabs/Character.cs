@@ -548,7 +548,7 @@ public class Character : KinematicBody2D
     {
         Input.StartJoyVibration(PlayerIndex, weakMagnitude, strongMagnitude, duration);
 
-        if (OS.GetName() == "Android" || OS.GetName() == "iOS")
+        if (PlatformUtil.IsMobile)
         {
             float magnitude = (weakMagnitude + strongMagnitude) / 2f;
             
