@@ -190,7 +190,7 @@ public class Game : Node2D
     public void MarkRoundComplete()
     {
         // Switch over music
-        BGM.VolumeDb *= 0.5f;
+        BGM.VolumeDb -= 10f;
         RoundComplete.Play();
         
         // Hide touch controls
