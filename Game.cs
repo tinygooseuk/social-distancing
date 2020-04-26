@@ -199,7 +199,7 @@ public class Game : Node2D
         Character c = GetPlayer(playerIndex);
         if (IsInstanceValid(c))
         {
-            c.Position = new Vector2(-Const.SCREEN_HALF_WIDTH + 40f, 480f);
+            c.Position = new Vector2(-Const.SCREEN_HALF_WIDTH + 40f, -Const.SCREEN_HEIGHT + 480f);
             c.RotationDegrees = 90f;
         }
         
