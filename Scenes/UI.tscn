@@ -31,7 +31,7 @@ extents = Vector2( 20, 20 )
 
 [sub_resource type="ShaderMaterial" id=5]
 shader = ExtResource( 5 )
-shader_param/progress = 0.0
+shader_param/progress = 1.0
 
 [sub_resource type="DynamicFont" id=6]
 size = 32
@@ -258,7 +258,6 @@ position = Vector2( 69.5603, 203.288 )
 texture = ExtResource( 14 )
 
 [node name="TitleCard" type="ColorRect" parent="."]
-visible = false
 material = SubResource( 5 )
 anchor_right = 1.0
 anchor_bottom = 1.0
