@@ -16,7 +16,7 @@ public class Game : Node2D
     [Subnode] private AudioStreamPlayer BGM;
     [Subnode] private AudioStreamPlayer RoundComplete;
 
-    //TODO: try subnodes again?
+    // Can't use subnodes here as they're under the root viewport and not us
     private Node2D GameArea;
     private Label TemplateLabel;
     private Label ScoreLabel;
