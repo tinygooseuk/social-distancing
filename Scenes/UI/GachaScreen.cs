@@ -111,7 +111,10 @@ public class GachaScreen : Control
         // Fast forward if required
         float fastForwardAmount = Input.GetActionStrength("fast_forward") * 4f;
         Engine.TimeScale = 1f + fastForwardAmount;        
-        
+
+        // Allow fast forward effects
+        Game.Instance.TitleCard.ShowFastForwardFX = true;
+                
         // Check for bumping
         EnemyColour reelColour = (EnemyColour)ReelNumber;
         string[] inputs = { "hit_blue", "hit_yellow", "hit_red", "jump"};

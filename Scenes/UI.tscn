@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=2]
+[gd_scene load_steps=28 format=2]
 
 [ext_resource path="res://Scripts/AgainButton.cs" type="Script" id=1]
 [ext_resource path="res://Shaders/ScreenShader.shader" type="Shader" id=2]
@@ -17,6 +17,8 @@
 [ext_resource path="res://Textures/MobileUI/TouchRight.png" type="Texture" id=15]
 [ext_resource path="res://Scripts/TouchControls.cs" type="Script" id=16]
 [ext_resource path="res://Textures/MobileUI/TouchFastForward.png" type="Texture" id=17]
+[ext_resource path="res://Materials/SpriteOutliner.tres" type="Material" id=18]
+[ext_resource path="res://Textures/FastForwardActive.png" type="Texture" id=19]
 
 [sub_resource type="ShaderMaterial" id=1]
 shader = ExtResource( 2 )
@@ -33,6 +35,7 @@ extents = Vector2( 20, 20 )
 [sub_resource type="ShaderMaterial" id=5]
 shader = ExtResource( 5 )
 shader_param/progress = 1.0
+shader_param/ffwd_separation = 0.0
 
 [sub_resource type="DynamicFont" id=6]
 size = 32
@@ -306,4 +309,18 @@ __meta__ = {
 [node name="AnimationPlayer" type="AnimationPlayer" parent="TitleCard"]
 anims/AnimEnd = SubResource( 7 )
 anims/AnimStart = SubResource( 8 )
+
+[node name="FastForwardIcon" type="TextureRect" parent="TitleCard"]
+visible = false
+material = ExtResource( 18 )
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -52.0
+margin_top = 20.0
+margin_right = -20.0
+margin_bottom = 52.0
+texture = ExtResource( 19 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 [connection signal="pressed" from="BG/AgainButton" to="BG/AgainButton" method="OnPressed"]

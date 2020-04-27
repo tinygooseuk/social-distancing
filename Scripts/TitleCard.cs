@@ -8,6 +8,8 @@ public class TitleCard : ColorRect
     [Subnode] Label RoundLabel;
     [Subnode] AnimationPlayer AnimationPlayer;
 
+    [Subnode] TextureRect FastForwardIcon;
+
     // Shader params
     private float TransitionValue 
     {
@@ -15,9 +17,24 @@ public class TitleCard : ColorRect
         set => ((ShaderMaterial)Material).SetShaderParam("progress", value);
     }
 
+    private float TargetSeparation = 0f;
+    private float FastForwardSeparation
+    {
+        get => (float)((ShaderMaterial)Material).GetShaderParam("ffwd_separation");
+        set => ((ShaderMaterial)Material).SetShaderParam("ffwd_separation", value);
+    }
+
+    // Public state
+    public bool ShowFastForwardFX = false;
+
+    // Private state
+    private float CurrentTime = 0f;
+
     public override void _Ready()
     {
         this.FindSubnodes();     
+
+        FastForwardSeparation = 0f;
 
         if (Global.RoundNumber == 0)
         {
@@ -33,7 +50,25 @@ public class TitleCard : ColorRect
 
     public override void _Process(float delta)
     {
-        
+        if (!ShowFastForwardFX) return;
+
+        bool isFastForwarding = TargetSeparation > 0.8f;
+
+        // Add VHS effect
+        TargetSeparation = Mathf.MoveToward(TargetSeparation, Input.GetActionStrength("fast_forward") * 5f, delta * 10f);       
+        FastForwardSeparation = TargetSeparation + (isFastForwarding? (float)GD.RandRange(-1.2f, +1.2f) : 0f);        
+
+        if (isFastForwarding)
+        {
+            // Show/hide ffwd icon
+            CurrentTime += delta;
+
+            FastForwardIcon.Visible = Mathf.PosMod(CurrentTime, 2f) > 1f;
+        }
+        else
+        {
+            FastForwardIcon.Visible = false;
+        }
     }
 
     public async Task AnimateIn()
@@ -44,7 +79,6 @@ public class TitleCard : ColorRect
         await ToSignal(AnimationPlayer, "animation_finished");
 
         RoundLabel.Visible = false;
-        Visible = false;
 
         if (PlatformUtil.IsMobile)
         {
