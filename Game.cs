@@ -136,6 +136,9 @@ public class Game : Node2D
             GameArea.AddChild(player);
             Players.Add(player);
         }        
+
+        // Show mobile UI
+        Game.Instance.TouchControls_Main.SetTouchControlsVisible(true);
     }
 
     public override void _Process(float delta)
@@ -199,9 +202,9 @@ public class Game : Node2D
         BGM.VolumeDb -= 10f;
         RoundComplete.Play();
 
+        // Hide touch controls on mobile
         if (PlatformUtil.IsMobile)
         {
-            // Hide touch controls
             Game.Instance.TouchControls_Main.SetTouchControlsVisible(false);
             Game.Instance.TouchControls_EndOfLevel.SetTouchControlsVisible(true);
         }
