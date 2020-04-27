@@ -136,9 +136,6 @@ public class Game : Node2D
             GameArea.AddChild(player);
             Players.Add(player);
         }        
-
-        // Show mobile UI
-        Game.Instance.TouchControls_Main.SetTouchControlsVisible(true);
     }
 
     public override void _Process(float delta)

@@ -23,15 +23,6 @@
 [sub_resource type="ShaderMaterial" id=1]
 shader = ExtResource( 2 )
 
-[sub_resource type="CircleShape2D" id=2]
-radius = 32.0
-
-[sub_resource type="RectangleShape2D" id=3]
-extents = Vector2( 32, 32 )
-
-[sub_resource type="RectangleShape2D" id=4]
-extents = Vector2( 20, 20 )
-
 [sub_resource type="ShaderMaterial" id=5]
 shader = ExtResource( 5 )
 shader_param/progress = 1.0
@@ -84,6 +75,15 @@ tracks/1/keys = {
 "values": [ 1.0, 1.0, 0.0 ]
 }
 
+[sub_resource type="CircleShape2D" id=2]
+radius = 24.0
+
+[sub_resource type="RectangleShape2D" id=3]
+extents = Vector2( 32, 32 )
+
+[sub_resource type="RectangleShape2D" id=4]
+extents = Vector2( 20, 20 )
+
 [node name="UI" type="CanvasLayer"]
 
 [node name="BG" type="ColorRect" parent="."]
@@ -124,6 +124,51 @@ custom_fonts/font = ExtResource( 3 )
 text = "Try again?"
 flat = true
 script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TitleCard" type="ColorRect" parent="."]
+material = SubResource( 5 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+script = ExtResource( 7 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="RoundLabel" type="Label" parent="TitleCard"]
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_top = -16.0
+margin_bottom = 16.0
+grow_horizontal = 2
+grow_vertical = 2
+rect_pivot_offset = Vector2( 208, 16 )
+custom_fonts/font = SubResource( 6 )
+text = "ROUND 1"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="TitleCard"]
+anims/AnimEnd = SubResource( 7 )
+anims/AnimStart = SubResource( 8 )
+
+[node name="FastForwardIcon" type="TextureRect" parent="TitleCard"]
+visible = false
+material = ExtResource( 18 )
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -52.0
+margin_top = 20.0
+margin_right = -20.0
+margin_bottom = 52.0
+texture = ExtResource( 19 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -278,49 +323,4 @@ normal = ExtResource( 17 )
 pressed = ExtResource( 17 )
 shape = SubResource( 2 )
 action = "fast_forward"
-
-[node name="TitleCard" type="ColorRect" parent="."]
-material = SubResource( 5 )
-anchor_right = 1.0
-anchor_bottom = 1.0
-mouse_filter = 2
-script = ExtResource( 7 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="RoundLabel" type="Label" parent="TitleCard"]
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-margin_top = -16.0
-margin_bottom = 16.0
-grow_horizontal = 2
-grow_vertical = 2
-rect_pivot_offset = Vector2( 208, 16 )
-custom_fonts/font = SubResource( 6 )
-text = "ROUND 1"
-align = 1
-valign = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="TitleCard"]
-anims/AnimEnd = SubResource( 7 )
-anims/AnimStart = SubResource( 8 )
-
-[node name="FastForwardIcon" type="TextureRect" parent="TitleCard"]
-visible = false
-material = ExtResource( 18 )
-anchor_left = 1.0
-anchor_right = 1.0
-margin_left = -52.0
-margin_top = 20.0
-margin_right = -20.0
-margin_bottom = 52.0
-texture = ExtResource( 19 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 [connection signal="pressed" from="BG/AgainButton" to="BG/AgainButton" method="OnPressed"]
