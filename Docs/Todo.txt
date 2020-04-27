@@ -1,0 +1,4 @@
+Tasks:
+[ ] Make fast forwarding look nice
+[ ] Make death more prominent (sound)
+[ ] Make death not necessarily permanent (gameplay)
