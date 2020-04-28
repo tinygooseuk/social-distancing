@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=2]
+[gd_scene load_steps=29 format=2]
 
 [ext_resource path="res://Scripts/AgainButton.cs" type="Script" id=1]
 [ext_resource path="res://Shaders/ScreenShader.shader" type="Shader" id=2]
@@ -19,22 +19,23 @@
 [ext_resource path="res://Textures/MobileUI/TouchFastForward.png" type="Texture" id=17]
 [ext_resource path="res://Materials/SpriteOutliner.tres" type="Material" id=18]
 [ext_resource path="res://Textures/FastForwardActive.png" type="Texture" id=19]
+[ext_resource path="res://Scripts/MainUI.cs" type="Script" id=20]
 
 [sub_resource type="ShaderMaterial" id=1]
 shader = ExtResource( 2 )
 
-[sub_resource type="ShaderMaterial" id=5]
+[sub_resource type="ShaderMaterial" id=2]
 shader = ExtResource( 5 )
-shader_param/progress = 1.0
+shader_param/progress = 0.0
 shader_param/ffwd_separation = 0.0
 
-[sub_resource type="DynamicFont" id=6]
+[sub_resource type="DynamicFont" id=3]
 size = 32
 outline_size = 2
 outline_color = Color( 0.2, 0.2, 0.2, 1 )
 font_data = ExtResource( 6 )
 
-[sub_resource type="Animation" id=7]
+[sub_resource type="Animation" id=4]
 tracks/0/type = "value"
 tracks/0/path = NodePath(".:material:shader_param/progress")
 tracks/0/interp = 1
@@ -48,7 +49,7 @@ tracks/0/keys = {
 "values": [ 0.0, 1.0 ]
 }
 
-[sub_resource type="Animation" id=8]
+[sub_resource type="Animation" id=5]
 length = 3.0
 tracks/0/type = "value"
 tracks/0/path = NodePath(".:material:shader_param/progress")
@@ -75,13 +76,13 @@ tracks/1/keys = {
 "values": [ 1.0, 1.0, 0.0 ]
 }
 
-[sub_resource type="CircleShape2D" id=2]
+[sub_resource type="CircleShape2D" id=6]
 radius = 24.0
 
-[sub_resource type="RectangleShape2D" id=3]
+[sub_resource type="RectangleShape2D" id=7]
 extents = Vector2( 32, 32 )
 
-[sub_resource type="RectangleShape2D" id=4]
+[sub_resource type="RectangleShape2D" id=8]
 extents = Vector2( 20, 20 )
 
 [node name="UI" type="CanvasLayer"]
@@ -96,40 +97,8 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Score" type="Label" parent="BG"]
-anchor_left = 1.0
-anchor_right = 1.0
-margin_left = -160.0
-margin_top = 20.0
-margin_right = -20.0
-margin_bottom = 20.0
-custom_fonts/font = ExtResource( 3 )
-text = "Score: 00000"
-align = 2
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="AgainButton" type="Button" parent="BG"]
-visible = false
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = -154.0
-margin_top = -75.0
-margin_right = -54.0
-margin_bottom = -55.0
-custom_fonts/font = ExtResource( 3 )
-text = "Try again?"
-flat = true
-script = ExtResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
 [node name="TitleCard" type="ColorRect" parent="."]
-material = SubResource( 5 )
+material = SubResource( 2 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
@@ -147,7 +116,7 @@ margin_bottom = 16.0
 grow_horizontal = 2
 grow_vertical = 2
 rect_pivot_offset = Vector2( 208, 16 )
-custom_fonts/font = SubResource( 6 )
+custom_fonts/font = SubResource( 3 )
 text = "ROUND 1"
 align = 1
 valign = 1
@@ -156,19 +125,60 @@ __meta__ = {
 }
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="TitleCard"]
-anims/AnimEnd = SubResource( 7 )
-anims/AnimStart = SubResource( 8 )
+anims/AnimEnd = SubResource( 4 )
+anims/AnimStart = SubResource( 5 )
 
-[node name="FastForwardIcon" type="TextureRect" parent="TitleCard"]
+[node name="MainUI" type="Control" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
+script = ExtResource( 20 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Score" type="Label" parent="MainUI"]
+visible = false
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = 216.0
+margin_top = 20.0
+margin_right = 356.0
+margin_bottom = 36.0
+custom_fonts/font = ExtResource( 3 )
+text = "Score: 00000"
+align = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="FastForwardIcon" type="TextureRect" parent="MainUI"]
 visible = false
 material = ExtResource( 18 )
 anchor_left = 1.0
 anchor_right = 1.0
-margin_left = -52.0
+margin_left = 324.0
 margin_top = 20.0
-margin_right = -20.0
+margin_right = 356.0
 margin_bottom = 52.0
 texture = ExtResource( 19 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="AgainButton" type="Button" parent="MainUI"]
+visible = false
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 222.0
+margin_top = 125.0
+margin_right = 322.0
+margin_bottom = 147.0
+custom_fonts/font = ExtResource( 3 )
+text = "Try again?"
+flat = true
+script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -242,51 +252,51 @@ __meta__ = {
 position = Vector2( 334.545, 187.755 )
 normal = ExtResource( 9 )
 pressed = ExtResource( 9 )
-shape = SubResource( 2 )
+shape = SubResource( 6 )
 action = "jump_0"
 
 [node name="Yellow" type="TouchScreenButton" parent="TouchControls"]
 position = Vector2( 334.057, 136.549 )
 normal = ExtResource( 10 )
 pressed = ExtResource( 10 )
-shape = SubResource( 2 )
+shape = SubResource( 6 )
 action = "hit_yellow_0"
 
 [node name="Red" type="TouchScreenButton" parent="TouchControls"]
 position = Vector2( 364, 162.883 )
 normal = ExtResource( 8 )
 pressed = ExtResource( 8 )
-shape = SubResource( 2 )
+shape = SubResource( 6 )
 action = "hit_red_0"
 
 [node name="Blue" type="TouchScreenButton" parent="TouchControls"]
 position = Vector2( 304, 162 )
 normal = ExtResource( 11 )
 pressed = ExtResource( 11 )
-shape = SubResource( 2 )
+shape = SubResource( 6 )
 action = "hit_blue_0"
 
 [node name="Left" type="TouchScreenButton" parent="TouchControls"]
 position = Vector2( 0, 148 )
-shape = SubResource( 3 )
+shape = SubResource( 7 )
 passby_press = true
 action = "move_left_0"
 
 [node name="Right" type="TouchScreenButton" parent="TouchControls"]
 position = Vector2( 76, 148 )
-shape = SubResource( 3 )
+shape = SubResource( 7 )
 passby_press = true
 action = "move_right_0"
 
 [node name="Up" type="TouchScreenButton" parent="TouchControls"]
 position = Vector2( 49, 132 )
-shape = SubResource( 4 )
+shape = SubResource( 8 )
 passby_press = true
 action = "look_up_0"
 
 [node name="Down" type="TouchScreenButton" parent="TouchControls"]
 position = Vector2( 49, 183 )
-shape = SubResource( 4 )
+shape = SubResource( 8 )
 passby_press = true
 action = "move_down_0"
 
@@ -321,6 +331,6 @@ __meta__ = {
 position = Vector2( 354.467, 180.806 )
 normal = ExtResource( 17 )
 pressed = ExtResource( 17 )
-shape = SubResource( 2 )
+shape = SubResource( 6 )
 action = "fast_forward"
-[connection signal="pressed" from="BG/AgainButton" to="BG/AgainButton" method="OnPressed"]
+[connection signal="pressed" from="MainUI/AgainButton" to="MainUI/AgainButton" method="OnPressed"]

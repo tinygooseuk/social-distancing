@@ -8,8 +8,6 @@ public class TitleCard : ColorRect
     [Subnode] Label RoundLabel;
     [Subnode] AnimationPlayer AnimationPlayer;
 
-    [Subnode] TextureRect FastForwardIcon;
-
     // Shader params
     private float TransitionValue 
     {
@@ -63,11 +61,11 @@ public class TitleCard : ColorRect
             // Show/hide ffwd icon
             CurrentTime += delta;
 
-            FastForwardIcon.Visible = Mathf.PosMod(CurrentTime, 2f) > 1f;
+            Game.Instance.MainUI.FastForwardIcon.Visible = Mathf.PosMod(CurrentTime, 2f) > 1f;
         }
         else
         {
-            FastForwardIcon.Visible = false;
+            Game.Instance.MainUI.FastForwardIcon.Visible = false;
         }
     }
 
@@ -79,6 +77,7 @@ public class TitleCard : ColorRect
         await ToSignal(AnimationPlayer, "animation_finished");
 
         RoundLabel.Visible = false;
+        Game.Instance.MainUI.ScoreLabel.Visible = true;
 
         if (PlatformUtil.IsMobile)
         {

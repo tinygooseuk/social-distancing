@@ -17,10 +17,9 @@ public class Game : Node2D
     [Subnode] private AudioStreamPlayer RoundComplete;
 
     // Can't use subnodes here as they're under the root viewport and not us
+    public MainUI MainUI;
     private Node2D GameArea;
     private Label TemplateLabel;
-    private Label ScoreLabel;
-    private Button AgainButton;
     public TitleCard TitleCard;
     [Subnode] public InputMethodManager InputMethodManager { get; private set; }
 
@@ -56,8 +55,7 @@ public class Game : Node2D
 
         CanvasLayer uiLayer = UICanvasLayer;
         {
-            ScoreLabel = uiLayer.GetNode<Label>("BG/Score");
-            AgainButton = uiLayer.GetNode<Button>("BG/AgainButton");    
+            MainUI = uiLayer.GetNode<MainUI>("MainUI");
             TitleCard = uiLayer.GetNode<TitleCard>("TitleCard");    
         }
 
@@ -158,7 +156,7 @@ public class Game : Node2D
         }
 
         // Update score label
-        ScoreLabel.Text = $"Score: {Global.TotalScore + TotalScore:d8}";
+        MainUI.ScoreLabel.Text = $"Score: {Global.TotalScore + TotalScore:d8}";
     }
 
     public Viewport RootViewport => GetPlayerViewport(0);
@@ -220,8 +218,8 @@ public class Game : Node2D
         // Wait 2s
         await ToSignal(GetTree().CreateTimer(2f), "timeout");
 
-        AgainButton.Visible = true;
-        AgainButton.GrabFocus();
+        MainUI.AgainButton.Visible = true;
+        MainUI.AgainButton.GrabFocus();
     }
 
     public async void ReloadGameScene()
