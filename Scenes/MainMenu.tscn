@@ -11,6 +11,7 @@ default_font = ExtResource( 2 )
 [sub_resource type="ShaderMaterial" id=2]
 shader = ExtResource( 4 )
 shader_param/progress = 0.0
+shader_param/ffwd_separation = 0.0
 
 [node name="MainMenu" type="Control"]
 anchor_right = 1.0
