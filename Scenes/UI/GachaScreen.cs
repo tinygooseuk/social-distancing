@@ -83,7 +83,7 @@ public class GachaScreen : Control
         if (Global.GetCollectedPixels(EnemyColour.Blue) > 0f)
         {
             // Wait 2 secs to roll blue to allow bumping
-            await ToSignal(GetTree().CreateTimer(2f), "timeout");
+            //await ToSignal(GetTree().CreateTimer(2f), "timeout");
         }
 
         // Begin spinning
