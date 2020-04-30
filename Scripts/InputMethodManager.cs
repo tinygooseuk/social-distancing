@@ -5,18 +5,17 @@ public class InputMethodManager : Node
 {
     public enum InputMethodEnum
     {
-        Unknown,
         Keyboard,
         Controller,
     };
-    public InputMethodEnum InputMethod { get; private set; } = InputMethodEnum.Unknown;
+    public InputMethodEnum InputMethod { get; private set; } = InputMethodEnum.Keyboard;
     public bool IsVibrationEnabled => InputMethod == InputMethodEnum.Controller;
     
     public override void _Ready()
     {
         var t = new Timer 
         {
-            WaitTime = 0.5f,
+            WaitTime = 0.25f,
             Autostart = true,
             OneShot = false,
         };

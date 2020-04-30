@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 public class Game : Node2D
 {
     // Ref
-    public static Game Instance = null;
+    public static Game Instance = new Game();
 
     // Exports
     [Export] private Curve DifficultyCurve;
@@ -21,7 +21,7 @@ public class Game : Node2D
     private Node2D GameArea;
     private Label TemplateLabel;
     public TitleCard TitleCard;
-    [Subnode] public InputMethodManager InputMethodManager { get; private set; }
+    [Subnode] public InputMethodManager InputMethodManager { get; private set; } = new InputMethodManager();
 
     private readonly Godot.Collections.Array Players = new Godot.Collections.Array();
 

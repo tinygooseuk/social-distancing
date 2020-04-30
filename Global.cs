@@ -11,17 +11,16 @@ public static class Global
     public static int TotalScore = 0;
 
     // Shared character state
-    private static int[] CollectedPixels = new[] { 0, 0, 0, 0 };
+    private static int[] CollectedPixels = ArrayUtil.GenerateArray<int>(Const.MAX_SUPPORTED_PLAYERS);
     public static int GetCollectedPixels(EnemyColour colour) => CollectedPixels[(int)colour];
     public static void SetCollectedPixels(EnemyColour colour, int amount) => CollectedPixels[(int)colour] = amount;
     public static void IncrementCollectedPixels(EnemyColour colour) => CollectedPixels[(int)colour]++;
     public static void DecrementCollectedPixels(EnemyColour colour) => CollectedPixels[(int)colour]--;
     
     // Character modifiers
-    public static List<List<IBehaviourModifier>> BehaviourModifiers = new List<List<IBehaviourModifier>>();
-
+    public static readonly List<List<IBehaviourModifier>> BehaviourModifiers = ArrayUtil.Generate(Const.MAX_SUPPORTED_PLAYERS, _ => new List<IBehaviourModifier>());
     // Behaviours
-    public static List<IShootBehaviour> ShootBehaviours = new List<IShootBehaviour>();
+    public static readonly List<IShootBehaviour> ShootBehaviours = ArrayUtil.Generate<IShootBehaviour>(Const.MAX_SUPPORTED_PLAYERS, _ => new DefaultShootBehaviour());
 
     public static void EndRound(Game endedGame)
     {

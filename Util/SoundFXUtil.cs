@@ -19,7 +19,16 @@ public static class SoundFXUtil
             Stream = await audioToPlay.LoadAsync(),
             Playing = true,
         };
-        Game.Instance.AddChild(player);
+
+        if (Game.Instance.IsInsideTree())
+        {
+            Game.Instance.AddChild(player);
+        }
+        else
+        {
+            tree.Root.AddChild(player);
+        }
+
         player.GlobalPosition = useLocation;
 
         await tree.ToSignal(tree.CreateTimer(player.Stream.GetLength() + 0.01f), "timeout");

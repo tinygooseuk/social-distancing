@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Godot;
 
 public static class ArrayUtil
@@ -19,4 +20,33 @@ public static class ArrayUtil
 
         return inArray;
     }
+
+    public static T[] GenerateArray<T>(int num)
+    {
+        return Generate<T>(num, i => default(T)).ToArray();
+    }
+    
+    public static List<T> Generate<T>(int num)
+    {
+        return Generate<T>(num, i => default(T));
+    }
+
+    public static T[] GenerateArray<T>(int num, Func<int, T> generator)
+    {
+        return Generate<T>(num, generator).ToArray();
+    }
+
+    public static List<T> Generate<T>(int num, Func<int, T> generator)
+    {
+        var list = new List<T>(num);
+
+        for (int i = 0; i < num; i++)
+        {
+            list.Add(generator.Invoke(i));
+        }
+        
+        return list;
+    }
+    
+    
 }
