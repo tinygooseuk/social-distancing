@@ -12,7 +12,7 @@ public class GachaPrize : Resource
     [Export] public string Description;
 
     // What's unlocked
-    [Export] public BehaviourModifiersEnum UnlockedBehaviourModfier = BehaviourModifiersEnum.None;
+    [Export] public BehaviourModifiersEnum UnlockedBehaviourModifier = BehaviourModifiersEnum.None;
     [Export] public ShootBehavioursEnum UnlockedShootBehaviour = ShootBehavioursEnum.None;
 
     // Weighting
