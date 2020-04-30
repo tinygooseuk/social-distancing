@@ -56,8 +56,8 @@ public class GoalRoom : Room
             else 
             {
                 // Burst everything
-                await ToSignal(GetTree().CreateTimer(2f), "timeout");            
-                GoalBanner.BurstIntoPixels((KinematicBody2D)GoalBanner.GetParent(), suck: true, pixelSize: 4, lifetimeMultiplier: 4f);
+                await ToSignal(GetTree().CreateTimer(1.5f), "timeout");            
+                GoalBanner.BurstIntoPixels((KinematicBody2D)GoalBanner.GetParent(), suck: true, pixelSize: 4, lifetimeMultiplier: 2f);
                 GoalBanner.QueueFree();
 
                 // Vibrate
@@ -69,7 +69,7 @@ public class GoalRoom : Room
                     }
                 }
 
-                await ToSignal(GetTree().CreateTimer(7f), "timeout");            
+                await ToSignal(GetTree().CreateTimer(4f), "timeout");            
             }
 
             // Show gacha            
@@ -95,9 +95,9 @@ public class GoalRoom : Room
                     Global.ShootBehaviours[0] = ShootBehavioursFactory.Create(prize.UnlockedShootBehaviour);
                 }
 
-                if (prize.UnlockedBehaviourModfier != BehaviourModifiersEnum.None)
+                if (prize.UnlockedBehaviourModifier != BehaviourModifiersEnum.None)
                 {
-                    Global.BehaviourModifiers[0].Add(BehaviourModifiersFactory.Create(prize.UnlockedBehaviourModfier));
+                    Global.BehaviourModifiers[0].Add(BehaviourModifiersFactory.Create(prize.UnlockedBehaviourModifier));
                 }
             }
 
