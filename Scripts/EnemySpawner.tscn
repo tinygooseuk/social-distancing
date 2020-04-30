@@ -5,7 +5,7 @@
 [ext_resource path="res://Prefabs/Enemy_Blue.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Prefabs/Enemy_Red.tscn" type="PackedScene" id=4]
 
-[sub_resource type="RectangleShape2D" id=6]
+[sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 344, 152 )
 
 [node name="EnemySpawner" type="Position2D"]
@@ -15,6 +15,7 @@ EnemyScenes = [ ExtResource( 3 ), ExtResource( 4 ), ExtResource( 2 ) ]
 [node name="PlayerDetector" type="Area2D" parent="."]
 
 [node name="CollisionPolygon2D" type="CollisionShape2D" parent="PlayerDetector"]
+visible = false
 position = Vector2( 0, 152 )
-shape = SubResource( 6 )
+shape = SubResource( 1 )
 [connection signal="body_entered" from="PlayerDetector" to="." method="OnBodyEntered"]
