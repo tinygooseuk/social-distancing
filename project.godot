@@ -18,6 +18,10 @@ _global_script_class_icons={
 config/name="SocialDistancing"
 run/main_scene="res://Scenes/MainMenu.tscn"
 
+[debug]
+
+settings/fps/force_fps=60
+
 [display]
 
 window/size/width=416
@@ -313,8 +317,6 @@ fast_forward={
 
 debugger_agent/port=55555
 debugger_agent/wait_timeout=30000
-export/aot/enabled=true
-export/aot/full_aot=true
 
 [physics]
 
