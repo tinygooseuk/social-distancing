@@ -26,7 +26,7 @@ public class Bullet : KinematicBody2D
         this.FindSubnodes();
 
         // Set colour
-        AnimatedSprite.Modulate = Colour.ToColor();
+        Modulate = Colour.ToColor();
 
         // Tween up the size
         IntroTween.InterpolateProperty(AnimatedSprite, "scale", null, new Vector2(2f, 2f), 0.1f, Tween.TransitionType.Cubic, Tween.EaseType.Out);
@@ -45,30 +45,47 @@ public class Bullet : KinematicBody2D
         KinematicCollision2D collision = MoveAndCollide(Direction * delta * SPEED);
         if (collision != null && IsInstanceValid(collision.Collider))
         {
+            bool dontExplode = false;
+            
             if (FirstFrame && !DisableRetry)
             {
                 Character firedByPlayer = Game.Instance.GetPlayer(FiredByPlayerIndex);
                 if (IsInstanceValid(firedByPlayer))
                 {
                     firedByPlayer.MarkBulletFailed();
+                    dontExplode = true;
                 }
             }
-
+            
             switch (Colour)
             {
                 case EnemyColour.Red when collision.Collider is Enemy_Red er:
+                    dontExplode = true;
                     KillEnemy(er);
                     break;
                 case EnemyColour.Yellow when collision.Collider is Enemy_Yellow ey:
+                    dontExplode = true;
                     KillEnemy(ey);
                     break;
                 case EnemyColour.Blue when collision.Collider is Enemy_Blue eb:
+                    dontExplode = true;
                     KillEnemy(eb);
                     break;
                 default:
                     QueueFree();
                     break;
             }
+
+            if (!dontExplode)
+            {
+                // Splat!
+                foreach (var pixel in AnimatedSprite.BurstIntoPixels(this, false, lifetimeMultiplier: 0.25f))
+                {
+                    const float MAX_FORCE = 50f;
+                    pixel.ApplyCentralImpulse(new Vector2((float)GD.RandRange(-MAX_FORCE, +MAX_FORCE), (float)GD.RandRange(-MAX_FORCE, +MAX_FORCE)));   
+                }
+            }
+
             return;
         }
 
