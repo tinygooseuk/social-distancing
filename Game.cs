@@ -155,6 +155,10 @@ public class Game : Node2D
             CurrentLevel = newLevel;
         }
 
+        // Adjust music 
+        BGM.PitchScale = Engine.TimeScale / 2f + 0.5f;
+        RoundComplete.PitchScale = Engine.TimeScale / 2f + 0.5f;
+        
         // Update score label
         MainUI.ScoreLabel.Text = $"Score: {Global.TotalScore + TotalScore:d8}";
     }

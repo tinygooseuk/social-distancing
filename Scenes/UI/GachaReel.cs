@@ -145,6 +145,7 @@ public class GachaReel : ScrollContainer
             {
                 // Tick
                 Sound_Tick.PitchScale = 1f + Mathf.Clamp(Mathf.InverseLerp(0f, 400f, SpinSpeed), 0f, 1f);
+                Sound_Tick.PitchScale *= Engine.TimeScale / 2f + 0.5f;
                 Sound_Tick.Play();
                 
                 EmitSignal(nameof(ReelTicked), CurrentItemIndex);
@@ -168,6 +169,7 @@ public class GachaReel : ScrollContainer
         await ToSignal(GetTree().CreateTimer(0.3f), "timeout");
 
         RectClipContent = false;
+        Sound_Pick.PitchScale = Engine.TimeScale / 2f + 0.5f;
         Sound_Pick.Play();
         
         // Vibrate
