@@ -423,7 +423,16 @@ public class Character : KinematicBody2D
 
         IsDead = true;
         Sound_Death.Play();
-        
+
+        if (false)
+        {
+            // Respawn at the bottom
+            QueueFree();
+            Game.Instance.SpawnPlayer(PlayerIndex, new Vector2(Const.SCREEN_HALF_WIDTH, -32f));
+
+            return;
+        }
+
         // Queue pixel creation, tell game we died
         Transform2D deathTransform = new Transform2D
         {

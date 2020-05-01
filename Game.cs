@@ -1,6 +1,7 @@
 using Godot;
 using Godot.Collections;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 public class Game : Node2D
@@ -23,7 +24,7 @@ public class Game : Node2D
     public TitleCard TitleCard;
     [Subnode] public InputMethodManager InputMethodManager { get; private set; } = new InputMethodManager();
 
-    private readonly Godot.Collections.Array Players = new Godot.Collections.Array();
+    private readonly List<Character> Players = ArrayUtil.Generate<Character>(Const.MAX_SUPPORTED_PLAYERS);
 
     // Enums
     public enum Difficulty { Easy, Medium, Hard, Neutral };
@@ -110,29 +111,23 @@ public class Game : Node2D
         }
          
         // Create players
-        Scene<Character> characterScene = R.Prefabs.CHARACTER;
         const float PLAYER_WIDTH = 20f;
         float totalPlayerWidth = PLAYER_WIDTH * Global.NumberOfPlayers;
 
         for (int playerIndex = 0; playerIndex < Global.NumberOfPlayers; playerIndex++)
-        {   
-            // Create player and set up
-            Character player = characterScene.Instance();
-            player.PlayerIndex = playerIndex;
-            player.Position = new Vector2
+        {
+            Vector2 position = new Vector2
             {
                 x = (-totalPlayerWidth / 2f) + playerIndex * PLAYER_WIDTH,
                 y = -32f
             };
-
+            SpawnPlayer(playerIndex, position);
+            
             // Limit player camera to top of world
             Camera2D camera = GetPlayerCamera(playerIndex);
 
             int offset = (Global.NumberOfPlayers == 2) ? -28 : 88;
             camera.LimitTop = (int)caret + offset; // 88 will arbitrarily make it limit properly. cool.
-            
-            GameArea.AddChild(player);
-            Players.Add(player);
         }        
     }
 
@@ -172,7 +167,7 @@ public class Game : Node2D
     public TouchControls TouchControls_Main => UICanvasLayer.GetNode<TouchControls>("TouchControls");
     public TouchControls TouchControls_EndOfLevel => UICanvasLayer.GetNode<TouchControls>("EndOfLevelTouchControls");
 
-    public Character GetPlayer(int playerIndex) => (Players.Count > playerIndex) ? Players[playerIndex] as Character : null;
+    public Character GetPlayer(int playerIndex) => (Players.Count > playerIndex && IsInstanceValid(Players[playerIndex])) ? Players[playerIndex] as Character : null;
     public Character GetNearestPlayer(Vector2 globalPosition) 
     {
         float nearestSqrDistance = 1000000000f;
@@ -195,6 +190,20 @@ public class Game : Node2D
 
     }
 
+    public Character SpawnPlayer(int playerIndex, Vector2 position)
+    {
+        Scene<Character> characterScene = R.Prefabs.CHARACTER;
+        
+        Character player = characterScene.Instance();
+        player.PlayerIndex = playerIndex;
+        player.Position = position;
+        
+        GameArea.AddChild(player);
+        Players[playerIndex] = player;
+
+        return player;
+    }
+    
     public void MarkRoundComplete()
     {
         // Switch over music
