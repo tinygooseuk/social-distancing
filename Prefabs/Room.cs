@@ -10,6 +10,8 @@ public class Room : Node2D
 
     [Subnode("EnemySpawners")] private Node2D _EnemySpawners;
     public IEnumerable EnemySpawners => _EnemySpawners.GetChildren().Cast<EnemySpawner>().ToArray();
+
+    public int Index = 0;
     
     public override void _Ready()
     {

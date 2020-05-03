@@ -76,6 +76,7 @@ public class Game : Node2D
             }
 
             Room room = await InstanceRandomRoomAsync(desiredDifficulty);
+            room.Index = level;
                         
             // Move caret up
             caret -= room.PixelHeight;
@@ -135,13 +136,13 @@ public class Game : Node2D
     {
         // Check current level
         int newLevel = -1;
-
+        
         for (int playerIndex = 0; playerIndex < Global.NumberOfPlayers; playerIndex++)
         {
             Character c = GetPlayer(playerIndex);
             if (Players.Count > playerIndex && IsInstanceValid(c))
             {
-                newLevel = Mathf.FloorToInt(1f + c.Position.y / -Const.SCREEN_HEIGHT);
+                newLevel = c.GetCurrentRoom()?.Index ?? 0;
             }        
         }
 
