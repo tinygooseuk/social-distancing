@@ -329,12 +329,13 @@ public class Character : KinematicBody2D
             // Add impulse
             Velocity.y = -Mods.JumpImpulse * 0.66f;
             
+            // Play sound
+            int extraJumpNumber = Mods.NumAirJumps - NumAirJumpsRemaining + 1;
+            Sound_Jump.PitchScale = 1f + (0.25f * extraJumpNumber);
+            Sound_Jump.Play();
+            
             // Remove a remaining jump
             NumAirJumpsRemaining--;
-
-            // Play sound
-            Sound_Jump.PitchScale = 1.3f;
-            Sound_Jump.Play();
         }
 
         // Cancel firing
@@ -424,11 +425,11 @@ public class Character : KinematicBody2D
         IsDead = true;
         Sound_Death.Play();
 
-        if (false)
+        if (true)
         {
             // Respawn at the bottom
             QueueFree();
-            Game.Instance.SpawnPlayer(PlayerIndex, new Vector2(Const.SCREEN_HALF_WIDTH, -32f));
+            Game.Instance.SpawnPlayer(PlayerIndex, new Vector2(0f, -40f));
 
             return;
         }
