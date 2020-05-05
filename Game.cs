@@ -44,7 +44,6 @@ public class Game : Node2D
 
         // Seed
         Engine.TimeScale = 1f;
-        Instance = this;
 
         // Find nodes
         Viewport mainViewport = RootViewport;
@@ -130,6 +129,15 @@ public class Game : Node2D
             int offset = (Global.NumberOfPlayers == 2) ? -28 : 88;
             camera.LimitTop = (int)caret + offset; // 88 will arbitrarily make it limit properly. cool.
         }        
+    }
+
+    public override void _EnterTree()
+    {
+        Instance = this;
+    }
+    public override void _ExitTree()
+    {
+        Instance = null;
     }
 
     public override void _Process(float delta)
