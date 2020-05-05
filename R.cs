@@ -18,6 +18,7 @@ public static class R
         public static class UI 
         {
             public const string GACHA_TILE = "res://Prefabs/UI/GachaTile.tscn";
+            public const string GACHA_TILE_SMALL = "res://Prefabs/UI/GachaTile_Small.tscn";
         }
     }
 

@@ -22,6 +22,9 @@ public static class Global
     // Behaviours
     public static readonly List<IShootBehaviour> ShootBehaviours = ArrayUtil.Generate<IShootBehaviour>(Const.MAX_SUPPORTED_PLAYERS, _ => new DefaultShootBehaviour());
 
+    // Gacha prizes
+    public static readonly List<List<GachaPrize>> PrizesWon = ArrayUtil.Generate(Const.MAX_SUPPORTED_PLAYERS, _ => new List<GachaPrize>());
+
     public static void EndRound(Game endedGame)
     {
         //TODO: move any vars from game into persistent storage here
@@ -46,14 +49,17 @@ public static class Global
         CollectedPixels[(int)EnemyColour.Blue] = 0;
         CollectedPixels[(int)EnemyColour.Yellow] = 0;
         CollectedPixels[(int)EnemyColour.Red] = 0;
+        CollectedPixels[(int)EnemyColour.Green] = 0;
 
         BehaviourModifiers.Clear();
         ShootBehaviours.Clear();
+        PrizesWon.Clear();
 
         for (int i = 0; i < Const.MAX_SUPPORTED_PLAYERS; i++)
         {
             BehaviourModifiers.Add(new List<IBehaviourModifier>());
             ShootBehaviours.Add(new DefaultShootBehaviour());
+            PrizesWon.Add(new List<GachaPrize>());
         }
 
         //TODO: reset any game-specific vars here

@@ -184,6 +184,20 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="BuffsBox" type="HBoxContainer" parent="MainUI"]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 8.0
+margin_top = -40.0
+margin_right = -8.0
+margin_bottom = -8.0
+grow_vertical = 0
+rect_min_size = Vector2( 0, 32 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="DebugUI" type="Control" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0

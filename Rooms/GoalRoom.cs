@@ -99,6 +99,8 @@ public class GoalRoom : Room
                 {
                     Global.BehaviourModifiers[0].Add(BehaviourModifiersFactory.Create(prize.UnlockedBehaviourModifier));
                 }
+
+                Global.PrizesWon[0].Add(prize);
             }
 
             // Mark end of round

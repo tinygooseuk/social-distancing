@@ -28,7 +28,7 @@ public class TitleCard : ColorRect
     // Private state
     private float CurrentTime = 0f;
 
-    public override void _Ready()
+    public override async void _Ready()
     {
         this.FindSubnodes();     
 
@@ -43,7 +43,11 @@ public class TitleCard : ColorRect
             RoundLabel.Text = $"Round {Global.RoundNumber}";
         }
 
+        await ToSignal(GetTree(), "idle_frame");
+        await Game.Instance.MainUI.FillBuffsBox(0); // player index 0?
         _ = AnimateIn();
+        await ToSignal(GetTree().CreateTimer(2.0f), "timeout");
+        Game.Instance.MainUI.HideAndEmptyBuffsBox();
     }
 
     public override void _Process(float delta)
