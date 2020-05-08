@@ -15,6 +15,8 @@ public class Modifiables
     
     public float CharacterScale;
 
+    public bool BulletsAreHoming;
+
     public Modifiables()
     {
         Reset();
@@ -35,5 +37,7 @@ public class Modifiables
         Friction = 0.15f;
     
         CharacterScale = 1f;
+
+        BulletsAreHoming = false;
     }
 }

@@ -16,3 +16,11 @@ public class ShootSlowerBehaviourModifier : IBehaviourModifier
         mods.ShootDebounce *= 2f;
     }
 }
+
+public class HomingShotsBehaviourModifier : IBehaviourModifier
+{
+    public void Modify(Modifiables mods)
+    {
+        mods.BulletsAreHoming = true;
+    }
+}

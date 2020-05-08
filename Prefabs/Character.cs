@@ -59,7 +59,7 @@ public class Character : KinematicBody2D
     private Vector2 CameraShakeMagnitude = Vector2.Zero;
     private Vector2 CameraShakeOffset = Vector2.Zero;
 
-    private Modifiables Mods => GetModifiables();
+    public Modifiables Mods => GetModifiables();
     private Modifiables _CachedModifiables = null;
 
     #region Engine Callbacks

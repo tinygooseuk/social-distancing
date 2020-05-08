@@ -14,10 +14,11 @@ public class Enemy : KinematicBody2D
     protected virtual EnemyColour Colour => EnemyColour.Red;
     protected virtual Vector2 Move(Vector2 playerPosition, float difficultyScale) => Vector2.Zero;
     
-
     // Consts
-    private static float GRAVITY = 9.8f;
-    private static float FRICTION = 0.15f;
+    public const string ENEMY_GROUP_NAME = "enemies";
+
+    private const float GRAVITY = 9.8f;
+    private const float FRICTION = 0.15f;
 
     // State
     protected Vector2 Velocity = Vector2.Zero;

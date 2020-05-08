@@ -24,52 +24,42 @@ public enum BehaviourModifiersEnum
     AirJumpLess,
     
     Reset,
+
+    ShootHomingBullets
 }
 
 public static class BehaviourModifiersFactory 
 {
     public static IBehaviourModifier Create(BehaviourModifiersEnum behaviourModifier)
     {
-        switch (behaviourModifier)
+        return behaviourModifier switch
         {
-            case BehaviourModifiersEnum.None:
-                return null;
+            BehaviourModifiersEnum.None => null,
 
-            case BehaviourModifiersEnum.SlippyFriction:
-                return new SlippyFrictionBehaviourModifier();
-            case BehaviourModifiersEnum.GrippyFriction:
-                return new GrippyFrictionBehaviourModifier();
+            BehaviourModifiersEnum.SlippyFriction => new SlippyFrictionBehaviourModifier(),
+            BehaviourModifiersEnum.GrippyFriction => new GrippyFrictionBehaviourModifier(),
 
-            case BehaviourModifiersEnum.MoonGravity:
-                return new MoonGravityBehaviourModifier();
+            BehaviourModifiersEnum.MoonGravity => new MoonGravityBehaviourModifier(),
 
-            case BehaviourModifiersEnum.HigherJumpHeight:
-                return new HigherJumpHeightBehaviourModifier();
-            case BehaviourModifiersEnum.LowerJumpHeight:
-                return new LowerJumpHeightBehaviourModifier();
+            BehaviourModifiersEnum.HigherJumpHeight => new HigherJumpHeightBehaviourModifier(),
+            BehaviourModifiersEnum.LowerJumpHeight => new LowerJumpHeightBehaviourModifier(),
 
-            case BehaviourModifiersEnum.BiggerScale:
-                return new BiggerScaleBehaviourModifier();
-            case BehaviourModifiersEnum.SmallerScale:
-                return new SmallerScaleBehaviourModifier();
+            BehaviourModifiersEnum.BiggerScale => new BiggerScaleBehaviourModifier(),
+            BehaviourModifiersEnum.SmallerScale => new SmallerScaleBehaviourModifier(),
 
-            case BehaviourModifiersEnum.ShootFaster:
-                return new ShootFasterBehaviourModifier();
-            case BehaviourModifiersEnum.ShootSlower:
-                return new ShootSlowerBehaviourModifier();
+            BehaviourModifiersEnum.ShootFaster => new ShootFasterBehaviourModifier(),
+            BehaviourModifiersEnum.ShootSlower => new ShootSlowerBehaviourModifier(),
             
-            case BehaviourModifiersEnum.AirJumpMore:
-                return new AirJumpMoreBehaviourModifier();
+            BehaviourModifiersEnum.AirJumpMore => new AirJumpMoreBehaviourModifier(),
             
-            case BehaviourModifiersEnum.AirJumpLess:
-                return new AirJumpLessBehaviourModifier();
+            BehaviourModifiersEnum.AirJumpLess => new AirJumpLessBehaviourModifier(),
             
-            case BehaviourModifiersEnum.Reset:
-                return new ResetBehaviourModifier();
-        }
+            BehaviourModifiersEnum.Reset => new ResetBehaviourModifier(),
 
-        Type t = MethodBase.GetCurrentMethod().DeclaringType;
-        throw new InvalidOperationException($"Missing case in {t?.Name}");
+            BehaviourModifiersEnum.ShootHomingBullets => new HomingShotsBehaviourModifier(),
+
+            _ => null
+        };
     }
 
     public static IBehaviourModifier CreateRandom()
