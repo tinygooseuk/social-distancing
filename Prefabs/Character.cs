@@ -513,22 +513,6 @@ public class Character : KinematicBody2D
     #endregion
 
     #region Misc
-    public Room GetCurrentRoom()
-    {
-        foreach (Node gameChild in Game.Instance.GetChildren())
-        {
-            if (gameChild is Room room)
-            {
-                Rect2 roomRect = new Rect2(room.GlobalPosition, new Vector2(Const.SCREEN_WIDTH, Const.SCREEN_HEIGHT));
-                if (roomRect.HasPoint(GlobalPosition))
-                {
-                    return room;
-                }
-            }
-        }
-
-        return null;
-    }
     private void UpdatePlayerIndex()
     {
         // Set collision layer based on player index
