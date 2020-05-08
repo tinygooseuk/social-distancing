@@ -9,3 +9,4 @@ export_presets.cfg
 data_*/
 Export/
 .vscode/
+.DS_Store
