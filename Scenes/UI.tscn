@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=2]
+[gd_scene load_steps=35 format=2]
 
 [ext_resource path="res://Scripts/AgainButton.cs" type="Script" id=1]
 [ext_resource path="res://Shaders/ScreenShader.shader" type="Shader" id=2]
@@ -79,11 +79,29 @@ tracks/1/keys = {
 [sub_resource type="CircleShape2D" id=6]
 radius = 24.0
 
-[sub_resource type="RectangleShape2D" id=7]
+[sub_resource type="CircleShape2D" id=7]
+radius = 24.0
+
+[sub_resource type="CircleShape2D" id=8]
+radius = 24.0
+
+[sub_resource type="CircleShape2D" id=9]
+radius = 24.0
+
+[sub_resource type="RectangleShape2D" id=10]
 extents = Vector2( 32, 32 )
 
-[sub_resource type="RectangleShape2D" id=8]
+[sub_resource type="RectangleShape2D" id=11]
+extents = Vector2( 32, 32 )
+
+[sub_resource type="RectangleShape2D" id=12]
 extents = Vector2( 20, 20 )
+
+[sub_resource type="RectangleShape2D" id=13]
+extents = Vector2( 20, 20 )
+
+[sub_resource type="CircleShape2D" id=14]
+radius = 24.0
 
 [node name="UI" type="CanvasLayer"]
 
@@ -264,60 +282,72 @@ __meta__ = {
 }
 
 [node name="Jump" type="TouchScreenButton" parent="TouchControls"]
-position = Vector2( 334.545, 187.755 )
-normal = ExtResource( 9 )
-pressed = ExtResource( 9 )
+position = Vector2( 351.246, 202.586 )
 shape = SubResource( 6 )
+shape_centered = false
 action = "jump_0"
 
 [node name="Yellow" type="TouchScreenButton" parent="TouchControls"]
-position = Vector2( 334.057, 136.549 )
-normal = ExtResource( 10 )
-pressed = ExtResource( 10 )
-shape = SubResource( 6 )
+position = Vector2( 350.758, 151.38 )
+shape = SubResource( 7 )
+shape_centered = false
 action = "hit_yellow_0"
 
 [node name="Red" type="TouchScreenButton" parent="TouchControls"]
-position = Vector2( 364, 162.883 )
-normal = ExtResource( 8 )
-pressed = ExtResource( 8 )
-shape = SubResource( 6 )
+position = Vector2( 380.701, 177.714 )
+shape = SubResource( 8 )
+shape_centered = false
 action = "hit_red_0"
 
 [node name="Blue" type="TouchScreenButton" parent="TouchControls"]
-position = Vector2( 304, 162 )
-normal = ExtResource( 11 )
-pressed = ExtResource( 11 )
-shape = SubResource( 6 )
+position = Vector2( 320.701, 176.831 )
+shape = SubResource( 9 )
+shape_centered = false
 action = "hit_blue_0"
 
 [node name="Left" type="TouchScreenButton" parent="TouchControls"]
 position = Vector2( 0, 148 )
-shape = SubResource( 7 )
+shape = SubResource( 10 )
 passby_press = true
 action = "move_left_0"
 
 [node name="Right" type="TouchScreenButton" parent="TouchControls"]
 position = Vector2( 76, 148 )
-shape = SubResource( 7 )
+shape = SubResource( 11 )
 passby_press = true
 action = "move_right_0"
 
 [node name="Up" type="TouchScreenButton" parent="TouchControls"]
 position = Vector2( 49, 132 )
-shape = SubResource( 8 )
+shape = SubResource( 12 )
 passby_press = true
 action = "look_up_0"
 
 [node name="Down" type="TouchScreenButton" parent="TouchControls"]
 position = Vector2( 49, 183 )
-shape = SubResource( 8 )
+shape = SubResource( 13 )
 passby_press = true
 action = "move_down_0"
 
 [node name="LeftImage" type="Sprite" parent="TouchControls"]
 position = Vector2( 39.9893, 178.001 )
 texture = ExtResource( 13 )
+
+[node name="JumpImage" type="Sprite" parent="TouchControls"]
+position = Vector2( 351, 204 )
+texture = ExtResource( 9 )
+
+[node name="BlueImage" type="Sprite" parent="TouchControls"]
+position = Vector2( 320, 178 )
+texture = ExtResource( 11 )
+
+[node name="YellowImage" type="Sprite" parent="TouchControls"]
+position = Vector2( 350, 152 )
+texture = ExtResource( 10 )
+
+[node name="RedImage" type="Sprite" parent="TouchControls"]
+position = Vector2( 380, 178 )
+texture = ExtResource( 8 )
 
 [node name="UpImage" type="Sprite" parent="TouchControls"]
 position = Vector2( 69.7622, 152.229 )
@@ -343,9 +373,13 @@ __meta__ = {
 }
 
 [node name="FastForward" type="TouchScreenButton" parent="EndOfLevelTouchControls"]
-position = Vector2( 354.467, 180.806 )
-normal = ExtResource( 17 )
-pressed = ExtResource( 17 )
-shape = SubResource( 6 )
+position = Vector2( 371.23, 196.136 )
+shape = SubResource( 14 )
+shape_centered = false
+passby_press = true
 action = "fast_forward"
+
+[node name="FastForwardImage" type="Sprite" parent="EndOfLevelTouchControls"]
+position = Vector2( 371, 196.633 )
+texture = ExtResource( 17 )
 [connection signal="pressed" from="MainUI/AgainButton" to="MainUI/AgainButton" method="OnPressed"]
